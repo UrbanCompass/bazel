@@ -5,4 +5,4 @@ http://github.com/madler/zlib .
 
 The commit hash on Github is `50893291`.
 
-`LICENSE.txt` is copy-pasted from `zlib.h` and a simple `BUILD` file is added.
+`LICENSE.txt` is copy-pasted from `zlib.h` and a simple `UCBUILD` file is added.

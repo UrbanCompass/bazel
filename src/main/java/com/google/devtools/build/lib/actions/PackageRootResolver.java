@@ -31,7 +31,7 @@ public interface PackageRootResolver {
    * @return mappings from {@code execPath} to {@link Root}, or null if for some reason we cannot
    *     determine the result at this time (such as when used within a SkyFunction)
    * @throws PackageRootResolutionException if unable to determine package roots or lack thereof,
-   *     typically caused by exceptions encountered while attempting to locate BUILD files
+   *     typically caused by exceptions encountered while attempting to locate UCBUILD files
    */
   @Nullable
   Map<PathFragment, Root> findPackageRootsForFiles(Iterable<PathFragment> execPaths)
@@ -47,7 +47,7 @@ public interface PackageRootResolver {
    * @return mappings from {@code execPath} to {@link Root}, or null if for some reason we cannot
    *     determine the result at this time (such as when used within a SkyFunction)
    * @throws PackageRootResolutionException if unable to determine package roots or lack thereof,
-   *     typically caused by exceptions encountered while attempting to locate BUILD files
+   *     typically caused by exceptions encountered while attempting to locate UCBUILD files
    */
   // TODO(bazel-team): Remove this once we don't need to find package roots for directories.
   @Nullable

@@ -148,7 +148,7 @@ public abstract class GlobFunctionTest {
 
   private void createTestFiles() throws IOException {
     FileSystemUtils.createDirectoryAndParents(pkgPath);
-    FileSystemUtils.createEmptyFile(pkgPath.getRelative("BUILD"));
+    FileSystemUtils.createEmptyFile(pkgPath.getRelative("UCBUILD"));
     for (String dir :
         ImmutableList.of(
             "foo/bar/wiz", "foo/barnacle/wiz", "food/barnacle/wiz", "fool/barnacle/wiz")) {
@@ -160,7 +160,7 @@ public abstract class GlobFunctionTest {
     for (String dir : ImmutableList.of("a1/b1/c", "a2/b2/c")) {
       FileSystemUtils.createDirectoryAndParents(pkgPath.getRelative(dir));
     }
-    FileSystemUtils.createEmptyFile(pkgPath.getRelative("a2/b2/BUILD"));
+    FileSystemUtils.createEmptyFile(pkgPath.getRelative("a2/b2/UCBUILD"));
   }
 
   @Test
@@ -258,7 +258,7 @@ public abstract class GlobFunctionTest {
     // and also produce the same hashCode.
     new EqualsTester()
         .addEqualityGroup(runGlob(false, "no-such-file")) // Matches nothing.
-        .addEqualityGroup(runGlob(false, "BUILD"), runGlob(true, "BUILD")) // Matches BUILD.
+        .addEqualityGroup(runGlob(false, "UCBUILD"), runGlob(true, "UCBUILD")) // Matches UCBUILD.
         .addEqualityGroup(runGlob(false, "**")) // Matches lots of things.
         .addEqualityGroup(
             runGlob(false, "f*o/bar*"),
@@ -268,21 +268,21 @@ public abstract class GlobFunctionTest {
 
   @Test
   public void testGlobDoesNotCrossPackageBoundary() throws Exception {
-    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/BUILD"));
+    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/UCBUILD"));
     // "foo/bar" should not be in the results because foo is a separate package.
     assertGlobMatches("f*/*", /* => */ "food/barnacle", "fool/barnacle");
   }
 
   @Test
   public void testGlobDirectoryMatchDoesNotCrossPackageBoundary() throws Exception {
-    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/bar/BUILD"));
+    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/bar/UCBUILD"));
     // "foo/bar" should not be in the results because foo/bar is a separate package.
     assertGlobMatches("foo/*", /* => */ "foo/barnacle");
   }
 
   @Test
   public void testStarStarDoesNotCrossPackageBoundary() throws Exception {
-    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/bar/BUILD"));
+    FileSystemUtils.createEmptyFile(pkgPath.getRelative("foo/bar/UCBUILD"));
     // "foo/bar" should not be in the results because foo/bar is a separate package.
     assertGlobMatches("foo/**", /* => */ "foo/barnacle/wiz", "foo/barnacle", "foo");
   }
@@ -290,7 +290,7 @@ public abstract class GlobFunctionTest {
   @Test
   public void testGlobDoesNotCrossPackageBoundaryUnderOtherPackagePath() throws Exception {
     FileSystemUtils.createDirectoryAndParents(writableRoot.getRelative("pkg/foo/bar"));
-    FileSystemUtils.createEmptyFile(writableRoot.getRelative("pkg/foo/bar/BUILD"));
+    FileSystemUtils.createEmptyFile(writableRoot.getRelative("pkg/foo/bar/UCBUILD"));
     // "foo/bar" should not be in the results because foo/bar is detected as a separate package,
     // even though it is under a different package path.
     assertGlobMatches("foo/**", /* => */ "foo/barnacle/wiz", "foo/barnacle", "foo");
@@ -456,7 +456,7 @@ public abstract class GlobFunctionTest {
     }
     // Note that these are not in the result: ".", ".."
     assertGlobMatches(
-        "*", "..also.hidden", ".hidden", "BUILD", "a1", "a2", "foo", "food", "fool", "not.hidden");
+        "*", "..also.hidden", ".hidden", "UCBUILD", "a1", "a2", "foo", "food", "fool", "not.hidden");
     assertGlobMatches("*.hidden", "not.hidden");
   }
 
@@ -480,12 +480,12 @@ public abstract class GlobFunctionTest {
         "fool/barnacle/wiz",
         "fool/barnacle",
         "fool",
-        "BUILD");
+        "UCBUILD");
   }
 
   @Test
   public void testDoubleStarExcludeDirs() throws Exception {
-    assertGlobWithoutDirsMatches("**", "foo/bar/wiz/file", "BUILD");
+    assertGlobWithoutDirsMatches("**", "foo/bar/wiz/file", "UCBUILD");
   }
 
   @Test
@@ -508,7 +508,7 @@ public abstract class GlobFunctionTest {
         "fool/barnacle/wiz",
         "fool/barnacle",
         "fool",
-        "BUILD");
+        "UCBUILD");
   }
 
   @Test
@@ -559,7 +559,7 @@ public abstract class GlobFunctionTest {
   /** Regression test for b/13319874: Directory listing crash. */
   @Test
   public void testResilienceToFilesystemInconsistencies_DirectoryExistence() throws Exception {
-    // Our custom filesystem says "pkgPath/BUILD" exists but "pkgPath" does not exist.
+    // Our custom filesystem says "pkgPath/UCBUILD" exists but "pkgPath" does not exist.
     fs.stubStat(pkgPath, null);
     RootedPath pkgRootedPath = RootedPath.toRootedPath(root, pkgPath);
     FileStateValue pkgDirFileStateValue = FileStateValue.create(pkgRootedPath, null);

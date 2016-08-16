@@ -65,7 +65,7 @@ public abstract class PackageFactoryTestBase {
 
   protected com.google.devtools.build.lib.packages.Package expectEvalSuccess(String... content)
       throws InterruptedException, IOException {
-    Path file = scratch.file("/pkg/BUILD", content);
+    Path file = scratch.file("/pkg/UCBUILD", content);
     Package pkg = packages.eval("pkg", file);
     assertFalse(pkg.containsErrors());
     return pkg;
@@ -73,7 +73,7 @@ public abstract class PackageFactoryTestBase {
 
   protected void expectEvalError(String expectedError, String... content) throws Exception {
     events.setFailFast(false);
-    Path file = scratch.file("/pkg/BUILD", content);
+    Path file = scratch.file("/pkg/UCBUILD", content);
     Package pkg = packages.eval("pkg", file);
     assertTrue("Expected evaluation error, but none was not reported", pkg.containsErrors());
     events.assertContainsError(expectedError);
@@ -134,7 +134,7 @@ public abstract class PackageFactoryTestBase {
   }
 
   protected Path emptyBuildFile(String packageName) {
-    return emptyFile(getPathPrefix() + "/" + packageName + "/BUILD");
+    return emptyFile(getPathPrefix() + "/" + packageName + "/UCBUILD");
   }
 
   protected Path emptyFile(String path) {
@@ -148,7 +148,7 @@ public abstract class PackageFactoryTestBase {
   protected boolean isValidPackageName(String packageName) throws Exception {
     // Write a license decl just in case it's a third_party package:
     Path buildFile = scratch.file(
-        getPathPrefix() + "/" + packageName + "/BUILD", "licenses(['notice'])");
+        getPathPrefix() + "/" + packageName + "/UCBUILD", "licenses(['notice'])");
     Package pkg = packages.createPackage(packageName, buildFile);
     return !pkg.containsErrors();
   }
@@ -166,8 +166,8 @@ public abstract class PackageFactoryTestBase {
   }
 
   private Package buildPackageWithGlob(String globCallExpression) throws Exception {
-    scratch.deleteFile("/dummypackage/BUILD");
-    Path file = scratch.file("/dummypackage/BUILD", "x = " + globCallExpression);
+    scratch.deleteFile("/dummypackage/UCBUILD");
+    Path file = scratch.file("/dummypackage/UCBUILD", "x = " + globCallExpression);
     return packages.eval("dummypackage", file);
   }
 
@@ -194,7 +194,7 @@ public abstract class PackageFactoryTestBase {
       List<String> result, List<String> includes, List<String> excludes, boolean excludeDirs)
       throws Exception {
 
-    // The BUILD language, unlike Skylark, doesn't have fail(), so instead,
+    // The UCBUILD language, unlike Skylark, doesn't have fail(), so instead,
     // we rely on boolean short circuit logic to only try to evaluate
     // the undefined identifier this_will_fail if the result isn't as expected,
     // in which case an error occurs (which we test in testGlobNegativeTest).
@@ -215,11 +215,11 @@ public abstract class PackageFactoryTestBase {
   }
 
   /**
-   * Evaluate a glob() call against a test directory and BUILD code to process the results.
+   * Evaluate a glob() call against a test directory and UCBUILD code to process the results.
    * @param includes a list of glob patterns; glob will include these files.
    * @param excludes a list of glob patterns to exclude even if previously included.
    * @param excludeDirs true if directories should be excluded from the match.
-   * @param resultAssertion code in the BUILD language that can access the variable result,
+   * @param resultAssertion code in the UCBUILD language that can access the variable result,
    * to which the result of the glob will be bound, and that may contain an assertion on it.
    * @return a Package and a GlobCache.
    * @throws Exception if the processResult code causes a failure.
@@ -234,7 +234,7 @@ public abstract class PackageFactoryTestBase {
     }
     Path file =
         scratch.file(
-            "/globs/BUILD",
+            "/globs/UCBUILD",
             Printer.format(
                 "result = glob(%r, exclude=%r, exclude_directories=%r)",
                 includes, excludes, excludeDirs ? 1 : 0),
@@ -285,7 +285,7 @@ public abstract class PackageFactoryTestBase {
       try {
         Path buildFile =
             scratch.file(
-                getPathPrefix() + "/isolated/BUILD",
+                getPathPrefix() + "/isolated/UCBUILD",
                 "# -*- python -*-",
                 "",
                 "java_library(name = 'mylib',",
@@ -331,7 +331,7 @@ public abstract class PackageFactoryTestBase {
   protected abstract String getPathPrefix();
 
   /** Process interfering with parsing of build files.
-   *  It waits until parsing of some BUILD file is started and then reports
+   *  It waits until parsing of some UCBUILD file is started and then reports
    *  arbitrary error. It signals that error was submitted so the parsing can be
    *  finished at the end.
    */

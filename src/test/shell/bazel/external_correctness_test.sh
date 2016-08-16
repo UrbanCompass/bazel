@@ -24,7 +24,7 @@ function set_up() {
   # Set up empty remote repo.
   mkdir -p $REMOTE
   touch $REMOTE/WORKSPACE
-  cat > $REMOTE/BUILD <<EOF
+  cat > $REMOTE/UCBUILD <<EOF
 genrule(
     name = "get-input",
     outs = ["an-input"],
@@ -41,7 +41,7 @@ local_repository(
     path = "$REMOTE",
 )
 EOF
-  cat > $LOCAL/BUILD <<EOF
+  cat > $LOCAL/UCBUILD <<EOF
 genrule(
     name = "b",
     srcs = ["@a//:get-input"],
@@ -52,13 +52,13 @@ EOF
 }
 
 function test_build_file_changes_are_noticed() {
-  cat > $REMOTE/BUILD <<EOF
+  cat > $REMOTE/UCBUILD <<EOF
 SYNTAX ERROR
 EOF
   bazel build //:b &> $TEST_log && fail "Build succeeded"
   expect_log "syntax error at 'ERROR'"
 
-  cat > $REMOTE/BUILD <<EOF
+  cat > $REMOTE/UCBUILD <<EOF
 genrule(
     name = "get-input",
     outs = ["a.out"],
@@ -132,7 +132,7 @@ EOF
 function test_genrule_d_correctness() {
   subdir=$REMOTE/b/c
   mkdir -p $subdir
-  cat > $subdir/BUILD <<EOF
+  cat > $subdir/UCBUILD <<EOF
 genrule(
     name = "echo-d",
     outs = ["d"],
@@ -148,11 +148,11 @@ function test_package_group_in_external_repos() {
   REMOTE=$TEST_TMPDIR/r
   mkdir -p $REMOTE/v $REMOTE/a v a
 
-  echo 'filegroup(name="rv", srcs=["//:fg"])' > $REMOTE/v/BUILD
-  echo 'filegroup(name="ra", srcs=["//:fg"])' > $REMOTE/a/BUILD
-  echo 'filegroup(name="mv", srcs=["@r//:fg"])' > v/BUILD
-  echo 'filegroup(name="ma", srcs=["@r//:fg"])' > a/BUILD
-  cat > $REMOTE/BUILD <<EOF
+  echo 'filegroup(name="rv", srcs=["//:fg"])' > $REMOTE/v/UCBUILD
+  echo 'filegroup(name="ra", srcs=["//:fg"])' > $REMOTE/a/UCBUILD
+  echo 'filegroup(name="mv", srcs=["@r//:fg"])' > v/UCBUILD
+  echo 'filegroup(name="ma", srcs=["@r//:fg"])' > a/UCBUILD
+  cat > $REMOTE/UCBUILD <<EOF
 package_group(name="pg", packages=["//v"])
 filegroup(name="fg", visibility=[":pg"])
 EOF
@@ -177,10 +177,10 @@ function test_refs_btwn_repos() {
   cat > $REMOTE1/input <<EOF
 1.0
 EOF
-  cat > $REMOTE1/BUILD <<EOF
+  cat > $REMOTE1/UCBUILD <<EOF
 exports_files(['input'])
 EOF
-  cat > $REMOTE2/BUILD <<EOF
+  cat > $REMOTE2/UCBUILD <<EOF
 genrule(
     name = "x",
     srcs = ["@remote1//:input"],
@@ -207,17 +207,17 @@ function test_visibility_attributes_in_external_repos() {
   REMOTE=$TEST_TMPDIR/r
   mkdir -p $REMOTE/v $REMOTE/r
 
-  cat > $REMOTE/r/BUILD <<EOF
+  cat > $REMOTE/r/UCBUILD <<EOF
 package(default_visibility=["//v:v"])
 filegroup(name='fg1')  # Inherits default visibility
 filegroup(name='fg2', visibility=["//v:v"])
 EOF
 
-  cat > $REMOTE/v/BUILD <<EOF
+  cat > $REMOTE/v/UCBUILD <<EOF
 package_group(name="v", packages=["//"])
 EOF
 
-  cat >$REMOTE/BUILD <<EOF
+  cat >$REMOTE/UCBUILD <<EOF
 filegroup(name="fg", srcs=["//r:fg1", "//r:fg2"])
 EOF
 
@@ -225,7 +225,7 @@ EOF
 local_repository(name = "r", path = "$REMOTE")
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 filegroup(name="fg", srcs=["@r//r:fg1", "@r//r:fg2"])
 EOF
 
@@ -239,7 +239,7 @@ function test_select_in_external_repo() {
   REMOTE=$TEST_TMPDIR/r
   mkdir -p $REMOTE/a $REMOTE/c d
 
-  cat > $REMOTE/a/BUILD <<'EOF'
+  cat > $REMOTE/a/UCBUILD <<'EOF'
 genrule(
     name = "gr",
     srcs = [],
@@ -255,7 +255,7 @@ genrule(
 config_setting(name = "two", values = { "define": "ARG=two" })
 EOF
 
-  cat > $REMOTE/c/BUILD <<EOF
+  cat > $REMOTE/c/UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 config_setting(name = "one", values = { "define": "ARG=one" })
 EOF
@@ -264,12 +264,12 @@ EOF
 local_repository(name="r", path="$REMOTE")
 EOF
 
-  cat > d/BUILD <<EOF
+  cat > d/UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 config_setting(name = "three", values = { "define": "ARG=three" })
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 config_setting(name = "four", values = { "define": "ARG=four" })
 EOF

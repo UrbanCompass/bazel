@@ -3,7 +3,7 @@
 new_local_repository(
     name = "local_jdk",
     path = DEFAULT_SERVER_JAVABASE,
-    build_file = __embedded_dir__ + "/jdk.BUILD",
+    build_file = __embedded_dir__ + "/jdk.UCBUILD",
 )
 
 bind(

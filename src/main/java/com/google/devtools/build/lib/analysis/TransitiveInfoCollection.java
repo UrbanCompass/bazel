@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
   name = "Target",
   category = SkylarkModuleCategory.BUILTIN,
   doc =
-      "A BUILD target. It is essentially a <code>struct</code> with the following fields:"
+      "A UCBUILD target. It is essentially a <code>struct</code> with the following fields:"
     + "<ul>"
     + "<li><h3 id=\"modules.Target.label\">label</h3><code><a class=\"anchor\" "
     + "href=\"Label.html\">Label</a> Target.label</code><br>The identifier of the target.</li>"

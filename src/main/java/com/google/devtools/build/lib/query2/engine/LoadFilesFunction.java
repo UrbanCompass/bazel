@@ -57,7 +57,7 @@ class LoadFilesFunction implements QueryEnvironment.QueryFunction {
                 env.getBuildFiles(
                     expression,
                     result,
-                    /* BUILD */ false,
+                    /* UCBUILD */ false,
                     /* subinclude */ false,
                     /* load */ true));
           }

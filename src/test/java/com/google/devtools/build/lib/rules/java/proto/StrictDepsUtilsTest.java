@@ -30,7 +30,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=false");
 
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",
         "java_proto_library(name = 'c', strict_deps = 1)");
@@ -45,7 +45,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=false");
 
     scratch.file(
-        "y/BUILD",
+        "y/UCBUILD",
         "package(default_strict_deps_java_protos = 0)",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",
@@ -61,7 +61,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=false");
 
     scratch.file(
-        "z/BUILD",
+        "z/UCBUILD",
         "package(default_strict_deps_java_protos = 1)",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",
@@ -77,7 +77,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=true");
 
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",
         "java_proto_library(name = 'c', strict_deps = 1)");
@@ -92,7 +92,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=true");
 
     scratch.file(
-        "y/BUILD",
+        "y/UCBUILD",
         "package(default_strict_deps_java_protos = 0)",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",
@@ -108,7 +108,7 @@ public class StrictDepsUtilsTest extends BuildViewTestCase {
     useConfiguration("--strict_deps_java_protos=true");
 
     scratch.file(
-        "z/BUILD",
+        "z/UCBUILD",
         "package(default_strict_deps_java_protos = 1)",
         "java_proto_library(name = 'a')",
         "java_proto_library(name = 'b', strict_deps = 0)",

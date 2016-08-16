@@ -45,7 +45,7 @@ import java.util.Map;
 public class ConfigSettingTest extends BuildViewTestCase {
 
   private void writeSimpleExample() throws Exception {
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
         "config_setting(",
         "    name = 'foo',",
         "    values = {",
@@ -167,7 +167,7 @@ public class ConfigSettingTest extends BuildViewTestCase {
     String crosstoolCpuDefault = (String) getTargetConfiguration().getOptionValue("cpu");
     String crosstoolCompilerDefault = (String) getTargetConfiguration().getOptionValue("compiler");
 
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "config_setting(",
         "    name = 'match',",
         "    values = {",
@@ -187,7 +187,7 @@ public class ConfigSettingTest extends BuildViewTestCase {
    */
   @Test
   public void testMultiValueDict() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "config_setting(",
         "    name = 'match',",
         "    values = {",
@@ -213,7 +213,7 @@ public class ConfigSettingTest extends BuildViewTestCase {
    */
   @Test
   public void testMultiValueList() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "config_setting(",
         "    name = 'match',",
         "    values = {",
@@ -249,7 +249,7 @@ public class ConfigSettingTest extends BuildViewTestCase {
 
   @Test
   public void testRequiredConfigFragmentMatcher() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "config_setting(",
         "    name = 'match',",
         "    values = {",

@@ -60,7 +60,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
 
   @Test
   public void testCreatePackage() throws Exception {
-    Path buildFile = scratch.file("/pkgname/BUILD", "# empty build file ");
+    Path buildFile = scratch.file("/pkgname/UCBUILD", "# empty build file ");
     Package pkg = packages.createPackage("pkgname", buildFile);
     assertEquals("pkgname", pkg.getName());
     assertThat(Sets.newHashSet(pkg.getTargets(Rule.class))).isEmpty();
@@ -94,7 +94,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testBadRuleName() throws Exception {
     events.setFailFast(false);
 
-    Path buildFile = scratch.file("/badrulename/BUILD", "cc_library(name = 3)");
+    Path buildFile = scratch.file("/badrulename/UCBUILD", "cc_library(name = 3)");
     Package pkg = packages.createPackage("badrulename", buildFile);
 
     events.assertContainsError("cc_library 'name' attribute must be a string");
@@ -105,7 +105,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testNoRuleName() throws Exception {
     events.setFailFast(false);
 
-    Path buildFile = scratch.file("/badrulename/BUILD", "cc_library()");
+    Path buildFile = scratch.file("/badrulename/UCBUILD", "cc_library()");
     Package pkg = packages.createPackage("badrulename", buildFile);
 
     events.assertContainsError("cc_library rule has no 'name' attribute");
@@ -130,7 +130,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path path =
         scratch.file(
-            "/googledata/cafe/BUILD",
+            "/googledata/cafe/UCBUILD",
             "exports_files(['houseads/house_ads:ca-aol_parenting_html'])");
     Package pkg = packages.createPackage("googledata/cafe", path);
     events.assertContainsError("target names may not contain ':'");
@@ -153,7 +153,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/duplicaterulename/BUILD",
+            "/duplicaterulename/UCBUILD",
             "# -*- python -*-",
             "proto_library(name = 'spell_proto', srcs = ['spell.proto'], cc_api_version = 2)",
             "cc_library(name = 'spell_proto')");
@@ -170,7 +170,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/has_dupe/BUILD",
+            "/has_dupe/UCBUILD",
             "cc_library(name='dep')",
             "cc_library(name='has_dupe', deps=[':dep', ':dep'])");
 
@@ -191,7 +191,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/fruit/orange/BUILD",
+            "/fruit/orange/UCBUILD",
             "genrule(name='orange', srcs=[], outs=['a', 'a/b'], cmd='')");
 
     packages.createPackage("fruit/orange", buildFile);
@@ -203,7 +203,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/fruit/orange/BUILD",
+            "/fruit/orange/UCBUILD",
             "genrule(name='orange', srcs=[], outs=['a/b', 'a'], cmd='')");
 
     packages.createPackage("fruit/orange", buildFile);
@@ -215,7 +215,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/fruit/kiwi/BUILD",
+            "/fruit/kiwi/UCBUILD",
             "genrule(name='kiwi1', srcs=[], outs=['a'], cmd='')",
             "genrule(name='kiwi2', srcs=[], outs=['a/b'], cmd='')");
     packages.createPackage("fruit/kiwi", buildFile);
@@ -228,7 +228,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path buildFile =
         scratch.file(
-            "/fruit/kiwi/BUILD",
+            "/fruit/kiwi/UCBUILD",
             "genrule(name='kiwi1', srcs=[], outs=['a/b'], cmd='')",
             "genrule(name='kiwi2', srcs=[], outs=['a'], cmd='')");
     packages.createPackage("fruit/kiwi", buildFile);
@@ -239,7 +239,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   @Test
   public void testPackageConstant() throws Exception {
     Path buildFile =
-        scratch.file("/pina/BUILD", "cc_library(name=PACKAGE_NAME + '-colada')");
+        scratch.file("/pina/UCBUILD", "cc_library(name=PACKAGE_NAME + '-colada')");
 
     Package pkg = packages.createPackage("pina", buildFile);
     events.assertNoWarningsOrErrors();
@@ -253,7 +253,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testPackageConstantInExternalRepository() throws Exception {
     Path buildFile =
         scratch.file(
-            "/external/a/b/BUILD",
+            "/external/a/b/UCBUILD",
             "genrule(name='c', srcs=[], outs=['ao'], cmd=REPOSITORY_NAME + ' ' + PACKAGE_NAME)");
     Package pkg =
         packages.createPackage(
@@ -268,7 +268,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
 
     Path buildFile =
         scratch.file(
-            "/multipleduplicaterulename/BUILD",
+            "/multipleduplicaterulename/UCBUILD",
             "# -*- python -*-",
             "proto_library(name = 'spellcheck_proto',",
             "         srcs = ['spellcheck.proto'],",
@@ -291,21 +291,21 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
 
   @Test
   public void testBuildFileTargetExists() throws Exception {
-    Path buildFile = scratch.file("/foo/BUILD", "");
+    Path buildFile = scratch.file("/foo/UCBUILD", "");
     Package pkg = packages.createPackage("foo", buildFile);
 
-    Target target = pkg.getTarget("BUILD");
-    assertEquals("BUILD", target.getName());
+    Target target = pkg.getTarget("UCBUILD");
+    assertEquals("UCBUILD", target.getName());
 
     // Test that it's memoized:
-    assertSame(target, pkg.getTarget("BUILD"));
+    assertSame(target, pkg.getTarget("UCBUILD"));
   }
 
   @Test
   public void testCreationOfInputFiles() throws Exception {
     Path buildFile =
         scratch.file(
-            "/foo/BUILD",
+            "/foo/UCBUILD",
             "exports_files(['Z'])",
             "cc_library(name='W', deps=['X', 'Y'])",
             "cc_library(name='X', srcs=['X'])",
@@ -330,22 +330,22 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
       assertThat(e)
           .hasMessage(
               "no such target '//foo:A': "
-                  + "target 'A' not declared in package 'foo' defined by /foo/BUILD");
+                  + "target 'A' not declared in package 'foo' defined by /foo/UCBUILD");
     }
 
-    // These are the only input files: BUILD, Z
+    // These are the only input files: UCBUILD, Z
     Set<String> inputFiles = Sets.newTreeSet();
     for (InputFile inputFile : pkg.getTargets(InputFile.class)) {
       inputFiles.add(inputFile.getName());
     }
-    assertEquals(ImmutableList.of("BUILD", "Z"), Lists.newArrayList(inputFiles));
+    assertEquals(ImmutableList.of("UCBUILD", "Z"), Lists.newArrayList(inputFiles));
   }
 
   @Test
   public void testThirdPartyLicenseError() throws Exception {
     events.setFailFast(false);
     Path buildFile =
-        scratch.file("/third_party/foo/BUILD", "# line 1", "cc_library(name='bar')", "# line 3");
+        scratch.file("/third_party/foo/UCBUILD", "# line 1", "cc_library(name='bar')", "# line 3");
     Package pkg = packages.createPackage("third_party/foo", buildFile);
     events.assertContainsError(
         "third-party rule '//third_party/foo:bar' lacks a license "
@@ -357,7 +357,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   @Test
   public void testThirdPartyLicenseExportsFileError() throws Exception {
     events.setFailFast(false);
-    Path buildFile = scratch.file("/third_party/foo/BUILD", "exports_files(['bar'])");
+    Path buildFile = scratch.file("/third_party/foo/UCBUILD", "exports_files(['bar'])");
     Package pkg = packages.createPackage("third_party/foo", buildFile);
     events.assertContainsError(
         "third-party file 'bar' lacks a license "
@@ -371,7 +371,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path path =
         scratch.file(
-            "/dup/BUILD",
+            "/dup/UCBUILD",
             "proto_library(name = 'dup_proto',",
             "              srcs  = ['dup.proto'],",
             "              cc_api_version = 2)",
@@ -403,7 +403,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     // "out2" still has rule1 as its getGeneratingRule().
     Path path =
         scratch.file(
-            "/conflict/BUILD",
+            "/conflict/UCBUILD",
             "genrule(name = 'rule1',",
             "        cmd = '',",
             "        srcs = ['in1', 'in2'],",
@@ -444,7 +444,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     events.setFailFast(false);
     Path path =
         scratch.file(
-            "/error/BUILD",
+            "/error/UCBUILD",
             "genrule(name = 'rule1',",
             "        cmd = ':',",
             "        outs = ['out.1'])",
@@ -471,7 +471,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
 
   @Test
   public void testHelpfulErrorForMissingExportsFiles() throws Exception {
-    Path path = scratch.file("/x/BUILD", "cc_library(name='x', srcs=['x.cc'])");
+    Path path = scratch.file("/x/UCBUILD", "cc_library(name='x', srcs=['x.cc'])");
     scratch.file("/x/x.cc");
     scratch.file("/x/y.cc");
     scratch.file("/x/dir/dummy");
@@ -489,8 +489,8 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
               "no such target '//x:y.cc': "
                   + "target 'y.cc' not declared in package 'x'; "
                   + "however, a source file of this name exists.  "
-                  + "(Perhaps add 'exports_files([\"y.cc\"])' to x/BUILD?) "
-                  + "defined by /x/BUILD");
+                  + "(Perhaps add 'exports_files([\"y.cc\"])' to x/UCBUILD?) "
+                  + "defined by /x/UCBUILD");
     }
 
     try {
@@ -501,7 +501,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
           .hasMessage(
               "no such target '//x:z.cc': "
                   + "target 'z.cc' not declared in package 'x' (did you mean 'x.cc'?) "
-                  + "defined by /x/BUILD");
+                  + "defined by /x/UCBUILD");
     }
 
     try {
@@ -512,8 +512,8 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
           .hasMessage(
               "no such target '//x:dir': target 'dir' not declared in package 'x'; "
                   + "however, a source directory of this name exists.  "
-                  + "(Perhaps add 'exports_files([\"dir\"])' to x/BUILD, "
-                  + "or define a filegroup?) defined by /x/BUILD");
+                  + "(Perhaps add 'exports_files([\"dir\"])' to x/UCBUILD, "
+                  + "or define a filegroup?) defined by /x/UCBUILD");
     }
   }
 
@@ -521,7 +521,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testTestSuitesImplicitlyDependOnAllRulesInPackage() throws Exception {
     Path path =
         scratch.file(
-            "/x/BUILD",
+            "/x/UCBUILD",
             "java_test(name='j')",
             "test_suite(name='t1')",
             "test_suite(name='t2', tests=['//foo'])",
@@ -550,7 +550,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     emptyFile("/fruit/data/berry/blue");
     Path file =
         scratch.file(
-            "/fruit/BUILD",
+            "/fruit/UCBUILD",
             "cc_library(name = 'yes', srcs = glob(['data/*']))",
             "cc_library(name = 'no',  srcs = glob(['data/*'], exclude_directories=0))");
     Package pkg = packages.eval("fruit", file);
@@ -579,7 +579,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     emptyFile("/rg/foo/wiz/quid/gav.cc");
     Path file =
         scratch.file(
-            "/rg/BUILD",
+            "/rg/UCBUILD",
             "cc_library(name = 'ri', srcs = glob(['**/*.cc']))",
             "cc_library(name = 're', srcs = glob(['*.cc'], exclude=['**/*.c']))");
     Package pkg = packages.eval("rg", file);
@@ -588,7 +588,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     assertEvaluates(
         pkg,
         ImmutableList.of(
-            "BUILD",
+            "UCBUILD",
             "a.cc",
             "foo",
             "foo/bar.cc",
@@ -714,7 +714,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
           /*excludesDirs=*/ true);
       fail();
     } catch (IllegalArgumentException e) {
-      assertThat(e).hasMessage("ERROR /globs/BUILD:2:73: name 'this_will_fail' is not defined");
+      assertThat(e).hasMessage("ERROR /globs/UCBUILD:2:73: name 'this_will_fail' is not defined");
     }
   }
 
@@ -804,7 +804,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     unreadableSubdir.createDirectory();
     unreadableSubdir.setReadable(false);
 
-    Path file = scratch.file("/pkg/BUILD", "cc_library(name = 'c', srcs = glob(['globs/**']))");
+    Path file = scratch.file("/pkg/UCBUILD", "cc_library(name = 'c', srcs = glob(['globs/**']))");
     packages.eval("pkg", file);
     events.assertContainsError("error globbing [globs/**]: Directory is not readable");
   }
@@ -895,8 +895,8 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   @Test
   public void testExportsBuildFile() throws Exception {
     Package pkg =
-        expectEvalSuccess("exports_files(['BUILD'], visibility=['//visibility:private'])");
-    assertEquals(pkg.getBuildFile(), pkg.getTarget("BUILD"));
+        expectEvalSuccess("exports_files(['UCBUILD'], visibility=['//visibility:private'])");
+    assertEquals(pkg.getBuildFile(), pkg.getTarget("UCBUILD"));
   }
 
   @Test
@@ -904,7 +904,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     String msg = "I am completely operational, and all my circuits are functioning perfectly.";
     Path file =
         scratch.file(
-            "/foo/BUILD",
+            "/foo/UCBUILD",
             "package(default_deprecation = \"" + msg + "\")",
             "sh_library(name = 'bar', srcs=['b'])");
     Package pkg = packages.eval("foo", file);
@@ -919,7 +919,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testDefaultTestonlyPropagation() throws Exception {
     Path file =
         scratch.file(
-            "/foo/BUILD",
+            "/foo/UCBUILD",
             "package(default_testonly = 1)",
             "sh_library(name = 'foo', srcs=['b'])",
             "sh_library(name = 'bar', srcs=['b'], testonly = 0)");
@@ -940,7 +940,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
     String deceive = "OMG PONIES!";
     Path file =
         scratch.file(
-            "/foo/BUILD",
+            "/foo/UCBUILD",
             "package(default_deprecation = \"" + deceive + "\")",
             "sh_library(name = 'bar', srcs=['b'], deprecation = \"" + msg + "\")");
     Package pkg = packages.eval("foo", file);
@@ -955,7 +955,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testPackageFeatures() throws Exception {
     Path file =
         scratch.file(
-            "/a/BUILD",
+            "/a/UCBUILD",
             "sh_library(name='before')",
             "package(features=['b', 'c'])",
             "sh_library(name='after')");
@@ -970,7 +970,7 @@ public class PackageFactoryTest extends PackageFactoryTestBase {
   public void testTransientErrorsInGlobbing() throws Exception {
     events.setFailFast(false);
     Path buildFile =
-        scratch.file("/e/BUILD", "sh_library(name = 'e', data = glob(['*.txt']))");
+        scratch.file("/e/UCBUILD", "sh_library(name = 'e', data = glob(['*.txt']))");
     Path parentDir = buildFile.getParentDirectory();
     scratch.file("/e/data.txt");
     throwOnReaddir = parentDir;

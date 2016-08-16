@@ -60,7 +60,7 @@ public class SkylarkImportLookupValue implements SkyValue {
 
   /**
    * SkyKey for a Skylark import composed of the label of the Skylark extension and wether it is
-   * loaded from the WORKSPACE file or from a BUILD file.
+   * loaded from the WORKSPACE file or from a UCBUILD file.
    */
   @Immutable
   public static final class SkylarkImportLookupKey implements Serializable {

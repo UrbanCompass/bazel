@@ -4,7 +4,7 @@ title: Build Encyclopedia
 ---
 #parse("com/google/devtools/build/docgen/templates/be/header.vm")
 
-<h1>Bazel BUILD Encyclopedia of Functions</h1>
+<h1>Bazel UCBUILD Encyclopedia of Functions</h1>
 <h2>Contents</h2>
 
 <h3>Concepts and terminology</h3>

@@ -53,7 +53,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   }
 
   private void writeConfigRules() throws Exception {
-    scratch.file("conditions/BUILD",
+    scratch.file("conditions/UCBUILD",
         "config_setting(",
         "    name = 'a',",
         "    values = {'define': 'mode=a'})",
@@ -69,7 +69,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testGetAttribute() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(",
         "    name = 'gen',",
         "    srcs = [],",
@@ -96,7 +96,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testLabelVisitation() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "sh_binary(",
         "    name = 'bin',",
         "    srcs = ['bin.sh'],",
@@ -153,7 +153,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testConfigurationTransitions() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(",
         "    name = 'gen',",
         "    srcs = [],",
@@ -188,7 +188,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
 
   @Test
   public void testConcatenatedSelects() throws Exception {
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "config_setting(name = 'a', values = {'define': 'foo=a'})",
         "config_setting(name = 'b', values = {'define': 'foo=b'})",
         "config_setting(name = 'c', values = {'define': 'bar=c'})",
@@ -210,7 +210,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testNoneValuesMeansAttributeIsNotExplicitlySet() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(",
         "    name = 'gen',",
         "    srcs = [],",
@@ -231,7 +231,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testNoneValuesWithMultipleSelectsAllNone() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(",
         "    name = 'gen',",
         "    srcs = [],",
@@ -256,7 +256,7 @@ public class ConfiguredAttributeMapperTest extends BuildViewTestCase {
   @Test
   public void testNoneValueOnDefaultConditionWithNullDefault() throws Exception {
     writeConfigRules();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = ['lib.cc'],",

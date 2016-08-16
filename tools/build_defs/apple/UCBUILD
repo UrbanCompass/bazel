@@ -2,6 +2,6 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "srcs",
-    srcs = glob(["*.bzl"]) + ["BUILD"],
+    srcs = glob(["*.bzl"]) + ["UCBUILD"],
     visibility = ["//tools:__pkg__"],
 )

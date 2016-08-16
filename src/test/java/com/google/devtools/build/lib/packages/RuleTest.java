@@ -40,7 +40,7 @@ public class RuleTest {
 
   @Test
   public void testAttributeLocation() throws Exception {
-    Path buildFile = scratch.file("x/BUILD",
+    Path buildFile = scratch.file("x/UCBUILD",
         "cc_binary(name = 'x',",
         "          srcs = ['a', 'b', 'c'],",
         "          defines = ['-Da', '-Db'])");
@@ -72,7 +72,7 @@ public class RuleTest {
   @Test
   public void testOutputNameError() throws Exception {
     events.setFailFast(false);
-    Path buildFile = scratch.file("namecollide/BUILD",
+    Path buildFile = scratch.file("namecollide/UCBUILD",
         "genrule(name = 'hello_world',",
                 "srcs = ['ignore_me.txt'],",
                 "outs = ['message.txt', 'hello_world'],",
@@ -87,7 +87,7 @@ public class RuleTest {
 
   @Test
   public void testIsLocalTestRuleForLocalEquals1() throws Exception {
-    Path buildFile = scratch.file("x/BUILD",
+    Path buildFile = scratch.file("x/UCBUILD",
         "cc_test(name = 'y',",
         "          srcs = ['a'],",
         "          local = 0)",
@@ -103,7 +103,7 @@ public class RuleTest {
 
   @Test
   public void testDeprecation() throws Exception {
-    Path buildFile = scratch.file("x/BUILD",
+    Path buildFile = scratch.file("x/UCBUILD",
         "cc_test(name = 'y')",
         "cc_test(name = 'z', deprecation = 'Foo')");
     Package pkg = packages.createPackage("x", buildFile);
@@ -115,7 +115,7 @@ public class RuleTest {
 
   @Test
   public void testVisibilityValid() throws Exception {
-    Package pkg = packages.createPackage("x", scratch.file("x/BUILD",
+    Package pkg = packages.createPackage("x", scratch.file("x/UCBUILD",
         "cc_binary(name = 'pr',",
         "          visibility = ['//visibility:private'])",
         "cc_binary(name = 'pu',",

@@ -39,17 +39,17 @@ public class NewLocalRepositoryRule implements RuleDefinition {
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("path", STRING).mandatory())
         /* <!-- #BLAZE_RULE(new_local_repository).ATTRIBUTE(build_file) -->
-        A file to use as a BUILD file for this directory.
+        A file to use as a UCBUILD file for this directory.
 
         <p>Either build_file or build_file_content must be specified.</p>
 
         <p>This attribute is a label relative to the main workspace. The file does not need to be
-        named BUILD, but can be (something like BUILD.new-repo-name may work well for
-        distinguishing it from the repository's actual BUILD files.</p>
+        named UCBUILD, but can be (something like UCBUILD.new-repo-name may work well for
+        distinguishing it from the repository's actual UCBUILD files.</p>
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("build_file", STRING))
         /* <!-- #BLAZE_RULE(new_local_repository).ATTRIBUTE(build_file_content) -->
-        The content for the BUILD file for this repository.
+        The content for the UCBUILD file for this repository.
 
         <p>Either build_file or build_file_content must be specified.</p>
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
@@ -74,7 +74,7 @@ public class NewLocalRepositoryRule implements RuleDefinition {
   repository can define and use targets from anywhere on the filesystem.</p>
 
 <p>This rule creates a Bazel repository by creating a WORKSPACE file and subdirectory containing
-symlinks to the BUILD file and path given.  The build file should create targets relative to the
+symlinks to the UCBUILD file and path given.  The build file should create targets relative to the
 <code>path</code>.
 
 <h4 id="new_local_repository_examples">Examples</h4>
@@ -82,8 +82,8 @@ symlinks to the BUILD file and path given.  The build file should create targets
 <p>Suppose the current repository is a chat client, rooted at the directory <i>~/chat-app</i>. It
   would like to use an SSL library which is defined in a different directory: <i>~/ssl</i>.</p>
 
-<p>The user can add a dependency by creating a BUILD file for the SSL library
-(~/chat-app/BUILD.my-ssl) containing:
+<p>The user can add a dependency by creating a UCBUILD file for the SSL library
+(~/chat-app/UCBUILD.my-ssl) containing:
 
 <pre class="code">
 java_library(
@@ -99,7 +99,7 @@ java_library(
 new_local_repository(
     name = "my-ssl",
     path = "/home/user/ssl",
-    build_file = "BUILD.my-ssl",
+    build_file = "UCBUILD.my-ssl",
 )
 </pre>
 
@@ -115,11 +115,11 @@ could add just that file to your build by adding the following to your WORKSPACE
 new_local_repository(
     name = "piano",
     path = "/home/username/Downloads/piano.jar",
-    build_file = "BUILD.piano",
+    build_file = "UCBUILD.piano",
 )
 </pre>
 
-<p>And creating the following BUILD.piano file:</p>
+<p>And creating the following UCBUILD.piano file:</p>
 
 <pre class="code">
 java_import(

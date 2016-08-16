@@ -39,7 +39,7 @@ import java.util.TreeSet;
 
 /**
  * Expands $(location) tags inside target attributes.
- * You can specify something like this in the BUILD file:
+ * You can specify something like this in the UCBUILD file:
  *
  * somerule(name='some name',
  *          someopt = [ '$(location //mypackage:myhelper)' ],
@@ -75,7 +75,7 @@ public class LocationExpander {
   /**
    * Creates location expander helper bound to specific target and with default location map.
    *
-   * @param ruleContext BUILD rule
+   * @param ruleContext UCBUILD rule
    * @param labelMap A mapping of labels to build artifacts.
    * @param allowDataAttributeEntriesInLabel set to true if the <code>data</code> attribute should
    *        be used too.
@@ -96,7 +96,7 @@ public class LocationExpander {
   /**
    * Creates location expander helper bound to specific target.
    *
-   * @param ruleContext the BUILD rule's context
+   * @param ruleContext the UCBUILD rule's context
    * @param options the list of options, see {@link Options}.
    */
   public LocationExpander(RuleContext ruleContext, ImmutableSet<Options> options) {
@@ -107,7 +107,7 @@ public class LocationExpander {
   /**
    * Creates location expander helper bound to specific target.
    * 
-   * @param ruleContext the BUILD rule's context
+   * @param ruleContext the UCBUILD rule's context
    * @param options the list of options, see {@link Options}.
    */
   public LocationExpander(RuleContext ruleContext, Options... options) {
@@ -261,7 +261,7 @@ public class LocationExpander {
   /**
    * Extracts all possible target locations from target specification.
    *
-   * @param ruleContext BUILD target object
+   * @param ruleContext UCBUILD target object
    * @param labelMap map of labels to build artifacts
    * @return map of all possible target locations
    */

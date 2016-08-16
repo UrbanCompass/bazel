@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
  *
  * <p>Traversing a directory results in a collection of {@link ResolvedFile}s for all files and
  * symlinks under it, and in all of its subdirectories. The {@link TraversalRequest} can specify
- * whether to traverse source subdirectories that are packages (have BUILD files in them).
+ * whether to traverse source subdirectories that are packages (have UCBUILD files in them).
  *
  * <p>Traversing a symlink that points to a directory is the same as traversing a normal directory.
  * The paths in the result will not be resolved; the files will be listed under the symlink, as if
@@ -126,7 +126,7 @@ public final class RecursiveFilesystemTraversalValue implements SkyValue {
     final PackageBoundaryMode crossPkgBoundaries;
 
     /**
-     * Whether to skip checking if the root (if it's a directory) contains a BUILD file.
+     * Whether to skip checking if the root (if it's a directory) contains a UCBUILD file.
      *
      * <p>Such directories are not considered to be packages when this flag is true. This needs to
      * be true in order to traverse directories of packages, but should be false for <i>their</i>

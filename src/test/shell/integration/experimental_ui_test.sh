@@ -54,7 +54,7 @@ sleep 1
 exit 0
 EOF
   chmod 755 pkg/output.sh
-  cat > pkg/BUILD <<EOF
+  cat > pkg/UCBUILD <<EOF
 sh_test(
   name = "true",
   srcs = ["true.sh"],

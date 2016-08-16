@@ -81,7 +81,7 @@ public class TargetPatternEvaluatorIOTest extends AbstractTargetPatternEvaluator
   public void testBadStatKeepGoing() throws Exception {
     reporter.removeHandler(failFastHandler);
     // Given a package, "parent",
-    Path parent = scratch.file("parent/BUILD", "sh_library(name = 'parent')").getParentDirectory();
+    Path parent = scratch.file("parent/UCBUILD", "sh_library(name = 'parent')").getParentDirectory();
     // And a child, "badstat",
     FileSystemUtils.createDirectoryAndParents(parent.getRelative("badstat"));
 
@@ -103,7 +103,7 @@ public class TargetPatternEvaluatorIOTest extends AbstractTargetPatternEvaluator
   public void testBadReaddirKeepGoing() throws Exception {
     reporter.removeHandler(failFastHandler);
     // Given a package, "parent",
-    Path parent = scratch.file("parent/BUILD", "sh_library(name = 'parent')").getParentDirectory();
+    Path parent = scratch.file("parent/UCBUILD", "sh_library(name = 'parent')").getParentDirectory();
     // And a child, "badstat",
     FileSystemUtils.createDirectoryAndParents(parent.getRelative("badstat"));
 

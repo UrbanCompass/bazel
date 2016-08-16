@@ -65,7 +65,7 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
   @Before
   public final void setUp() throws Exception {
     Path emptyPackagePath = rootDirectory.getRelative("somewhere/else");
-    scratch.file("parentpackage/BUILD");
+    scratch.file("parentpackage/UCBUILD");
 
     AnalysisMock analysisMock = AnalysisMock.get();
     AtomicReference<PathPackageLocator> pkgLocator = new AtomicReference<>(
@@ -143,7 +143,7 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testDeletedPackage() throws Exception {
-    scratch.file("parentpackage/deletedpackage/BUILD");
+    scratch.file("parentpackage/deletedpackage/UCBUILD");
     deletedPackages.set(ImmutableSet.of(
         PackageIdentifier.createInMainRepo("parentpackage/deletedpackage")));
     PackageLookupValue packageLookupValue = lookupPackage("parentpackage/deletedpackage");
@@ -155,8 +155,8 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testBlacklistedPackage() throws Exception {
-    scratch.file("blacklisted/subdir/BUILD");
-    scratch.file("blacklisted/BUILD");
+    scratch.file("blacklisted/subdir/UCBUILD");
+    scratch.file("blacklisted/UCBUILD");
     PrecomputedValue.BLACKLISTED_PACKAGE_PREFIXES_FILE.set(differencer,
         new PathFragment("config/blacklisted.txt"));
     Path blacklist = scratch.file("config/blacklisted.txt", "blacklisted");
@@ -182,7 +182,7 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testInvalidPackageName() throws Exception {
-    scratch.file("parentpackage/invalidpackagename%42/BUILD");
+    scratch.file("parentpackage/invalidpackagename%42/UCBUILD");
     PackageLookupValue packageLookupValue = lookupPackage("parentpackage/invalidpackagename%42");
     assertFalse(packageLookupValue.packageExists());
     assertEquals(ErrorReason.INVALID_PACKAGE_NAME,
@@ -192,7 +192,7 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testDirectoryNamedBuild() throws Exception {
-    scratch.dir("parentpackage/isdirectory/BUILD");
+    scratch.dir("parentpackage/isdirectory/UCBUILD");
     PackageLookupValue packageLookupValue = lookupPackage("parentpackage/isdirectory");
     assertFalse(packageLookupValue.packageExists());
     assertEquals(ErrorReason.NO_BUILD_FILE,
@@ -202,20 +202,20 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testEverythingIsGood() throws Exception {
-    scratch.file("parentpackage/everythinggood/BUILD");
+    scratch.file("parentpackage/everythinggood/UCBUILD");
     PackageLookupValue packageLookupValue = lookupPackage("parentpackage/everythinggood");
     assertTrue(packageLookupValue.packageExists());
     assertEquals(rootDirectory, packageLookupValue.getRoot());
-    assertEquals(BuildFileName.BUILD, packageLookupValue.getBuildFileName());
+    assertEquals(BuildFileName.UCBUILD, packageLookupValue.getBuildFileName());
   }
 
   @Test
   public void testEmptyPackageName() throws Exception {
-    scratch.file("BUILD");
+    scratch.file("UCBUILD");
     PackageLookupValue packageLookupValue = lookupPackage("");
     assertTrue(packageLookupValue.packageExists());
     assertEquals(rootDirectory, packageLookupValue.getRoot());
-    assertEquals(BuildFileName.BUILD, packageLookupValue.getBuildFileName());
+    assertEquals(BuildFileName.UCBUILD, packageLookupValue.getBuildFileName());
   }
 
   @Test
@@ -236,11 +236,11 @@ public class PackageLookupFunctionTest extends FoundationTestCase {
     // to have logical equality semantics.
     new EqualsTester()
         .addEqualityGroup(
-            PackageLookupValue.success(root1, BuildFileName.BUILD),
-            PackageLookupValue.success(root1, BuildFileName.BUILD))
+            PackageLookupValue.success(root1, BuildFileName.UCBUILD),
+            PackageLookupValue.success(root1, BuildFileName.UCBUILD))
         .addEqualityGroup(
-            PackageLookupValue.success(root2, BuildFileName.BUILD),
-            PackageLookupValue.success(root2, BuildFileName.BUILD))
+            PackageLookupValue.success(root2, BuildFileName.UCBUILD),
+            PackageLookupValue.success(root2, BuildFileName.UCBUILD))
         .addEqualityGroup(
             PackageLookupValue.NO_BUILD_FILE_VALUE, PackageLookupValue.NO_BUILD_FILE_VALUE)
         .addEqualityGroup(

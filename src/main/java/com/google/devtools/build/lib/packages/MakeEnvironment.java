@@ -83,8 +83,8 @@ public class MakeEnvironment {
       return null;
     }
     // First, look for a matching non-default binding.
-    // (The order in 'bindings' is the reverse of the order of vardefs in the BUILD file, so
-    // the first match in this for loop selects the last matching definition in the BUILD file.)
+    // (The order in 'bindings' is the reverse of the order of vardefs in the UCBUILD file, so
+    // the first match in this for loop selects the last matching definition in the UCBUILD file.)
     for (Binding binding : bindings) {
       if (!binding.platformSetRegexp.equals(MATCH_ANY) &&
           platform.matches(binding.platformSetRegexp)) {

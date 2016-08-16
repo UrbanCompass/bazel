@@ -56,7 +56,7 @@ public final class TargetMarkerFunction implements SkyFunction {
 
     if (label.getName().contains("/")) {
       // This target is in a subdirectory, therefore it could potentially be invalidated by
-      // a new BUILD file appearing in the hierarchy.
+      // a new UCBUILD file appearing in the hierarchy.
       PathFragment containingDirectory = label.toPathFragment().getParentDirectory();
       ContainingPackageLookupValue containingPackageLookupValue;
       try {
@@ -77,7 +77,7 @@ public final class TargetMarkerFunction implements SkyFunction {
         // trying to build the target for label 'a:b/foo'.
         throw new BuildFileNotFoundException(
             label.getPackageIdentifier(),
-            "BUILD file not found on package path for '" + pkgForLabel.getPathString() + "'");
+            "UCBUILD file not found on package path for '" + pkgForLabel.getPathString() + "'");
       }
       if (!containingPackageLookupValue.getContainingPackageName().equals(
               label.getPackageIdentifier())) {

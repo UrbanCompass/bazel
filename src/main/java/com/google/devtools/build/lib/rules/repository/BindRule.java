@@ -82,7 +82,7 @@ bind(
 
 <p>Now targets can depend on <code>//external:javacc-latest</code> instead of
   <code>//third_party/javacc-v2</code>. If javacc-v3 is released, the <code>bind</code> rule can be
-  updated and all of the BUILD files depending on <code>//external:javacc-latest</code> will now
+  updated and all of the UCBUILD files depending on <code>//external:javacc-latest</code> will now
   depend on javacc-v3 without needing to be edited.</p>
 
 <p>Bind can also be used to make targets in external repositories available to your workspace.
@@ -97,7 +97,7 @@ bind(
 )
 </pre>
 
-<p>Then, in a BUILD file in your workspace, the bound target can be used as follows:</p>
+<p>Then, in a UCBUILD file in your workspace, the bound target can be used as follows:</p>
 
 <pre class="code">
 cc_library(

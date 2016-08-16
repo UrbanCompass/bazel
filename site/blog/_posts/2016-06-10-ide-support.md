@@ -17,7 +17,7 @@ and how an IDE plugin integrating with Bazel can be implemented.
 
 ## Principles of Bazel IDE support
 
-Bazel BUILD files provide a description of a project’s source code: what
+Bazel UCBUILD files provide a description of a project’s source code: what
 source files are part of the project, what artifacts (targets) should be
 built from those files, what the dependencies between those files are, etc.
 Bazel uses this information to perform a build, that is, it figures out the set
@@ -78,7 +78,7 @@ The `--aspects` flag directs Bazel to apply `e4b_aspect`, exported from
 The aspect is then applied transitively to the dependencies of the specified
 targets, producing `.e4b-build.json` files for each target in the transitive
 closure of dependencies. The e4b plugin reads those outputs and provides
-a Classpath for Eclipse core to consume. If the input BUILD files change
+a Classpath for Eclipse core to consume. If the input UCBUILD files change
 so that a project model needs to be re-synced, the plugin still invokes
 the exact same command: Bazel will rebuild only those files that are affected
 by the change, so the plugin need only reexamine only those newly built

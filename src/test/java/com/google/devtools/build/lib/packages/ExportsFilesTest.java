@@ -44,7 +44,7 @@ public class ExportsFilesTest {
   private PackageFactoryApparatus packages = new PackageFactoryApparatus(events.reporter());
 
   private Package pkg() throws Exception {
-    Path buildFile = scratch.file("pkg/BUILD",
+    Path buildFile = scratch.file("pkg/UCBUILD",
                                   "exports_files(['foo.txt', 'bar.txt'])");
     return packages.createPackage("pkg", buildFile);
   }
@@ -52,7 +52,7 @@ public class ExportsFilesTest {
   @Test
   public void testExportsFilesRegistersFilesWithPackage() throws Exception {
     List<String> names = getFileNamesOf(pkg());
-    String expected = "//pkg:BUILD //pkg:bar.txt //pkg:foo.txt";
+    String expected = "//pkg:UCBUILD //pkg:bar.txt //pkg:foo.txt";
     assertEquals(expected, Joiner.on(' ').join(names));
   }
 
@@ -76,7 +76,7 @@ public class ExportsFilesTest {
     } catch (NoSuchTargetException e) {
       assertThat(e).hasMessage("no such target '//pkg:baz.txt':"
           + " target 'baz.txt' not declared in package 'pkg' (did you mean 'bar.txt'?)"
-          + " defined by /workspace/pkg/BUILD");
+          + " defined by /workspace/pkg/UCBUILD");
     }
   }
 
@@ -91,7 +91,7 @@ public class ExportsFilesTest {
   public void testExportsFilesAndRuleNameConflict() throws Exception {
     events.setFailFast(false);
 
-    Path buildFile = scratch.file("pkg2/BUILD",
+    Path buildFile = scratch.file("pkg2/UCBUILD",
         "exports_files(['foo'])",
         "genrule(name = 'foo', srcs = ['bar'], outs = [],",
         "        cmd = '/bin/true')");

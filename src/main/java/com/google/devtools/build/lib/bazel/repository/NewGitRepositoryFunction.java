@@ -23,7 +23,7 @@ import com.google.devtools.build.skyframe.SkyFunction.Environment;
 import com.google.devtools.build.skyframe.SkyValue;
 
 /**
- * Clones a Git repository, creates a WORKSPACE file, and adds a BUILD file for it.
+ * Clones a Git repository, creates a WORKSPACE file, and adds a UCBUILD file for it.
  */
 public class NewGitRepositoryFunction extends GitRepositoryFunction {
   @Override

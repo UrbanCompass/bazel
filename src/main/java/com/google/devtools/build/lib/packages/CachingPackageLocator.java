@@ -30,7 +30,7 @@ import com.google.devtools.build.lib.vfs.Path;
 public interface CachingPackageLocator {
 
   /**
-   * Returns path of BUILD file for specified package iff the specified package exists, null
+   * Returns path of UCBUILD file for specified package iff the specified package exists, null
    * otherwise (e.g. invalid package name, no build file, or package has been deleted via
    * --deleted_packages)..
    *

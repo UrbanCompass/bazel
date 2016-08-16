@@ -93,7 +93,7 @@ public interface TargetPatternResolver<T> {
 
   /**
    * Returns true, if and only if the given package identifier corresponds to a package, i.e., a
-   * file with the name {@code packageName/BUILD} exists in the appropriat repository.
+   * file with the name {@code packageName/UCBUILD} exists in the appropriat repository.
    */
   boolean isPackage(PackageIdentifier packageIdentifier) throws InterruptedException;
 

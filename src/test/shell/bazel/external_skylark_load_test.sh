@@ -30,13 +30,13 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test-setup.sh \
 # ${WORKSPACE_DIR}/
 #   WORKSPACE
 #   local_pkg/
-#     BUILD
+#     UCBUILD
 #   another_local_pkg/
-#     BUILD
+#     UCBUILD
 #     local_constants.bzl
 # ${external_repo}/
 #   external_pkg/
-#     BUILD
+#     UCBUILD
 #     macro_def.bzl
 #     external_constants.bzl
 function run_external_skylark_load_test() {
@@ -51,19 +51,19 @@ local_repository(name = "external_repo", path = "${external_repo}")
 EOF
 
   mkdir ${WORKSPACE_DIR}/local_pkg
-  cat > ${WORKSPACE_DIR}/local_pkg/BUILD <<EOF
+  cat > ${WORKSPACE_DIR}/local_pkg/UCBUILD <<EOF
 load("@external_repo//external_pkg:macro_def.bzl", "macro")
 macro(name="macro_instance")
 EOF
 
   mkdir ${WORKSPACE_DIR}/another_local_pkg
-  touch ${WORKSPACE_DIR}/another_local_pkg/BUILD
+  touch ${WORKSPACE_DIR}/another_local_pkg/UCBUILD
   cat > ${WORKSPACE_DIR}/another_local_pkg/local_constants.bzl <<EOF
 OUTPUT_STRING = "LOCAL!"
 EOF
 
   mkdir ${external_repo}/external_pkg
-  touch ${external_repo}/external_pkg/BUILD
+  touch ${external_repo}/external_pkg/UCBUILD
   cat > ${external_repo}/external_pkg/macro_def.bzl <<EOF
 load("${load_target_to_test}", "OUTPUT_STRING")
 def macro(name):
@@ -126,7 +126,7 @@ function test_load_skylark_from_external_repo_with_repo_relative_label_load() {
 function test_skylark_repository_relative_label() {
   repo2=$TEST_TMPDIR/repo2
   mkdir -p $repo2
-  touch $repo2/WORKSPACE $repo2/BUILD
+  touch $repo2/WORKSPACE $repo2/UCBUILD
   cat > $repo2/remote.bzl <<EOF
 def _impl(ctx):
   print(Label("//foo:bar"))
@@ -142,7 +142,7 @@ local_repository(
     path = "$repo2",
 )
 EOF
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 load('@r//:remote.bzl', 'remote_rule')
 
 remote_rule(name = 'local')
@@ -165,11 +165,11 @@ EOF
 
 # Going one level deeper: if we have:
 # local/
-#   BUILD
+#   UCBUILD
 # r1/
-#   BUILD
+#   UCBUILD
 # r2/
-#   BUILD
+#   UCBUILD
 #   remote.bzl
 # If //foo in local depends on //bar in r1, which is a Skylark rule
 # defined in r2/remote.bzl, then a Label in remote.bzl should either
@@ -190,7 +190,7 @@ local_repository(
     path = "$repo2",
 )
 EOF
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(
     name = "foo",
     srcs = ["@r1//:bar"],
@@ -201,7 +201,7 @@ EOF
 
   # r1
   touch $repo1/WORKSPACE
-  cat > $repo1/BUILD <<EOF
+  cat > $repo1/UCBUILD <<EOF
 load('@r2//:remote.bzl', 'remote_rule')
 
 remote_rule(
@@ -211,7 +211,7 @@ remote_rule(
 EOF
 
   # r2
-  touch $repo2/WORKSPACE $repo2/BUILD
+  touch $repo2/WORKSPACE $repo2/UCBUILD
   cat > $repo2/remote.bzl <<EOF
 def _impl(ctx):
   print(Label("//foo:bar"))
@@ -243,7 +243,7 @@ load("//:repo.bzl", "repo")
 bind(name="x2", actual="//:x2")
 EOF
 
-cat > BUILD <<EOF
+cat > UCBUILD <<EOF
 load("//:rule.bzl", "test_rule")
 
 filegroup(name = "x1")

@@ -342,7 +342,7 @@ public final class AndroidRuleClasses {
           .add(attr("build_tools_version", STRING))
           // This is the Proguard that comes from the --proguard_top attribute.
           .add(attr(":proguard", LABEL).cfg(HOST).value(JavaSemantics.PROGUARD).exec())
-          // This is the Proguard in the BUILD file that contains the android_sdk rule. Used when
+          // This is the Proguard in the UCBUILD file that contains the android_sdk rule. Used when
           // --proguard_top is not specified.
           .add(attr("proguard", LABEL).mandatory().cfg(HOST).allowedFileTypes(ANY_FILE).exec())
           .add(attr("aapt", LABEL).mandatory().cfg(HOST).allowedFileTypes(ANY_FILE).exec())
@@ -475,7 +475,7 @@ public final class AndroidRuleClasses {
                   .value(false))
           /* <!-- #BLAZE_RULE($android_resource_support).ATTRIBUTE(custom_package) -->
           Java package for which java sources will be generated.
-          By default the package is inferred from the directory where the BUILD file
+          By default the package is inferred from the directory where the UCBUILD file
           containing the rule is. You can specify a different package but this is
           highly discouraged since it can introduce classpath conflicts with other
           libraries that will only be detected at runtime.

@@ -61,7 +61,7 @@ import javax.annotation.Nullable;
  *
  * <p>Local ones are those whose fetching does not require access to any external resources
  * (e.g. network). These are always re-fetched on Bazel server restarts. This operation is fast
- * (usually just a few symlinks and maybe writing a BUILD file). {@code --nofetch} does not apply
+ * (usually just a few symlinks and maybe writing a UCBUILD file). {@code --nofetch} does not apply
  * to local repositories.
  *
  * <p>The up-to-dateness of non-local repositories is checked using a marker file under the
@@ -197,7 +197,7 @@ public abstract class RepositoryFunction {
 
   protected static RepositoryDirectoryValue writeBuildFile(
       Path repositoryDirectory, String contents) throws RepositoryFunctionException {
-    Path buildFilePath = repositoryDirectory.getRelative("BUILD");
+    Path buildFilePath = repositoryDirectory.getRelative("UCBUILD");
     try {
       FileSystemUtils.writeContentAsLatin1(buildFilePath, contents);
     } catch (IOException e) {
@@ -222,7 +222,7 @@ public abstract class RepositoryFunction {
    * .external-repository/
    *   x/
    *     WORKSPACE
-   *     BUILD -> &lt;build_root&gt;/x.BUILD
+   *     UCBUILD -> &lt;build_root&gt;/x.UCBUILD
    *     z -> /some/path/to/y/z
    *     w -> /some/path/to/y/w
    *     v -> /some/path/to/y/v

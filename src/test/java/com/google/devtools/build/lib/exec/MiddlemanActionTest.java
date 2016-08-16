@@ -49,9 +49,9 @@ public class MiddlemanActionTest extends BuildViewTestCase {
 
   @Before
   public final void initializeMiddleman() throws Exception  {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
                 "testing_dummy_rule(name='a', outs=['a.out'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
                 "testing_dummy_rule(name='b', outs=['b.out'])");
     a = getFilesToBuild(getConfiguredTarget("//a")).iterator().next();
     b = getFilesToBuild(getConfiguredTarget("//b")).iterator().next();
@@ -103,7 +103,7 @@ public class MiddlemanActionTest extends BuildViewTestCase {
 
   @Test
   public void testDifferentExecutablesForRunfilesMiddleman() throws Exception {
-    scratch.file("c/BUILD",
+    scratch.file("c/UCBUILD",
                 "testing_dummy_rule(name='c', outs=['c.out', 'd.out', 'common.out'])");
 
     Artifact c = getFilesToBuild(getConfiguredTarget("//c:c.out")).iterator().next();

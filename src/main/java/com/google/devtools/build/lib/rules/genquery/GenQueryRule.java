@@ -91,7 +91,7 @@ public final class GenQueryRule implements RuleDefinition {
     <code>//pkg:*</code> or <code>//pkg:all</code>) are not allowed here.
     The reasons for this are two-fold: first, because <code>genquery</code> has
     to specify a scope to prevent targets outside the transitive closure of the
-    query to influence its output; and, second, because <code>BUILD</code> files
+    query to influence its output; and, second, because <code>UCBUILD</code> files
     do not support wildcard dependencies (e.g. <code>deps=["//a/..."]</code>
     is not allowed).
   </p>

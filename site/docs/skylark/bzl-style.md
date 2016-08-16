@@ -15,11 +15,11 @@
   one underscore. Bazel enforces that private values cannot be used from other
   files.
 
-* As in BUILD files, there is no strict line length limit as labels can be long.
+* As in UCBUILD files, there is no strict line length limit as labels can be long.
   When possible, try to use at most 79 characters per line.
 
 * In keyword arguments, spaces around the equal sign are optional. In general,
-  we follow the BUILD file convention when calling macros and native rules, and
+  we follow the UCBUILD file convention when calling macros and native rules, and
   the Python convention for other functions, e.g.
 
 ```python

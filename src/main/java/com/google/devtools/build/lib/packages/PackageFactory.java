@@ -83,7 +83,7 @@ import javax.annotation.Nullable;
 
 /**
  * The package factory is responsible for constructing Package instances
- * from a BUILD file's abstract syntax tree (AST).
+ * from a UCBUILD file's abstract syntax tree (AST).
  *
  * <p>A PackageFactory is a heavy-weight object; create them sparingly.
  * Typically only one is needed per client application.
@@ -125,7 +125,7 @@ public final class PackageFactory {
   }
 
   /**
-   * An extension to the global namespace of the BUILD language.
+   * An extension to the global namespace of the UCBUILD language.
    */
   // TODO(bazel-team): this is largely unrelated to syntax.Environment.Extension,
   // and should probably be renamed PackageFactory.RuntimeExtension, since really,
@@ -945,7 +945,7 @@ public final class PackageFactory {
   };
 
   /**
-   * Converts back to type that will work in BUILD and skylark,
+   * Converts back to type that will work in UCBUILD and skylark,
    * such as string instead of label, SkylarkList instead of List,
    * Returns null if we don't want to export the value.
    *
@@ -1033,11 +1033,11 @@ public final class PackageFactory {
 
     if (val instanceof BuildType.SelectorList) {
       // This is terrible:
-      //  1) this value is opaque, and not a BUILD value, so it cannot be used in rule arguments
+      //  1) this value is opaque, and not a UCBUILD value, so it cannot be used in rule arguments
       //  2) its representation has a pointer address, so it breaks hermeticity.
       //
       // Even though this is clearly imperfect, we return this value because otherwise
-      // native.rules() fails if there is any rule using a select() in the BUILD file.
+      // native.rules() fails if there is any rule using a select() in the UCBUILD file.
       //
       // To remedy this, we should return a syntax.SelectorList. To do so, we have to
       // 1) recurse into the Selector contents of SelectorList, so those values are skylarkified too
@@ -1139,7 +1139,7 @@ public final class PackageFactory {
         // Validate parameter list
         if (pkgBuilder.isPackageFunctionUsed()) {
           throw new EvalException(ast.getLocation(),
-              "'package' can only be used once per BUILD file");
+              "'package' can only be used once per UCBUILD file");
         }
         pkgBuilder.setPackageFunctionUsed();
 
@@ -1192,11 +1192,11 @@ public final class PackageFactory {
       throws EvalException {
     PackageContext value = (PackageContext) env.lookup(PKG_CONTEXT);
     if (value == null) {
-      // if PKG_CONTEXT is missing, we're not called from a BUILD file. This happens if someone
+      // if PKG_CONTEXT is missing, we're not called from a UCBUILD file. This happens if someone
       // uses native.some_func() in the wrong place.
       throw new EvalException(ast.getLocation(),
           "The native module cannot be accessed from here. "
-          + "Wrap the function in a macro and call it from a BUILD file");
+          + "Wrap the function in a macro and call it from a UCBUILD file");
     }
     return value;
   }
@@ -1389,7 +1389,7 @@ public final class PackageFactory {
     return result;
   }
 
-  /** Preprocesses the given BUILD file. */
+  /** Preprocesses the given UCBUILD file. */
   public Preprocessor.Result preprocess(
       PackageIdentifier packageId, Path buildFile, CachingPackageLocator locator)
       throws InterruptedException, IOException {
@@ -1404,7 +1404,7 @@ public final class PackageFactory {
   }
 
   /**
-   * Preprocesses the given BUILD file, executing {@code globber.onInterrupt()} on an
+   * Preprocesses the given UCBUILD file, executing {@code globber.onInterrupt()} on an
    * {@link InterruptedException}.
    */
   public Preprocessor.Result preprocess(
@@ -1420,7 +1420,7 @@ public final class PackageFactory {
           buildFileBytes,
           packageId.toString(),
           globber,
-          Environment.BUILD,
+          Environment.UCBUILD,
           ruleFactory.getRuleClassNames());
     } catch (InterruptedException e) {
       globber.onInterrupt();
@@ -1446,7 +1446,7 @@ public final class PackageFactory {
 
   /**
    * This tuple holds the current package builder, current lexer, etc, for the
-   * duration of the evaluation of one BUILD file. (We use a PackageContext
+   * duration of the evaluation of one UCBUILD file. (We use a PackageContext
    * object in preference to storing these values in mutable fields of the
    * PackageFactory.)
    *
@@ -1564,7 +1564,7 @@ public final class PackageFactory {
   }
 
   /**
-   * Constructs a Package instance, evaluates the BUILD-file AST inside the
+   * Constructs a Package instance, evaluates the UCBUILD-file AST inside the
    * build environment, and populates the package with Rule instances as it
    * goes.  As with most programming languages, evaluation stops when an
    * exception is encountered: no further rules after the point of failure will
@@ -1601,7 +1601,7 @@ public final class PackageFactory {
 
     try (Mutability mutability = Mutability.create("package %s", packageId)) {
       Environment pkgEnv = Environment.builder(mutability)
-          .setGlobals(Environment.BUILD)
+          .setGlobals(Environment.UCBUILD)
           .setEventHandler(eventHandler)
           .setImportedExtensions(imports)
           .setToolsRepository(ruleClassProvider.getToolsRepository())
@@ -1611,7 +1611,7 @@ public final class PackageFactory {
       pkgBuilder.setFilename(buildFilePath)
           .setMakeEnv(pkgMakeEnv)
           .setDefaultVisibility(defaultVisibility)
-          // "defaultVisibility" comes from the command line. Let's give the BUILD file a chance to
+          // "defaultVisibility" comes from the command line. Let's give the UCBUILD file a chance to
           // set default_visibility once, be reseting the PackageBuilder.defaultVisibilitySet flag.
           .setDefaultVisibilitySet(false)
           .setSkylarkFileDependencies(skylarkFileDependencies)
@@ -1670,14 +1670,14 @@ public final class PackageFactory {
       // point in prefetching them again.
       return;
     }
-    // TODO(bazel-team): It may be wasteful to evaluate the BUILD file here, only to throw away the
+    // TODO(bazel-team): It may be wasteful to evaluate the UCBUILD file here, only to throw away the
     // result. It may be better to first scan the ast and see if there are even possibly any globs
     // at all. Additionally, it's wasteful to execute Skylark code that cannot invoke globs. So one
     // strategy would be to crawl the ast and tag statements whose execution cannot involve globs -
     // these can be executed and their impact on the resulting package can be saved.
     try (Mutability mutability = Mutability.create("prefetchGlobs for %s", packageId)) {
       Environment pkgEnv = Environment.builder(mutability)
-          .setGlobals(Environment.BUILD)
+          .setGlobals(Environment.UCBUILD)
           .setEventHandler(NullEventHandler.INSTANCE)
           .setToolsRepository(ruleClassProvider.getToolsRepository())
           .setPhase(Phase.LOADING)
@@ -1689,7 +1689,7 @@ public final class PackageFactory {
       pkgBuilder.setFilename(buildFilePath)
           .setMakeEnv(pkgMakeEnv)
           .setDefaultVisibility(defaultVisibility)
-          // "defaultVisibility" comes from the command line. Let's give the BUILD file a chance to
+          // "defaultVisibility" comes from the command line. Let's give the UCBUILD file a chance to
           // set default_visibility once, be reseting the PackageBuilder.defaultVisibilitySet flag.
           .setDefaultVisibilitySet(false);
 

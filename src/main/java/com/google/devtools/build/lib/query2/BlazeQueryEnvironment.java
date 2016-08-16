@@ -378,7 +378,7 @@ public class BlazeQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
     // real target.
     Set<Label> seenLabels = new HashSet<>();
 
-    // Adds all the package definition files (BUILD files and build
+    // Adds all the package definition files (UCBUILD files and build
     // extensions) for package "pkg", to "buildfiles".
     for (Target x : nodes) {
       Package pkg = x.getPackage();
@@ -398,16 +398,16 @@ public class BlazeQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
         for (Label subinclude : extensions) {
           addIfUniqueLabel(getSubincludeTarget(subinclude, pkg), seenLabels, dependentFiles);
 
-          // Also add the BUILD file of the subinclude.
+          // Also add the UCBUILD file of the subinclude.
           if (buildFiles) {
             try {
               addIfUniqueLabel(
-                  getSubincludeTarget(subinclude.getLocalTargetLabel("BUILD"), pkg),
+                  getSubincludeTarget(subinclude.getLocalTargetLabel("UCBUILD"), pkg),
                   seenLabels,
                   dependentFiles);
 
             } catch (LabelSyntaxException e) {
-              throw new AssertionError("BUILD should always parse as a target name", e);
+              throw new AssertionError("UCBUILD should always parse as a target name", e);
             }
           }
         }

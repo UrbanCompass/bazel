@@ -66,7 +66,7 @@ public class RepositoryDirectoryValue implements SkyValue {
   /**
    * Returns the path to the directory containing the repository's contents. This directory is
    * guaranteed to exist.  It may contain a full Bazel repository (with a WORKSPACE file,
-   * directories, and BUILD files) or simply contain a file (or set of files) for, say, a jar from
+   * directories, and UCBUILD files) or simply contain a file (or set of files) for, say, a jar from
    * Maven.
    */
   public Path getPath() {

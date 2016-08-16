@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utility for quickly creating BUILD file rules for use in tests.
+ * Utility for quickly creating UCBUILD file rules for use in tests.
  *
- * <p>The use case for this class is writing BUILD files where simple
+ * <p>The use case for this class is writing UCBUILD files where simple
  * readability for the sake of rules' relationship to the test framework
  * is more important than detailed semantics and layout.
  *

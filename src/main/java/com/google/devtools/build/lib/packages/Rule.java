@@ -51,7 +51,7 @@ import java.util.Set;
  * with Java classes.  All rules are implemented by the same Java classes, Rule
  * and RuleClass.
  *
- * <p>Here is a typical rule as it appears in a BUILD file:
+ * <p>Here is a typical rule as it appears in a UCBUILD file:
  * <pre>
  * cc_library(name = 'foo',
  *            defines = ['-Dkey=value'],
@@ -330,8 +330,8 @@ public final class Rule implements Target, DependencyFilter.AttributeInfoProvide
   }
 
   /**
-   * Returns true iff the value of the specified attribute is explicitly set in the BUILD file (as
-   * opposed to its default value). This also returns true if the value from the BUILD file is the
+   * Returns true iff the value of the specified attribute is explicitly set in the UCBUILD file (as
+   * opposed to its default value). This also returns true if the value from the UCBUILD file is the
    * same as the default value. In addition, this method return false if the rule has no attribute
    * with the given name.
    */
@@ -356,7 +356,7 @@ public final class Rule implements Target, DependencyFilter.AttributeInfoProvide
    * valid attribute name for this rule.
    *
    * <p>If this rule was created by a macro, this method returns the
-   * location of the macro invocation in the BUILD file instead.
+   * location of the macro invocation in the UCBUILD file instead.
    */
   public Location getAttributeLocation(String attrName) {
     return getAttributeLocation(attrName, true /* useBuildLocation */);
@@ -364,11 +364,11 @@ public final class Rule implements Target, DependencyFilter.AttributeInfoProvide
 
   private Location getAttributeLocation(String attrName, boolean useBuildLocation) {
     /*
-     * If the rule was created by a macro, we have to deal with two locations: one in the BUILD
+     * If the rule was created by a macro, we have to deal with two locations: one in the UCBUILD
      * file where the macro is invoked and one in the bzl file where the rule is created.
      * For error reporting, we are usually more interested in the former one.
      * Different methods in this class refer to different locations, though:
-     * - getLocation() points to the location of the macro invocation in the BUILD file (thanks to
+     * - getLocation() points to the location of the macro invocation in the UCBUILD file (thanks to
      *   RuleFactory).
      * - attributes.getAttributeLocation() points to the location in the bzl file.
      */

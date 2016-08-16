@@ -70,7 +70,7 @@ def _test_simple_java_library(ctx):
         end_test(ctx, env)
         return
     assert_equals(env,
-            ctx.label.package + "/BUILD",
+            ctx.label.package + "/UCBUILD",
             info.build_file_artifact_location.relative_path)
 
     assert_equals(env,

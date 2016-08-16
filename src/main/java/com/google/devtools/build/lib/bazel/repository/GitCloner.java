@@ -69,12 +69,12 @@ public class GitCloner {
       if (head != null && checkout != null && head.equals(checkout)) {
         Status status = Git.wrap(repository).status().call();
         if (!status.hasUncommittedChanges()) {
-          // new_git_repository puts (only) BUILD and WORKSPACE, and
+          // new_git_repository puts (only) UCBUILD and WORKSPACE, and
           // git_repository doesn't add any files.
           Set<String> untracked = status.getUntracked();
           if (untracked.isEmpty()
               || (untracked.size() == 2
-                  && untracked.contains("BUILD")
+                  && untracked.contains("UCBUILD")
                   && untracked.contains("WORKSPACE"))) {
             return true;
           }

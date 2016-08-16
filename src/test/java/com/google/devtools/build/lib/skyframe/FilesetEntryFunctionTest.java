@@ -306,14 +306,14 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
     Artifact dir = getSourceArtifact("foo/dir");
     RootedPath fileA = createFile(childOf(dir, "file.a"), "blah");
     RootedPath fileAsym = childOf(dir, "subdir/file.a.sym");
-    RootedPath buildFile = createFile(childOf(dir, "subpkg/BUILD"), "blah");
+    RootedPath buildFile = createFile(childOf(dir, "subpkg/UCBUILD"), "blah");
     RootedPath fileB = createFile(childOf(dir, "subpkg/file.b"), "blah");
     fileAsym.asPath().getParentDirectory().createDirectory();
     fileAsym.asPath().createSymbolicLink(new PathFragment("../file.a"));
 
     FilesetOutputSymlink outA = symlink("output-name/file.a", childOf(dir, "file.a"));
     FilesetOutputSymlink outAsym = null;
-    FilesetOutputSymlink outBuild = symlink("output-name/subpkg/BUILD", buildFile);
+    FilesetOutputSymlink outBuild = symlink("output-name/subpkg/UCBUILD", buildFile);
     FilesetOutputSymlink outB = symlink("output-name/subpkg/file.b", fileB);
     switch (symlinks) {
       case COPY:
@@ -389,7 +389,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
     Artifact symlink = getSourceArtifact("foo/dir_sym");
     createFile(childOf(dir, "file.a"), "blah");
     RootedPath fileAsym = childOf(dir, "subdir/file.a.sym");
-    createFile(childOf(dir, "subpkg/BUILD"), "blah");
+    createFile(childOf(dir, "subpkg/UCBUILD"), "blah");
     createFile(childOf(dir, "subpkg/file.b"), "blah");
     fileAsym.asPath().getParentDirectory().createDirectory();
     fileAsym.asPath().createSymbolicLink(new PathFragment("../file.a"));
@@ -398,7 +398,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
     FilesetOutputSymlink outA = symlink("output-name/file.a", childOf(symlink, "file.a"));
     FilesetOutputSymlink outASym = null;
     FilesetOutputSymlink outBuild =
-        symlink("output-name/subpkg/BUILD", childOf(symlink, "subpkg/BUILD"));
+        symlink("output-name/subpkg/UCBUILD", childOf(symlink, "subpkg/UCBUILD"));
     FilesetOutputSymlink outB =
         symlink("output-name/subpkg/file.b", childOf(symlink, "subpkg/file.b"));
     switch (symlinks) {
@@ -472,8 +472,8 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
 
   private void assertRecursiveTraversalForPackage(
       SymlinkBehavior symlinks, PackageBoundaryMode pkgBoundaryMode) throws Exception {
-    Artifact buildFile = createSourceArtifact("foo/BUILD");
-    Artifact subpkgBuildFile = createSourceArtifact("foo/subpkg/BUILD");
+    Artifact buildFile = createSourceArtifact("foo/UCBUILD");
+    Artifact subpkgBuildFile = createSourceArtifact("foo/subpkg/UCBUILD");
     Artifact subpkgSymlink = getSourceArtifact("foo/subpkg_sym");
 
     RootedPath fileA = createFile(siblingOf(buildFile, "file.a"), "blah");
@@ -484,10 +484,10 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
     fileAsym.asPath().createSymbolicLink(new PathFragment("../file.a"));
     subpkgSymlink.getPath().createSymbolicLink(new PathFragment("subpkg"));
 
-    FilesetOutputSymlink outBuild = symlink("output-name/BUILD", buildFile);
+    FilesetOutputSymlink outBuild = symlink("output-name/UCBUILD", buildFile);
     FilesetOutputSymlink outA = symlink("output-name/file.a", fileA);
     FilesetOutputSymlink outAsym = null;
-    FilesetOutputSymlink outSubpkgBuild = symlink("output-name/subpkg/BUILD", subpkgBuildFile);
+    FilesetOutputSymlink outSubpkgBuild = symlink("output-name/subpkg/UCBUILD", subpkgBuildFile);
     FilesetOutputSymlink outSubpkgB = symlink("output-name/subpkg/file.b", fileB);
     FilesetOutputSymlink outSubpkgSymBuild;
     switch (symlinks) {
@@ -646,7 +646,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
   }
 
   private void assertExclusionOfDanglingSymlink(SymlinkBehavior symlinkBehavior) throws Exception {
-    Artifact buildFile = getSourceArtifact("foo/BUILD");
+    Artifact buildFile = getSourceArtifact("foo/UCBUILD");
     createFile(buildFile);
 
     Artifact linkName = getSourceArtifact("foo/file.sym");
@@ -665,7 +665,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
             /* pkgBoundaryMode */ PackageBoundaryMode.DONT_CROSS);
     assertSymlinksInOrder(
         params,
-        symlink("output-name/BUILD", buildFile),
+        symlink("output-name/UCBUILD", buildFile),
         symlink("output-name/file.actual", linkTarget),
         symlinkBehavior == SymlinkBehavior.COPY
             ? symlink("output-name/file.sym", "file.actual")
@@ -683,7 +683,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
             /* excludes */ ImmutableSet.of("file.sym"),
             /* symlinkBehaviorMode */ symlinkBehavior,
             /* pkgBoundaryMode */ PackageBoundaryMode.DONT_CROSS);
-    assertSymlinksInOrder(params, symlink("output-name/BUILD", buildFile));
+    assertSymlinksInOrder(params, symlink("output-name/UCBUILD", buildFile));
   }
 
   @Test
@@ -887,7 +887,7 @@ public final class FilesetEntryFunctionTest extends FoundationTestCase {
     new FingerprintTester(
         ImmutableMap.<String, Domain>builder()
             .put("ownerLabel", notPartOfFingerprint("//foo", "//bar"))
-            .put("buildFile", partOfFingerprint("foo/BUILD", "bar/BUILD"))
+            .put("buildFile", partOfFingerprint("foo/UCBUILD", "bar/UCBUILD"))
             .put("destPath", partOfFingerprint("out1", "out2"))
             .put(
                 "excludes",

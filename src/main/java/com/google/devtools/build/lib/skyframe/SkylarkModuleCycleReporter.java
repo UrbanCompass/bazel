@@ -64,7 +64,7 @@ public class SkylarkModuleCycleReporter implements CyclesReporter.SingleCycleRep
         && IS_PACKAGE_SKY_KEY.apply(lastPathElement)) {
       StringBuilder cycleMessage =
           new StringBuilder()
-              .append(lastPathElement.argument()).append("/BUILD: ")
+              .append(lastPathElement.argument()).append("/UCBUILD: ")
               .append("cycle in referenced extension files: ");
 
       AbstractLabelCycleReporter.printCycle(
@@ -78,7 +78,7 @@ public class SkylarkModuleCycleReporter implements CyclesReporter.SingleCycleRep
             }
           });
       // TODO(bazel-team): it would be nice to pass the Location of the load Statement in the
-      // BUILD file.
+      // UCBUILD file.
       eventHandler.handle(Event.error(null, cycleMessage.toString()));
       return true;
     } else if (Iterables.any(cycle, IS_PACKAGE_LOOKUP) && Iterables.any(cycle, IS_WORKSPACE_FILE)

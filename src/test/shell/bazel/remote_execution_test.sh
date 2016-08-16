@@ -24,7 +24,7 @@ source $src_dir/test-setup.sh \
 
 function set_up() {
   mkdir -p a
-  cat > a/BUILD <<EOF
+  cat > a/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 cc_binary(
 name = 'test',

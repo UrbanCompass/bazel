@@ -80,7 +80,7 @@ Bazel source tree.
 
 <p id="android_library_examples.idl_import_root">The following example shows
 how to set <code>idl_import_root</code>.
-Let <code>//java/bazel/helloandroid/BUILD</code> contain:</p>
+Let <code>//java/bazel/helloandroid/UCBUILD</code> contain:</p>
 <pre class="code">
 android_library(
     name = "parcelable",

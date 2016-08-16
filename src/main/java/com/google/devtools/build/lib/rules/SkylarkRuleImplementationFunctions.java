@@ -498,7 +498,7 @@ public class SkylarkRuleImplementationFunctions {
           ImmutableList.Builder<Substitution> substitutionsBuilder = ImmutableList.builder();
           for (Map.Entry<String, String> substitution : substitutionsUnchecked.getContents(
               String.class, String.class, "substitutions").entrySet()) {
-            // ParserInputSource.create(Path) uses Latin1 when reading BUILD files, which might
+            // ParserInputSource.create(Path) uses Latin1 when reading UCBUILD files, which might
             // contain UTF-8 encoded symbols as part of template substitution.
             // As a quick fix, the substitution values are corrected before being passed on.
             // In the long term, fixing ParserInputSource.create(Path) would be a better approach.

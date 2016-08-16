@@ -102,8 +102,8 @@ public abstract class DependencyFilter
   public interface AttributeInfoProvider {
     /**
      * Returns true iff the value of the specified attribute is explicitly set in
-     * the BUILD file (as opposed to its default value). This also returns true if
-     * the value from the BUILD file is the same as the default value.
+     * the UCBUILD file (as opposed to its default value). This also returns true if
+     * the value from the UCBUILD file is the same as the default value.
      */
     boolean isAttributeValueExplicitlySpecified(Attribute attribute);
   }

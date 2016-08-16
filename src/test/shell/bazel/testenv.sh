@@ -62,8 +62,8 @@ fi
 langtools="$(rlocation io_bazel/src/test/shell/bazel/langtools.jar)"
 
 # Tools directory location
-tools_dir="$(dirname $(rlocation io_bazel/tools/BUILD))"
-langtools_dir="$(dirname $(rlocation io_bazel/third_party/java/jdk/langtools/BUILD))"
+tools_dir="$(dirname $(rlocation io_bazel/tools/UCBUILD))"
+langtools_dir="$(dirname $(rlocation io_bazel/third_party/java/jdk/langtools/UCBUILD))"
 EXTRA_BAZELRC="build --ios_sdk_version=8.4"
 
 # Java tooling
@@ -132,14 +132,14 @@ fi
 # This function copies the tools directory from Bazel.
 function copy_tools_directory() {
   cp -RL ${tools_dir}/* tools
-  # tools/jdk/BUILD file for JDK 7 is generated.
-  if [ -f tools/jdk/BUILD.* ]; then
-    cp tools/jdk/BUILD.* tools/jdk/BUILD
-    chmod +w tools/jdk/BUILD
+  # tools/jdk/UCBUILD file for JDK 7 is generated.
+  if [ -f tools/jdk/UCBUILD.* ]; then
+    cp tools/jdk/UCBUILD.* tools/jdk/UCBUILD
+    chmod +w tools/jdk/UCBUILD
   fi
   # To support custom langtools
   cp ${langtools} tools/jdk/langtools.jar
-  cat >>tools/jdk/BUILD <<'EOF'
+  cat >>tools/jdk/UCBUILD <<'EOF'
 filegroup(name = "test-langtools", srcs = ["langtools.jar"])
 EOF
 
@@ -148,10 +148,10 @@ EOF
 
   chmod -R +w .
   mkdir -p tools/defaults
-  touch tools/defaults/BUILD
+  touch tools/defaults/UCBUILD
 
   mkdir -p third_party/py/gflags
-  cat > third_party/py/gflags/BUILD <<EOF
+  cat > third_party/py/gflags/UCBUILD <<EOF
 licenses(["notice"])
 package(default_visibility = ["//visibility:public"])
 
@@ -175,7 +175,7 @@ function is_tools_directory() {
 
 # Copy the examples of the base workspace
 function copy_examples() {
-  EXAMPLE="$(cd $(dirname $(rlocation io_bazel/examples/cpp/BUILD))/..; pwd)"
+  EXAMPLE="$(cd $(dirname $(rlocation io_bazel/examples/cpp/UCBUILD))/..; pwd)"
   cp -RL ${EXAMPLE} .
   chmod -R +w .
 }

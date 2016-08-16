@@ -225,7 +225,7 @@ public final class EvalUtils {
 
   /**
    * Returns a pretty name for the datatype of object {@code object} in Skylark
-   * or the BUILD language, with full details if the {@code full} boolean is true.
+   * or the UCBUILD language, with full details if the {@code full} boolean is true.
    */
   public static String getDataTypeName(Object object, boolean fullDetails) {
     Preconditions.checkNotNull(object);

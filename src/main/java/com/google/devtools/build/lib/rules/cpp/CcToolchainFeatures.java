@@ -52,7 +52,7 @@ import java.util.Stack;
  * <p>This class can be generated from the CToolchain protocol buffer.
  * 
  * <p>TODO(bazel-team): Implement support for specifying the toolchain configuration directly from
- * the BUILD file.
+ * the UCBUILD file.
  * 
  * <p>TODO(bazel-team): Find a place to put the public-facing documentation and link to it from
  * here.

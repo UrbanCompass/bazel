@@ -107,7 +107,7 @@ import javax.annotation.Nullable;
  * be done during the execution phase of the build.
  *
  * <p><b>Configurations</b> the inputs to a build come from two sources: the
- * intrinsic inputs, specified in the BUILD file, are called <em>targets</em>.
+ * intrinsic inputs, specified in the UCBUILD file, are called <em>targets</em>.
  * The environmental inputs, coming from the build tool, the command-line, or
  * configuration files, are called the <em>configuration</em>.  Only when a
  * target and a configuration are combined is there sufficient information to

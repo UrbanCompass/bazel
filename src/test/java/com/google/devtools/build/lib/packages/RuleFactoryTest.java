@@ -51,7 +51,7 @@ public class RuleFactoryTest extends PackageLoadingTestCase {
 
   @Test
   public void testCreateRule() throws Exception {
-    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/BUILD");
+    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/UCBUILD");
     Package.Builder pkgBuilder =
         packageFactory.newPackageBuilder(PackageIdentifier.createInMainRepo("mypkg"), "TESTING")
             .setFilename(myPkgPath)
@@ -138,7 +138,7 @@ public class RuleFactoryTest extends PackageLoadingTestCase {
 
   @Test
   public void testWorkspaceRuleFailsInBuildFile() throws Exception {
-    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/BUILD");
+    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/UCBUILD");
     Package.Builder pkgBuilder =
         packageFactory.newPackageBuilder(PackageIdentifier.createInMainRepo("mypkg"), "TESTING")
             .setFilename(myPkgPath)
@@ -241,7 +241,7 @@ public class RuleFactoryTest extends PackageLoadingTestCase {
   // pattern, which will always guarantee that these attributes are present.
   @Test
   public void testTestRules() throws Exception {
-    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/BUILD");
+    Path myPkgPath = scratch.resolve("/foo/workspace/mypkg/UCBUILD");
     Package pkg =
         packageFactory.newPackageBuilder(PackageIdentifier.createInMainRepo("mypkg"), "TESTING")
             .setFilename(myPkgPath)

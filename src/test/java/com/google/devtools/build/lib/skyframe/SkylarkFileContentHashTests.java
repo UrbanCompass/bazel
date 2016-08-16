@@ -46,9 +46,9 @@ public class SkylarkFileContentHashTests extends BuildViewTestCase {
 
   @Before
   public final void createFiles() throws Exception  {
-    scratch.file("foo/BUILD");
-    scratch.file("bar/BUILD");
-    scratch.file("helper/BUILD");
+    scratch.file("foo/UCBUILD");
+    scratch.file("bar/UCBUILD");
+    scratch.file("helper/UCBUILD");
 
     scratch.file("helper/ext.bzl", "def rule_impl(ctx):", "  return None");
 
@@ -66,7 +66,7 @@ public class SkylarkFileContentHashTests extends BuildViewTestCase {
         "bar1 = rule(implementation = rule_impl)");
 
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "load('/foo/ext', 'foo1')",
         "load('/foo/ext', 'foo2')",
         "load('/bar/ext', 'bar1')",

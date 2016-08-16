@@ -86,7 +86,7 @@ EOF
 @end
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 objc_binary(name = "bin",
             non_arc_srcs = ['app.m'])
 ios_application(name = "app",
@@ -165,7 +165,7 @@ function test_xcodelocator_embedded_tool() {
   rm -rf ios
   mkdir -p ios
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 genrule(
     name = "invoke_tool",
     srcs = ["@bazel_tools//tools/osx:xcode-locator"],
@@ -183,7 +183,7 @@ EOF
 # results would not be hermetic.
 function test_archive_timestamps() {
   mkdir -p objclib
-  cat > objclib/BUILD <<EOF
+  cat > objclib/UCBUILD <<EOF
 objc_library(
     name = "objclib",
     srcs = ["mysrc.m"],

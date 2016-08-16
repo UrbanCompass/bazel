@@ -93,7 +93,7 @@ import javax.annotation.Nullable;
  * information which may affect a build (for example: the target platform for
  * compilation, or whether or not debug tables are required).  In fact, all
  * "environmental" information (e.g. from the tool's command-line, as opposed
- * to the BUILD file) that can affect the output of any build tool should be
+ * to the UCBUILD file) that can affect the output of any build tool should be
  * explicitly represented in the BuildConfiguration instance.
  *
  * <p>A single build may require building tools to run on a variety of
@@ -658,7 +658,7 @@ public final class BuildConfiguration {
         category = "testing",
         converter = TestActionBuilder.ShardingStrategyConverter.class,
         help = "Specify strategy for test sharding: "
-            + "'explicit' to only use sharding if the 'shard_count' BUILD attribute is present. "
+            + "'explicit' to only use sharding if the 'shard_count' UCBUILD attribute is present. "
             + "'disabled' to never use test sharding. "
             + "'experimental_heuristic' to enable sharding on remotely executed tests without an "
             + "explicit  'shard_count' attribute which link in a supported framework. Considered "
@@ -1740,7 +1740,7 @@ public final class BuildConfiguration {
   }
 
   /**
-   * Calculates the configurations of a direct dependency. If a rule in some BUILD file refers
+   * Calculates the configurations of a direct dependency. If a rule in some UCBUILD file refers
    * to a target (like another rule or a source file) using a label attribute, that target needs
    * to have a configuration, too. This method figures out the proper configuration for the
    * dependency.

@@ -94,7 +94,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
   @Before
   public final void createBuildFile() throws Exception {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         "  cmd = 'dummy_cmd',",
         "  srcs = ['a.txt', 'b.img'],",
@@ -427,7 +427,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
         ")");
 
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/empty', 'empty_action_rule')",
         "empty_action_rule(name = 'my_empty_action',",
         "                srcs = ['foo.in', 'other_foo.in'])",
@@ -612,7 +612,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
   }
 
   /**
-   * Simulates the fact that the Parser currently uses Latin1 to read BUILD files, while users
+   * Simulates the fact that the Parser currently uses Latin1 to read UCBUILD files, while users
    * usually write those files using UTF-8 encoding. Currently, the string-valued 'substitutions'
    * parameter of the template_action function contains a hack that assumes its input is a UTF-8
    * encoded string which has been ingested as Latin 1. The hack converts the string to its
@@ -972,7 +972,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
         "  outputs = _foo,",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/glob', 'glob_rule')",
         "glob_rule(name = 'my_glob',",
         "  srcs = ['foo.bar', 'other_foo.bar'])");
@@ -985,7 +985,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
   public void testRuleFromBzlFile() throws Exception {
     scratch.file("test/rule.bzl", "def _impl(ctx): return", "foo = rule(implementation = _impl)");
     scratch.file("test/ext.bzl", "load('//test:rule.bzl', 'foo')", "a = 1", "foo(name = 'x')");
-    scratch.file("test/BUILD", "load('//test:ext.bzl', 'a')");
+    scratch.file("test/UCBUILD", "load('//test:ext.bzl', 'a')");
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:x");
     assertContainsEvent("Cannot instantiate a rule when loading a .bzl file");
@@ -1019,7 +1019,7 @@ public class SkylarkRuleImplementationFunctionsTest extends SkylarkTestCase {
     scratch.file("test/a.bar", "a");
     scratch.file("test/b.bar", "b");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/glob', 'glob_rule')",
         "glob_rule(name = 'my_glob', srcs = glob(['*.bar']))");
     ConfiguredTarget ct = getConfiguredTarget("//test:my_glob");

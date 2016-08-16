@@ -16,7 +16,7 @@ genrule(
 filegroup(
     name = "srcs",
     srcs = [
-        "BUILD",
+        "UCBUILD",
         "genrule.txt",
     ],
 )

@@ -64,7 +64,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   print('This aspect does nothing')",
         "   return struct()",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     AnalysisResult analysisResult =
         update(ImmutableList.of("test/aspect.bzl%MyAspect"), "//test:xxx");
@@ -103,7 +103,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   print('This aspect does nothing')",
         "   return struct()",
         "MyAspect = aspect(implementation=_impl, fragments=['jvm'], host_fragments=['cpp'])");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     AnalysisResult analysisResult =
         update(ImmutableList.of("test/aspect.bzl%MyAspect"), "//test:xxx");
@@ -144,7 +144,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   attr_aspects=['deps'],",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "java_library(",
         "     name = 'yyy',",
         ")",
@@ -217,7 +217,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   attr_aspects=['_stl', '_stl_default'],",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/aspect', 'my_rule')",
         "cc_library(",
         "     name = 'xxx',",
@@ -261,7 +261,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   attr_aspects=['deps'],",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "java_library(",
         "     name = 'xxx',",
         "     srcs = ['A.java'],",
@@ -319,7 +319,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         ")");
 
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/aspect', 'my_rule')",
         "java_library(",
         "     name = 'yyy',",
@@ -375,7 +375,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         ")");
     scratch.file("test/zzz.jar");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "exports_files(['zzz.jar'])",
         "java_library(",
         "     name = 'xxx',",
@@ -404,7 +404,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   return 1/0",
         "",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -415,10 +415,10 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
       // expect to fail.
     }
     assertContainsEvent(
-        "ERROR /workspace/test/BUILD:1:1: in "
+        "ERROR /workspace/test/UCBUILD:1:1: in "
             + "//test:aspect.bzl%MyAspect aspect on java_library rule //test:xxx: \n"
             + "Traceback (most recent call last):\n"
-            + "\tFile \"/workspace/test/BUILD\", line 1"
+            + "\tFile \"/workspace/test/UCBUILD\", line 1"
             + LINE_SEPARATOR
             + "\t\t//test:aspect.bzl%MyAspect(...)\n"
             + "\tFile \"/workspace/test/aspect.bzl\", line 2, in _impl"
@@ -435,7 +435,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   return 0",
         "",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -458,7 +458,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   return struct(x = foo)",
         "",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -469,7 +469,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
       // expect to fail.
     }
     assertContainsEvent(
-        "ERROR /workspace/test/BUILD:1:1: in //test:aspect.bzl%MyAspect aspect on java_library rule"
+        "ERROR /workspace/test/UCBUILD:1:1: in //test:aspect.bzl%MyAspect aspect on java_library rule"
         + " //test:xxx: \n"
         + "\n"
         + "\n"
@@ -485,7 +485,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "  return struct()",
         "",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "java_library(name = 'xxx',)");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx',)");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -496,7 +496,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
       // expect to fail.
     }
     assertContainsEvent(
-        "ERROR /workspace/test/BUILD:1:1: in "
+        "ERROR /workspace/test/UCBUILD:1:1: in "
             + "//test:aspect.bzl%MyAspect aspect on java_library rule //test:xxx: \n"
             + "\n"
             + "\n"
@@ -507,7 +507,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
   @Test
   public void topLevelAspectIsNotAnAspect() throws Exception {
     scratch.file("test/aspect.bzl", "MyAspect = 4");
-    scratch.file("test/BUILD", "java_library(name = 'xxx')");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx')");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -523,7 +523,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
   @Test
   public void topLevelAspectDoesNotExist() throws Exception {
     scratch.file("test/aspect.bzl", "");
-    scratch.file("test/BUILD", "java_library(name = 'xxx')");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx')");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -538,7 +538,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
 
   @Test
   public void topLevelAspectDoesNotExist2() throws Exception {
-    scratch.file("test/BUILD", "java_library(name = 'xxx')");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx')");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -555,7 +555,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
 
   @Test
   public void topLevelAspectDoesNotExistNoBuildFile() throws Exception {
-    scratch.file("test/BUILD", "java_library(name = 'xxx')");
+    scratch.file("test/UCBUILD", "java_library(name = 'xxx')");
 
     reporter.removeHandler(failFastHandler);
     try {
@@ -567,8 +567,8 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
     }
     assertContainsEvent(
         "Every .bzl file must have a corresponding package, but 'foo' does not have one. "
-        + "Please create a BUILD file in the same or any parent directory. "
-        + "Note that this BUILD file does not need to do anything except exist.");
+        + "Please create a UCBUILD file in the same or any parent directory. "
+        + "Note that this UCBUILD file does not need to do anything except exist.");
   }
 
   @Test
@@ -587,7 +587,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    implementation=_rule_impl,",
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectUncovered]) },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx')");
 
@@ -621,7 +621,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectMismatch]),",
         "              'my_attr' : attr.int() },",
        ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx', my_attr = 4)");
 
@@ -654,7 +654,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    implementation=_rule_impl,",
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectBadDefault]) },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx')");
 
@@ -688,7 +688,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectBadValue]),",
         "              'my_attr' : attr.string() },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx', my_attr='b')");
 
@@ -700,7 +700,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
     } catch (Exception e) {
       // expect to fail.
     }
-    assertContainsEvent("ERROR /workspace/test/BUILD:2:1: //test:xxx: invalid value in 'my_attr' "
+    assertContainsEvent("ERROR /workspace/test/UCBUILD:2:1: //test:xxx: invalid value in 'my_attr' "
         + "attribute: has to be one of 'a' instead of 'b'");
   }
 
@@ -721,7 +721,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspect]),",
         "              'my_attr' : attr.string() },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx', my_attr = 'aaa')");
 
@@ -745,7 +745,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    implementation=_rule_impl,",
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectOptParam]) },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx')");
 
@@ -772,7 +772,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "    attrs = { 'deps' : attr.label_list(aspects=[MyAspectOptOverride]),",
         "              'my_attr' : attr.string() },",
         ")");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('//test:aspect.bzl', 'my_rule')",
         "my_rule(name = 'xxx', my_attr = 'b')");
 
@@ -797,7 +797,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
     );
 
     scratch.file("foo/tool.sh", "#!/bin/bash");
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "load('extension',  'my_rule')",
         "my_rule(name = 'main', exe1 = ':tool.sh', exe2 = ':tool.sh')"
     );
@@ -888,7 +888,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   host_fragments=[" + ruleHostFragments + "],",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/aspect', 'my_rule')",
         "exports_files(['zzz'])",
         "my_rule(",
@@ -913,7 +913,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
   public void invalidateAspectOnBzlFileChange() throws Exception {
     scratch.file("test/build_defs.bzl", aspectBzlFile("'deps'"));
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('build_defs', 'repro', 'repro_no_aspect')",
         "repro_no_aspect(name = 'r0')",
         "repro_no_aspect(name = 'r1', deps = [':r0'])",
@@ -1003,7 +1003,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         ")"
     );
 
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "load('extension', 'rule_bin_out', 'rule_gen_out', 'main_rule')",
         "rule_bin_out(name = 'rbin')",
         "rule_gen_out(name = 'rgen')",
@@ -1037,7 +1037,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "   print('This aspect does nothing')",
         "   return struct()",
         "MyAspect = aspect(implementation=_impl)");
-    scratch.file("test/BUILD", "exports_files(['file.txt'])");
+    scratch.file("test/UCBUILD", "exports_files(['file.txt'])");
     scratch.file("test/file.txt", "");
     AnalysisResult analysisResult =
         update(ImmutableList.of("test/aspect.bzl%MyAspect"), "//test:file.txt");
@@ -1060,7 +1060,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
     );
 
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load(':aspect.bzl', 'r1', 'r2')",
         "r1(name = 't1')",
         "r2(name = 't2', deps = [':t1'])"
@@ -1083,7 +1083,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
     );
 
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load(':aspect.bzl', 'r1')",
         "r1(name = 't1')"
     );
@@ -1109,7 +1109,7 @@ public class SkylarkAspectsTest extends AnalysisTestCase {
         "my_aspect = aspect(implementation = _aspect_impl)"
     );
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "extra_action(",
         "    name = 'xa',",
         "    cmd = 'echo $(EXTRA_ACTION_FILE) > $(output file.xa)',",

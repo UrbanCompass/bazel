@@ -34,7 +34,7 @@ public class CcToolchainSuiteTest extends BuildViewTestCase {
   @Test
   public void testFilesToBuild() throws Exception {
     scratch.file(
-        "cc/BUILD",
+        "cc/UCBUILD",
         "cc_toolchain_suite(",
         "    name = 'suite',",
         "    toolchains = { ",
@@ -172,7 +172,7 @@ public class CcToolchainSuiteTest extends BuildViewTestCase {
         "    name = 'windows-files',",
         "    srcs = ['windows-marker', 'everything'])");
 
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(name='a', srcs=[], outs=['ao'], tools=['//tools/defaults:crosstool'], cmd='x')");
     invalidatePackages();
     useConfiguration("--crosstool_top=//cc:suite");
@@ -188,7 +188,7 @@ public class CcToolchainSuiteTest extends BuildViewTestCase {
   @Test
   public void testSmoke() throws Exception {
     scratch.file(
-        "cc/BUILD",
+        "cc/UCBUILD",
         "cc_toolchain_suite(",
         "    name = 'suite',",
         "    toolchains = { ",

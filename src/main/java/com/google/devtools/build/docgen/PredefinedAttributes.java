@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * A class to contain the base definition of common BUILD rule attributes.
+ * A class to contain the base definition of common UCBUILD rule attributes.
  */
 public class PredefinedAttributes {
 

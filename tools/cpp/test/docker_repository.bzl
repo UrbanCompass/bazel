@@ -18,7 +18,7 @@ def _impl(ctx):
   if docker == None:
     # We cannot find docker, we won't be able to run tests depending
     # on it, silently ignoring.
-    ctx.file("BUILD",
+    ctx.file("UCBUILD",
              "\n".join([
                  "filegroup(",
                  "    name = 'docker',",
@@ -42,7 +42,7 @@ while [ -L "${BIN}" ]; do
 done
 exec "${BIN%%.sh}-bin" "$@"
 """]))
-    ctx.file("BUILD", "\n".join([
+    ctx.file("UCBUILD", "\n".join([
         "sh_binary(",
         "    name = 'docker',",
         "    srcs = ['docker.sh'],",

@@ -1,6 +1,6 @@
 ---
 layout: documentation
-title: BUILD files
+title: UCBUILD files
 ---
 <h1>Bazel: Build Files and Terminology</h1>
 <p>
@@ -22,7 +22,7 @@ title: BUILD files
       <li><a href="#rules">Rules</a></li>
     </ul>
   </li>
-  <li><a href="#BUILD_files">BUILD Files</a>
+  <li><a href="#BUILD_files">UCBUILD Files</a>
     <ul>
       <li><a href="#core_build_language">The Core Build Language</a></li>
 
@@ -45,7 +45,7 @@ title: BUILD files
 <p>Bazel builds software from source code organized in a directory called
    a workspace. Source files in the workspace are organized in a nested
    hierarchy of packages, where each package is a directory that contains a set
-   of related source files and one BUILD file. The BUILD file specifies what
+   of related source files and one UCBUILD file. The UCBUILD file specifies what
    software outputs can be built from the source.
 </p>
 <h2 id="packages_targets">Workspace, Packages and Targets</h2>
@@ -68,9 +68,9 @@ title: BUILD files
 </p>
 <p>
   A package is defined as a directory containing a file
-  named <code>BUILD</code>, residing beneath the top-level directory in the
+  named <code>UCBUILD</code>, residing beneath the top-level directory in the
   workspace.  A package includes all files in its directory, plus all
-  subdirectories beneath it, except those which themselves contain a BUILD
+  subdirectories beneath it, except those which themselves contain a UCBUILD
   file.
 </p>
 <p>
@@ -82,10 +82,10 @@ title: BUILD files
 </p>
 
 <pre>
-src/my/app/BUILD
+src/my/app/UCBUILD
 src/my/app/app.cc
 src/my/app/data/input.txt
-src/my/app/tests/BUILD
+src/my/app/tests/UCBUILD
 src/my/app/tests/test.cc
 </pre>
 <h3 id="targets">Targets</h3>
@@ -312,9 +312,9 @@ src/my/app/tests/test.cc
 </p>
 
 <p>
-  Within a BUILD file, the package-name part of label may be omitted,
-  and optionally the colon too.  So within the BUILD file for package
-  <code>my/app</code> (i.e. <code>//my/app:BUILD</code>),
+  Within a UCBUILD file, the package-name part of label may be omitted,
+  and optionally the colon too.  So within the UCBUILD file for package
+  <code>my/app</code> (i.e. <code>//my/app:UCBUILD</code>),
   the following "relative" labels are all equivalent:
 </p>
 
@@ -331,7 +331,7 @@ app
 </p>
 
 <p>
-  Similarly, within a BUILD file, files belonging to the package may
+  Similarly, within a UCBUILD file, files belonging to the package may
   be referenced by their unadorned name relative to the package
   directory:
 </p>
@@ -354,10 +354,10 @@ testdata/input.txt
   case.  For example, if the source tree contains both the package
   <code>my/app</code> and the package
   <code>my/app/testdata</code> (i.e., each of these two
-  packages has its own BUILD file).  The latter package contains a
+  packages has its own UCBUILD file).  The latter package contains a
   file named <code>testdepot.zip</code>.  Here are two ways (one
   wrong, one correct) to refer to this file within
-  <code>//my/app:BUILD</code>:
+  <code>//my/app:UCBUILD</code>:
 </p>
 
 <pre>
@@ -371,7 +371,7 @@ testdata/input.txt
   or <code>//my:app/testdata/testdepot.zip</code>, you will get an
   error from the build tool saying that the label "crosses a package
   boundary".  You should correct the label by putting the colon after
-  the directory containing the innermost enclosing BUILD file, i.e.,
+  the directory containing the innermost enclosing UCBUILD file, i.e.,
   <code>//my/app/testdata:testdepot.zip</code>.
 </p>
 
@@ -395,9 +395,9 @@ testdata/input.txt
 
 <p><code>target-name</code> is the name of the target within the package.
   The name of a rule is the value of the <code>name</code>
-  parameter in the rule's declaration in a BUILD file; the name
+  parameter in the rule's declaration in a UCBUILD file; the name
   of a file is its pathname relative to the directory containing
-  the BUILD file.
+  the UCBUILD file.
   Target names must be composed entirely of
   characters drawn from the set <code>a</code>–<code>z</code>,
   <code>A</code>–<code>Z</code>, <code>0</code>–<code>9</code>,
@@ -433,7 +433,7 @@ testdata/input.txt
 <p>
   The name of a package is the name of the directory containing its
 
-  BUILD file, relative to the top-level directory of the source tree.
+  UCBUILD file, relative to the top-level directory of the source tree.
   For example: <code>my/app</code>.
   Package names must start with a lower-case ASCII letter
   (<code>a</code>–<code>z</code>),
@@ -635,7 +635,7 @@ testdata/input.txt
 </p>
 
 
-<h2 id="BUILD_files">BUILD Files</h2>
+<h2 id="BUILD_files">UCBUILD Files</h2>
 
 <p>
   The previous section described packages, targets and labels, and the
@@ -644,26 +644,26 @@ testdata/input.txt
 </p>
 
 <p>
-  By definition, every package contains a BUILD file, which is a short
-  program written in the Build Language.  Most BUILD files
+  By definition, every package contains a UCBUILD file, which is a short
+  program written in the Build Language.  Most UCBUILD files
   appear to be little more than a series of declarations of build
   rules; indeed, the declarative style is strongly encouraged when
-  writing BUILD files.
+  writing UCBUILD files.
 </p>
 
 <p>
   However, the build language is in fact an imperative language, and
-  BUILD files are interpreted as a sequential list of statements.
+  UCBUILD files are interpreted as a sequential list of statements.
   Build rule functions, such as <code>cc_library</code>, are procedures whose
   side-effect is to create an abstract build rule inside the build tool.
 </p>
 
 <p>
-  The concrete syntax of BUILD files is a subset of Python.
+  The concrete syntax of UCBUILD files is a subset of Python.
   Originally, the syntax <i>was</i> that of Python, but experience
   showed that users rarely used more than a tiny subset of Python's
   features, and when they did, it often resulted in complex and
-  fragile BUILD files.  In many cases, the use of such features was
+  fragile UCBUILD files.  In many cases, the use of such features was
   unnecessary, and the same result could be achieved by using an
   external program, e.g. via a <code>genrule</code> build rule.
 </p>
@@ -671,7 +671,7 @@ testdata/input.txt
 <p>
   Crucially, programs in the build language are unable to perform
   arbitrary I/O (though many users try!).  This invariant makes the
-  interpretation of BUILD files hermetic, i.e. dependent only on a
+  interpretation of UCBUILD files hermetic, i.e. dependent only on a
   known set of inputs, which is essential for ensuring that builds are
   reproducible.
 </p>
@@ -689,7 +689,7 @@ testdata/input.txt
 </p>
 
 <p>
-  BUILD files should be written using only ASCII characters,
+  UCBUILD files should be written using only ASCII characters,
   although technically they are interpreted using the Latin-1
   character set.  The use
   of <a href='http://www.python.org/dev/peps/pep-0263/'><code>coding:</code></a>
@@ -772,17 +772,17 @@ arg ::= IDENTIFIER '=' expr
 <p>
   The build language is an imperative language, so in general, order
   does matter: variables must be defined before they are used, for
-  example.  However, most BUILD files consist only of declarations of
+  example.  However, most UCBUILD files consist only of declarations of
   build rules, and the relative order of these statements is
   immaterial; all that matters is <em>which</em> rules were declared,
   and with what values, by the time package evaluation completes.
 
-  So, in simple BUILD files, rule declarations can be re-ordered
+  So, in simple UCBUILD files, rule declarations can be re-ordered
   freely without changing the behavior.
 </p>
 
 <p>
-  BUILD file authors are encouraged to use comments liberally to
+  UCBUILD file authors are encouraged to use comments liberally to
   document the role of each build target, whether it is intended for
   public use, and anything else that would help users and future
   maintainers, including a <code># Description:</code> comment at the
@@ -909,7 +909,7 @@ arg ::= IDENTIFIER '=' expr
 </p>
 
 <p>
-  What this means for BUILD file writers is that every rule must
+  What this means for UCBUILD file writers is that every rule must
   explicitly declare all of its actual direct dependencies to the
   build system, and no more.
 
@@ -939,7 +939,7 @@ arg ::= IDENTIFIER '=' expr
   Through careless programming, code in one file may use code provided
   by an <em>indirect</em> dependency, i.e. a transitive but not direct
   edge in the declared dependency graph.  Indirect dependencies do not
-  appear in the BUILD file.  Since the rule doesn't
+  appear in the UCBUILD file.  Since the rule doesn't
   directly depend on the provider, there is no way to track changes,
   as shown in the following example timeline:
 </p>
@@ -952,7 +952,7 @@ The code in package <code>b</code> uses code in package <code>c</code>,
 and thus <code>a</code> transitively depends on <code>c</code>.</p>
 
 <div style="float:left; width: 49%; margin-top: -20px;">
-<p><code>a/BUILD</code></p>
+<p><code>a/UCBUILD</code></p>
 <pre class="code">
 <b>rule(
     name = "a",
@@ -967,7 +967,7 @@ b.foo();</b>
 </pre>
 </div>
 <div style="float:right; width: 49%; margin-top: -20px; ">
-<p><code>b/BUILD</code></p>
+<p><code>b/UCBUILD</code></p>
 <pre class="code">
 <b>rule(
     name = "b",
@@ -1028,7 +1028,7 @@ actual but undeclared dependency on <code>c</code>.
   fault of their own.
 </p>
 <div style="float:right; width: 49%; margin-top: -20px; ">
-<p><code>b/BUILD</code></p>
+<p><code>b/UCBUILD</code></p>
 <pre class="code">
 rule(
     name = "b",
@@ -1057,7 +1057,7 @@ Actual dependency graph:    a --&gt; b    _c
 
   The problem could have been averted by ensuring that the actual
   dependency from <code>a</code> to <code>c</code> introduced in Step
-  2 was properly declared in the BUILD file.
+  2 was properly declared in the UCBUILD file.
 </div>
 
 <h3 id="types_of_dependencies">Types of dependencies</h3>
@@ -1129,7 +1129,7 @@ path, e.g.
 <code>${TEST_SRCDIR}/workspace/path/to/data/file</code>.
    <h3 id="label_directory">Using Labels to Reference Directories</h3>
 
-   <p>As you look over our <code>BUILD</code> files, you might notice
+   <p>As you look over our <code>UCBUILD</code> files, you might notice
       that some <code>data</code> labels refer to directories.
       These labels end with <code>/.</code> or <code>/</code> like so:
 

@@ -23,19 +23,19 @@ has the following features:
     of the box, and can be extended to support arbitrary programming
     languages.
 
-*   High-level build language: Projects are described in the BUILD
+*   High-level build language: Projects are described in the UCBUILD
     language, a concise text format that describes a project as sets of
     small interconnected libraries, binaries and tests. In contrast, with
     tools like Make, you have to describe individual files and compiler
     invocations.
 
-*   Multi-platform support: The same tool and the same BUILD files can
+*   Multi-platform support: The same tool and the same UCBUILD files can
     be used to build software for different architectures, and even
     different platforms.  At Google, we use Bazel to build everything from
     server applications running on systems in our data centers to client apps
     running on mobile phones.
 
-*   Reproducibility: In BUILD files, each library, test and binary must
+*   Reproducibility: In UCBUILD files, each library, test and binary must
     specify its direct dependencies completely.  Bazel uses this
     dependency information to know what must be rebuilt when you make
     changes to a source file, and which tasks can run in parallel.  This
@@ -118,7 +118,7 @@ For our server code base, we use the following development workflow:
 *   Everybody builds their software with Bazel.
 
 *   Different teams own different parts of the source tree, and make
-    their components available as BUILD targets.
+    their components available as UCBUILD targets.
 
 *   Branching is primarily used for managing releases, so everybody
     develops their software at the head revision.
@@ -157,11 +157,11 @@ Can I see examples?
 
 Yes. For a simple example, see:
 
-  <https://github.com/bazelbuild/bazel/blob/master/examples/cpp/BUILD>
+  <https://github.com/bazelbuild/bazel/blob/master/examples/cpp/UCBUILD>
 
 The Bazel source code itself provides a more complex example:
 
-  <https://github.com/bazelbuild/bazel/blob/master/src/BUILD>
+  <https://github.com/bazelbuild/bazel/blob/master/src/UCBUILD>
 
 What is Bazel best at?
 ----------------------
@@ -299,7 +299,7 @@ I use Eclipse/IntelliJ. How does Bazel interoperate with IDEs?
 --------------------------------------------------------------
 
 We currently have no IDE integration API as such but the iOS rules generate
-Xcode projects based on Bazel BUILD targets (see below).
+Xcode projects based on Bazel UCBUILD targets (see below).
 
 How does Bazel interact with Xcode?
 -----------------------------------

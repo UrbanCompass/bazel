@@ -103,7 +103,7 @@ public class ContainingPackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testContainingPackageIsParent() throws Exception {
-    scratch.file("a/BUILD");
+    scratch.file("a/UCBUILD");
     ContainingPackageLookupValue value = lookupContainingPackage("a/b");
     assertTrue(value.hasContainingPackage());
     assertEquals(PackageIdentifier.createInMainRepo("a"), value.getContainingPackageName());
@@ -112,7 +112,7 @@ public class ContainingPackageLookupFunctionTest extends FoundationTestCase {
 
   @Test
   public void testContainingPackageIsSelf() throws Exception {
-    scratch.file("a/b/BUILD");
+    scratch.file("a/b/UCBUILD");
     ContainingPackageLookupValue value = lookupContainingPackage("a/b");
     assertTrue(value.hasContainingPackage());
     assertEquals(PackageIdentifier.createInMainRepo("a/b"), value.getContainingPackageName());

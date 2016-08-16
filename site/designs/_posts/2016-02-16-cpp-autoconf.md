@@ -110,7 +110,7 @@ the repository context object:
 -v`](http://stackoverflow.com/questions/11946294/dump-include-paths-from-g)
      to list the built-in include directories.
 To address the issue 5, we can add the list of paths to dependencies to the
-[crosstool rule in the BUILD
+[crosstool rule in the UCBUILD
 file](https://github.com/bazelbuild/bazel/wiki/Building-with-a-custom-toolchain).
 
 ## Writing the cpp package
@@ -118,7 +118,7 @@ file](https://github.com/bazelbuild/bazel/wiki/Building-with-a-custom-toolchain)
 Once we have resolved all the information from the system, we need to
 write two or three files:
 
-  - The `BUILD` file that will contains the corresponding
+  - The `UCBUILD` file that will contains the corresponding
     `cc_toolchain` rules
   - The `CROSSTOOL` file
   - Optionally, the wrapper script.

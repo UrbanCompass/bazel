@@ -35,7 +35,7 @@ function set_up() {
   # TODO(b/27267941): This is a hack until the bug is fixed.
   rm -rf xcodehelper
   mkdir -p xcodehelper
-  cat > xcodehelper/BUILD <<EOF
+  cat > xcodehelper/UCBUILD <<EOF
 genrule(
     name = "invoke_tool",
     srcs = ["@bazel_tools//tools/osx:xcode-locator"],
@@ -99,7 +99,7 @@ EOF
 </plist>
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "SwiftMain",
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "SwiftMain",
@@ -210,7 +210,7 @@ EOF
 @end
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "swift_lib",
@@ -255,7 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 objc_binary(name = "bin",
@@ -279,7 +279,7 @@ EOF
 function test_fat_apple_binary() {
   rm -rf package
   mkdir -p package
-  cat > package/BUILD <<EOF
+  cat > package/UCBUILD <<EOF
 objc_library(
     name = "lib_a",
     srcs = ["a.m"],
@@ -343,7 +343,7 @@ public class Utility {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "swift_lib",
@@ -378,7 +378,7 @@ class FooTest: XCTestCase {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "SwiftMain",
@@ -430,7 +430,7 @@ func foo() {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "swift_lib",
@@ -449,7 +449,7 @@ EOF
 
 function test_fat_binary_no_srcs() {
   mkdir -p package
-  cat > package/BUILD <<EOF
+  cat > package/UCBUILD <<EOF
 objc_library(
     name = "lib_a",
     srcs = ["a.m"],
@@ -504,7 +504,7 @@ public class SwiftClass {
 }
 EOF
 
-  cat >ios/BUILD <<EOF
+  cat >ios/UCBUILD <<EOF
 load("//tools/build_defs/apple:swift.bzl", "swift_library")
 
 swift_library(name = "swift_lib",

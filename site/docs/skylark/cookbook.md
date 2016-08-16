@@ -28,7 +28,7 @@ def macro(name, visibility=None):
   empty(name = name, visibility = visibility)
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "macro")
@@ -55,7 +55,7 @@ def macro(name, visibility=None):
   )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "macro")
@@ -107,7 +107,7 @@ _cc_and_something_else_binary = rule(implementation=_impl)
 
 Macros can look at previously instantiated rules. This is done with
 `native.existing_rule`, which returns information on a single rule defined in the same
-`BUILD` file, eg.,
+`UCBUILD` file, eg.,
 
 ```python
 native.existing_rule("descriptor_proto")
@@ -137,7 +137,7 @@ def system_test_suite(name, flavors=["default"], test_files):
   native.test_suite(name = name, tests = ts)
 ```
 
-In the following BUILD file, note how `(basic_test.py, fast)` is emitted for
+In the following UCBUILD file, note how `(basic_test.py, fast)` is emitted for
 both the `smoke` test suite and the `thorough` test suite.
 
 ```python
@@ -151,13 +151,13 @@ system_test_suite("thorough", flavors=["fast", "debug", "opt"], ["basic_test.py"
 ```
 
 
-## <a name="aggregation"></a>Aggregating over the BUILD file
+## <a name="aggregation"></a>Aggregating over the UCBUILD file
 
-Macros can collect information from the BUILD file as processed so far.  We call
+Macros can collect information from the UCBUILD file as processed so far.  We call
 this aggregation. The typical example is collecting data from all rules of a
 certain kind.  This is done by calling
 <a href="lib/native.html#existing_rules">native.existing\_rules</a>, which
-returns a dictionary representing all rules defined so far in the current BUILD
+returns a dictionary representing all rules defined so far in the current UCBUILD
 file. The dictionary has entries of the form `name` => `rule`, with the values
 using the same format as `native.existing_rule`.
 
@@ -172,7 +172,7 @@ def archive_cc_src_files(tag):
 ```
 
 Since `native.existing_rules` constructs a potentially large dictionary, you should avoid
-calling it repeatedly within BUILD file.
+calling it repeatedly within UCBUILD file.
 
 ## <a name="empty"></a>Empty rule
 
@@ -189,7 +189,7 @@ def _impl(ctx):
 empty = rule(implementation=_impl)
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:empty.bzl", "empty")
@@ -224,7 +224,7 @@ printer = rule(
     })
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:printer.bzl", "printer")
@@ -232,7 +232,7 @@ load("//pkg:printer.bzl", "printer")
 printer(
     name = "nothing",
     deps = [
-        "BUILD",
+        "UCBUILD",
         ":other",
     ],
 )
@@ -251,7 +251,7 @@ the user. The output has the same name as the rule, with a `.size` suffix.
 While convenient, Shell commands should be used carefully. Generating the
 command-line can lead to escaping and injection issues. It can also create
 portability problems. It is often better to declare a binary target in a
-BUILD file and execute it. See the example [executing a binary](#execute-bin).
+UCBUILD file and execute it. See the example [executing a binary](#execute-bin).
 
 `size.bzl`:
 
@@ -279,7 +279,7 @@ size = rule(
 Hello
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:size.bzl", "size")
@@ -308,7 +308,7 @@ file = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:file.bzl", "file")
@@ -358,7 +358,7 @@ concat = rule(
 Any executable target can be used. In this example, we will use a
 `sh_binary` rule that concatenates all the inputs.
 
-`BUILD`:
+`UCBUILD`:
 
 ```
 load("execute", "concat")
@@ -455,7 +455,7 @@ execute = rule(
 tr 'a-z' 'A-Z' < $1 > $2
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:execute.bzl", "execute")
@@ -509,7 +509,7 @@ execute = rule(
 Hello World!
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:execute.bzl", "execute")
@@ -517,7 +517,7 @@ load("//pkg:execute.bzl", "execute")
 execute(
     name = "e",
     # The path to data.txt has to include the package directories as well. I.e.
-    # if the BUILD file is under foo/BUILD and the data file is foo/data.txt
+    # if the UCBUILD file is under foo/UCBUILD and the data file is foo/data.txt
     # then it needs to be referred as foo/data.txt in the command.
     command = "cat data.txt",
     data = [':data.txt']
@@ -587,7 +587,7 @@ hash = rule(
   outputs = {"text": "%{name}.txt"})
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:hash.bzl", "hash")
@@ -659,7 +659,7 @@ sum = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:sum.bzl", "sum")
@@ -707,7 +707,7 @@ sum = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:sum.bzl", "sum")
@@ -750,7 +750,7 @@ executable_rule = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "executable_rule")
@@ -782,7 +782,7 @@ rule_with_outputs = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "rule_with_outputs")
@@ -816,7 +816,7 @@ rule_with_outputs = rule(
 )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "rule_with_outputs")
@@ -875,7 +875,7 @@ def macro(name, cmd, input):
   )
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:extension.bzl", "macro")
@@ -909,7 +909,7 @@ def _impl(ctx):
 debug = rule(implementation=_impl)
 ```
 
-`BUILD`:
+`UCBUILD`:
 
 ```python
 load("//pkg:debug.bzl", "debug")

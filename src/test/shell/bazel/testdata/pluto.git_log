@@ -2,13 +2,13 @@ commit b87de9346bb1a4a3d4d2ab1a567b07c5d11a486a (HEAD -> master, tag: 1-build)
 Author: John Doe <john@foo.com>
 Date:   Thu Jul 16 04:50:53 2015 -0700
 
-    Add WORKSPACE and BUILD file. Update info because Pluto is no longer a planet.
+    Add WORKSPACE and UCBUILD file. Update info because Pluto is no longer a planet.
 
-diff --git a/BUILD b/BUILD
+diff --git a/UCBUILD b/UCBUILD
 new file mode 100644
 index 0000000..874e03f
 --- /dev/null
-+++ b/BUILD
++++ b/UCBUILD
 @@ -0,0 +1,5 @@
 +filegroup(
 +    name = "pluto",

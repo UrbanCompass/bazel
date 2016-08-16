@@ -19,7 +19,7 @@ This tutorial shows how to use Bazel to build the following:
 In this tutorial, you'll learn how to:
 
 *   Set up a Bazel workspace and create a `WORKSPACE` file
-*   Create `BUILD` files that contain the instructions used by Bazel to build
+*   Create `UCBUILD` files that contain the instructions used by Bazel to build
     the software
 *   Run builds using the Bazel command line tool
 

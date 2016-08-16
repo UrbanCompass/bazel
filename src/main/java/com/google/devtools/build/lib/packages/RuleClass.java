@@ -89,7 +89,7 @@ import javax.annotation.concurrent.Immutable;
  * <li>Changing an attribute from MANDATORY to OPTIONAL creates the potential for null-pointer
  *     exceptions in code that expects a value.
  * <li>Attributes whose names are preceded by a "$" or a ":" are "hidden", and cannot be redefined
- *     in a BUILD file.  They are a useful way of adding a special dependency. By convention,
+ *     in a UCBUILD file.  They are a useful way of adding a special dependency. By convention,
  *     attributes starting with "$" are implicit dependencies, and those starting with a ":" are
  *     late-bound implicit dependencies, i.e. dependencies that can only be resolved when the
  *     configuration is known.
@@ -266,7 +266,7 @@ public final class RuleClass {
       /**
        * Abstract rules are intended for rule classes that are just used to
        * factor out common attributes, and for rule classes that are used only
-       * internally. These rules cannot be instantiated by a BUILD file.
+       * internally. These rules cannot be instantiated by a UCBUILD file.
        *
        * <p>The rule name must contain a '$' and {@link
        * TargetUtils#isTestRuleName} must return false for the name.
@@ -302,8 +302,8 @@ public final class RuleClass {
       },
 
       /**
-       * Normal rules are instantiable by BUILD files. Their names must therefore
-       * obey the rules for identifiers in the BUILD language. In addition,
+       * Normal rules are instantiable by UCBUILD files. Their names must therefore
+       * obey the rules for identifiers in the UCBUILD language. In addition,
        * {@link TargetUtils#isTestRuleName} must return false for the name.
        */
       NORMAL {
@@ -344,9 +344,9 @@ public final class RuleClass {
       },
 
       /**
-       * Test rules are instantiable by BUILD files and are handled specially
+       * Test rules are instantiable by UCBUILD files and are handled specially
        * when run with the 'test' command. Their names must obey the rules
-       * for identifiers in the BUILD language and {@link
+       * for identifiers in the UCBUILD language and {@link
        * TargetUtils#isTestRuleName} must return true for the name.
        *
        * <p>In addition, test rules must contain certain attributes. See {@link
@@ -1147,7 +1147,7 @@ public final class RuleClass {
    * this class is declared, and whose name is derived from the name of the rule.
    *
    * <p>Implicit outputs are a widely-relied upon. All ".so", and "_deploy.jar" targets referenced
-   * in BUILD files are examples.
+   * in UCBUILD files are examples.
    */
   @VisibleForTesting
   public ImplicitOutputsFunction getDefaultImplicitOutputsFunction() {

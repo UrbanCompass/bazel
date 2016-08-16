@@ -2,7 +2,7 @@
 Target pattern syntax
 =====================
 
-The BUILD file label syntax is used to specify a single target. Target
+The UCBUILD file label syntax is used to specify a single target. Target
 patterns generalize this syntax to sets of targets, and also support
 working-directory-relative forms, recursion, subtraction and filtering.
 Examples:

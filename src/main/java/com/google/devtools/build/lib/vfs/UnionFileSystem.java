@@ -38,9 +38,9 @@ import javax.annotation.Nullable;
  *
  * <p>For example:
  * "/in" maps to InFileSystem, "/" maps to OtherFileSystem.
- * Reading from "/in/base/BUILD" through the UnionFileSystem will delegate the read operation to
- * InFileSystem, which will read "/in/base/BUILD" relative to its root.
- * ("mount" behavior would remap it to "/base/BUILD" on the delegate).
+ * Reading from "/in/base/UCBUILD" through the UnionFileSystem will delegate the read operation to
+ * InFileSystem, which will read "/in/base/UCBUILD" relative to its root.
+ * ("mount" behavior would remap it to "/base/UCBUILD" on the delegate).
  *
  * <p>Intra-filesystem symbolic links are resolved to their ultimate targets.
  * Cross-filesystem links are not currently supported.

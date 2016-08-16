@@ -187,8 +187,8 @@ if [ -z "${BAZEL_SKIP_JAVA_COMPILATION}" ]; then
 
   java_compilation "Bazel Java" "$DIRS" "$EXCLUDE_FILES" "$LIBRARY_JARS" "${OUTPUT_DIR}"
 
-  # help files: all non java and BUILD files in src/main/java.
-  for i in $(find src/main/java -type f -a \! -name '*.java' -a \! -name 'BUILD' | sed 's|src/main/java/||'); do
+  # help files: all non java and UCBUILD files in src/main/java.
+  for i in $(find src/main/java -type f -a \! -name '*.java' -a \! -name 'UCBUILD' | sed 's|src/main/java/||'); do
     mkdir -p $(dirname ${OUTPUT_DIR}/classes/$i)
     cp src/main/java/$i ${OUTPUT_DIR}/classes/$i
   done
@@ -252,7 +252,7 @@ EOF
 chmod 0755 ${ARCHIVE_DIR}/_embedded_binaries/process-wrapper${EXE_EXT}
 
 cp src/main/tools/build_interface_so ${ARCHIVE_DIR}/_embedded_binaries/build_interface_so
-cp src/main/tools/jdk.BUILD ${ARCHIVE_DIR}/_embedded_binaries/jdk.BUILD
+cp src/main/tools/jdk.UCBUILD ${ARCHIVE_DIR}/_embedded_binaries/jdk.UCBUILD
 cp $OUTPUT_DIR/libblaze.jar ${ARCHIVE_DIR}
 cp tools/osx/xcode_locator_stub.sh ${ARCHIVE_DIR}/_embedded_binaries/xcode-locator
 

@@ -13,14 +13,14 @@ and actions. Some typical scenarios when aspects can be useful:
 *   IDEs that integrate Bazel can use aspects to collect information about the
     project
 *   Code generation tools can leverage aspects to execute on their inputs in
-    "target-agnostic" manner. As an example, BUILD files can specify a hierarchy
+    "target-agnostic" manner. As an example, UCBUILD files can specify a hierarchy
     of [protobuf](https://developers.google.com/protocol-buffers/) library
     definitions, and language-specific rules can use aspects to attach
     actions generating protobuf support code for a particular language
 
 ## Aspect basics
 
-Bazel BUILD files provide a description of a project’s source code: what source
+Bazel UCBUILD files provide a description of a project’s source code: what source
 files are part of the project, what artifacts (_targets_) should be built from
 those files, what the dependencies between those files are, etc. Bazel uses
 this information to perform a build, that is, it figures out the set of actions
@@ -28,7 +28,7 @@ needed to produce the artifacts (such as running compiler or linker) and
 executes those actions. Bazel accomplishes this by constructing a _dependency
 graph_ between targets and visiting this graph to collect those actions.
 
-Consider the following BUILD file:
+Consider the following UCBUILD file:
 
 ```python
 java_library(name = 'W', ...)
@@ -39,7 +39,7 @@ java_library(name = 'T', deps = [':Q'], ...)
 java_library(name = 'X', deps = [':Y',':Z'], runtime_deps = [':T'], ...)
 ```
 
-This BUILD file defines a dependency graph shown in Fig 1.
+This UCBUILD file defines a dependency graph shown in Fig 1.
 
 <img src="build-graph.png" alt="Build Graph" width="250px" />
 
@@ -50,7 +50,7 @@ artifacts (such as Jar files), and provide information (such as locations
 and names of those artifacts) to their dependencies in providers that
 they return. Their dependencies can access those providers through the
 [Target object](lib/Target.html). In other words, every target
-defined in the BUILD file generates a node in the dependency graph, and
+defined in the UCBUILD file generates a node in the dependency graph, and
 the appropriate rule implementation function is called for every node.
 
 Aspects are similar to rules in that they have an implementation function that

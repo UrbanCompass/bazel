@@ -90,7 +90,7 @@ public class PackageCacheOptions extends OptionsBase {
           + "visible somewhere on the package path."
           + "\n"
           + "Use this option when deleting a subpackage 'x/y' of an "
-          + "existing package 'x'.  For example, after deleting x/y/BUILD "
+          + "existing package 'x'.  For example, after deleting x/y/UCBUILD "
           + "in your client, the build system may complain if it "
           + "encounters a label '//x:y/z' if that is still provided by another "
           + "package_path entry.  Specifying --deleted_packages x/y avoids this "

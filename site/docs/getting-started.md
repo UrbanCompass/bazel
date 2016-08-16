@@ -28,7 +28,7 @@ $ touch WORKSPACE
 
 ## Creating a Build File
 
-To know which targets can be built in your project, Bazel inspects `BUILD`
+To know which targets can be built in your project, Bazel inspects `UCBUILD`
 files. They are written in Bazel's build language which is syntactically
 similar to Python. Usually they are just a sequence of declarations of rules.
 Each rule specifies its inputs, outputs, and a way to compute the outputs from
@@ -49,7 +49,7 @@ genrule(
 
 The shell command may contain [Make variables](/docs/be/make-variables.html).
 
-Using the above `BUILD` file, you can ask Bazel to generate the target.
+Using the above `UCBUILD` file, you can ask Bazel to generate the target.
 
 ```
 $ bazel build :hello

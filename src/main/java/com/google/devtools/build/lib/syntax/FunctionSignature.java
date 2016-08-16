@@ -32,7 +32,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * Function Signatures for BUILD language (same as Python)
+ * Function Signatures for UCBUILD language (same as Python)
  *
  * <p>Skylark's function signatures are just like Python3's.
  * A function may have 6 kinds of arguments:

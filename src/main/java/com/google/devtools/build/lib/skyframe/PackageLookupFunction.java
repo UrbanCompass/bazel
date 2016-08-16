@@ -52,7 +52,7 @@ public class PackageLookupFunction implements SkyFunction {
     PathPackageLocator pkgLocator = PrecomputedValue.PATH_PACKAGE_LOCATOR.get(env);
     PackageIdentifier packageKey = (PackageIdentifier) skyKey.argument();
     if (PackageFunction.isDefaultsPackage(packageKey)) {
-      return PackageLookupValue.success(pkgLocator.getPathEntries().get(0), BuildFileName.BUILD);
+      return PackageLookupValue.success(pkgLocator.getPathEntries().get(0), BuildFileName.UCBUILD);
     }
 
     if (!packageKey.getRepository().isMain()) {
@@ -85,7 +85,7 @@ public class PackageLookupFunction implements SkyFunction {
       }
     }
 
-    return getPackageLookupValue(env, pkgLocator.getPathEntries(), packageKey, BuildFileName.BUILD);
+    return getPackageLookupValue(env, pkgLocator.getPathEntries(), packageKey, BuildFileName.UCBUILD);
   }
 
   @Nullable
@@ -201,7 +201,7 @@ public class PackageLookupFunction implements SkyFunction {
       throw new PackageLookupFunctionException(new BuildFileNotFoundException(id, e.getMessage()),
           Transience.PERSISTENT);
     }
-    BuildFileName buildFileName = BuildFileName.BUILD;
+    BuildFileName buildFileName = BuildFileName.UCBUILD;
     PathFragment buildFileFragment = id.getPackageFragment().getChild(buildFileName.getFilename());
     RootedPath buildFileRootedPath = RootedPath.toRootedPath(repositoryValue.getPath(),
         buildFileFragment);

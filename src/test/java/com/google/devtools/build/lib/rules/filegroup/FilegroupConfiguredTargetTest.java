@@ -39,7 +39,7 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
 
   @Test
   public void testGroup() throws Exception {
-    scratch.file("nevermore/BUILD",
+    scratch.file("nevermore/UCBUILD",
         "filegroup(name  = 'staticdata',",
         "          srcs = ['staticdata/spam.txt', 'staticdata/good.txt'])");
     ConfiguredTarget groupTarget = getConfiguredTarget("//nevermore:staticdata");
@@ -51,7 +51,7 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
   @Test
   public void testDependencyGraph() throws Exception {
     scratch.file(
-        "java/com/google/test/BUILD",
+        "java/com/google/test/UCBUILD",
         "java_binary(name  = 'test_app',",
         "    resources = [':data'],",
         "    create_executable = 0,",
@@ -78,10 +78,10 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
   }
 
   private void writeTest() throws IOException {
-    scratch.file("another/BUILD",
+    scratch.file("another/UCBUILD",
         "filegroup(name  = 'another',",
         "          srcs = ['another.txt'])");
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "filegroup(name  = 'a',",
         "          srcs = ['a.txt'])",
         "filegroup(name  = 'b',",
@@ -117,21 +117,21 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
 
   @Test
   public void testIsNotExecutable() throws Exception {
-    scratch.file("x/BUILD",
+    scratch.file("x/UCBUILD",
                 "filegroup(name = 'not_exec_two_files', srcs = ['bin', 'bin.sh'])");
     assertNull(getExecutable("//x:not_exec_two_files"));
   }
 
   @Test
   public void testIsExecutable() throws Exception {
-    scratch.file("x/BUILD",
+    scratch.file("x/UCBUILD",
                 "filegroup(name = 'exec', srcs = ['bin'])");
     assertEquals("x/bin", getExecutable("//x:exec").getExecPath().getPathString());
   }
 
   @Test
   public void testNoDuplicate() throws Exception {
-    scratch.file("x/BUILD",
+    scratch.file("x/UCBUILD",
                 "filegroup(name = 'a', srcs = ['file'])",
                 "filegroup(name = 'b', srcs = ['file'])",
                 "filegroup(name = 'c', srcs = [':a', ':b'])");
@@ -157,7 +157,7 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
     scratch.file("pkg/in_ouput_group_b");
 
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "java_library(name='lib_a', srcs=['a.java'])",
         "java_library(name='lib_b', srcs=['b.java'])",
         "filegroup(name='group', srcs=[':lib_a', ':lib_b'],"
@@ -172,7 +172,7 @@ public class FilegroupConfiguredTargetTest extends BuildViewTestCase {
   public void testErrorForIllegalOutputGroup() throws Exception {
     scratch.file("pkg/a.cc");
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "cc_library(name='lib_a', srcs=['a.cc'])",
         String.format(
             "filegroup(name='group', srcs=[':lib_a'], output_group='%s')",

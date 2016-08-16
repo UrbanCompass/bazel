@@ -359,8 +359,8 @@ public class RuleFactory {
    * Uses the given label to retrieve the workspace-relative path of the given location (including
    * the line number).
    *
-   * <p>For example, the location /usr/local/workspace/my/cool/package/BUILD:3:1 and the label
-   * //my/cool/package:BUILD would lead to "my/cool/package:BUILD:3".
+   * <p>For example, the location /usr/local/workspace/my/cool/package/UCBUILD:3:1 and the label
+   * //my/cool/package:UCBUILD would lead to "my/cool/package:UCBUILD:3".
    *
    * @return The workspace-relative path of the given location, or null if it could not be computed.
    */
@@ -373,7 +373,7 @@ public class RuleFactory {
     // in the same package.
     // It would be preferable to construct the path from the label itself, but this doesn't work for
     // rules created from function calls in a subincluded file, even if both files share a path
-    // prefix (for example, when //a/package:BUILD subincludes //a/package/with/a/subpackage:BUILD).
+    // prefix (for example, when //a/package:UCBUILD subincludes //a/package/with/a/subpackage:UCBUILD).
     // We can revert to that approach once subincludes aren't supported anymore.
     String absolutePath = Location.printPathAndLine(location);
     int pos = absolutePath.indexOf(label.getPackageName());

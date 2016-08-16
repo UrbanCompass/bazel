@@ -35,7 +35,7 @@ public class CppCompilationContextTest extends BuildViewTestCase {
 
   @Before
   public final void createBuildFile() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_binary(name = 'foo',",
         "          srcs = ['foo.cc'])",
         "cc_binary(name = 'bar',",

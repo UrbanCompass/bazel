@@ -423,7 +423,7 @@ public final class XcodeProvider implements TransitiveInfoProvider {
               || oldProvider.configurationDistinguisher != provider.configurationDistinguisher) {
             // Do not include duplicate dependencies whose architecture or configuration
             // distinguisher does not match this project's. This check avoids having multiple
-            // conflicting Xcode targets for the same BUILD target that are only distinguished by
+            // conflicting Xcode targets for the same UCBUILD target that are only distinguished by
             // these fields (which Xcode does not care about).
             continue;
           }
@@ -567,7 +567,7 @@ public final class XcodeProvider implements TransitiveInfoProvider {
   }
 
   private TargetControl targetControl() {
-    String buildFilePath = label.getPackageFragment().getSafePathString() + "/BUILD";
+    String buildFilePath = label.getPackageFragment().getSafePathString() + "/UCBUILD";
     NestedSet<String> userHeaderSearchPaths = NestedSetBuilder.<String>linkOrder()
         .addTransitive(propagatedUserHeaderSearchPaths)
         .addTransitive(nonPropagatedUserHeaderSearchPaths)

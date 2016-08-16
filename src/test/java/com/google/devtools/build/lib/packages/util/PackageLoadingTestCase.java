@@ -182,7 +182,7 @@ public abstract class PackageLoadingTestCase extends FoundationTestCase {
    */
   protected Rule scratchRule(String packageName, String ruleName, String... lines)
       throws Exception {
-    scratch.file(packageName + "/BUILD", lines);
+    scratch.file(packageName + "/UCBUILD", lines);
     return (Rule) getTarget("//" + packageName + ":" + ruleName);
   }
 

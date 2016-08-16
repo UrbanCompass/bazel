@@ -254,7 +254,7 @@ public class RuleClassTest extends PackageLoadingTestCase {
 
   @Before
   public final void setRuleLocation() throws Exception {
-    testBuildfilePath = scratch.resolve("/home/user/workspace/testpackage/BUILD");
+    testBuildfilePath = scratch.resolve("/home/user/workspace/testpackage/UCBUILD");
     testRuleLocation = Location.fromPathAndStartColumn(
         testBuildfilePath.asFragment(), 0, 0, new LineAndColumn(TEST_RULE_DEFINED_AT_LINE, 0));
   }

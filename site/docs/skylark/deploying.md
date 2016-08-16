@@ -35,14 +35,14 @@ chaiscript language. We would have the following structure:
 README.md
 WORKSPACE
 chaiscript/
-  BUILD
+  UCBUILD
   chaiscript.bzl
 tests/
-  BUILD
+  UCBUILD
   some_test.sh
   another_test.py
 examples/
-  BUILD
+  UCBUILD
   bin.chai
   lib.chai
   test.chai

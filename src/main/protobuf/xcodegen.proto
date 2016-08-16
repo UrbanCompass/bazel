@@ -70,7 +70,7 @@ message TargetControl {
   // valid. These sources are compiled without ARC.
   repeated string non_arc_source_file = 6;
 
-  // Relative paths to support files, such as BUILD, header, and non-compiled
+  // Relative paths to support files, such as UCBUILD, header, and non-compiled
   // source files. These are included in the project so they can be opened in
   // the project explorer view, but are not compiled into object files.
   repeated string support_file = 3;

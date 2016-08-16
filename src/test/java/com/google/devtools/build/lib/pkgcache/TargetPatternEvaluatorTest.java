@@ -69,20 +69,20 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     boolean hasImplicitCcOutputs = ruleClassProvider.getRuleClassMap().get("cc_library")
         .getDefaultImplicitOutputsFunction() != ImplicitOutputsFunction.NONE;
 
-    scratch.file("BUILD",
+    scratch.file("UCBUILD",
         "filegroup(name = 'fg', srcs = glob(['*.cc']))");
     scratch.file("foo.cc");
 
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_library(name = 'foo1', srcs = [ 'foo1.cc' ], hdrs = [ 'foo1.h' ])",
         "exports_files(['baz/bang'])");
-    scratch.file("foo/bar/BUILD",
+    scratch.file("foo/bar/UCBUILD",
         "cc_library(name = 'bar1', alwayslink = 1)",
         "cc_library(name = 'bar2')",
         "exports_files(['wiz/bang', 'wiz/all', 'baz', 'baz/bang', 'undeclared.h'])");
 
     // 'filegroup' and 'test_suite' are rules, but 'exports_files' is not.
-    scratch.file("otherrules/BUILD",
+    scratch.file("otherrules/UCBUILD",
         "test_suite(name = 'suite1')",
         "filegroup(name='group', srcs=['suite/somefile'])",
         "exports_files(['suite/somefile'])",
@@ -100,14 +100,14 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     rulesInFoo = labels("//foo:foo1");
     rulesInFooBar = labels("//foo/bar:bar1", "//foo/bar:bar2");
     rulesInOtherrules = rulesBeneathOtherrules;
-    targetsInTopLevelPackage = labels("//:BUILD", "//:foo.cc", "//:fg");
+    targetsInTopLevelPackage = labels("//:UCBUILD", "//:foo.cc", "//:fg");
 
     targetsInFoo = labels(
         "//foo:foo1",
         "//foo:foo1",
         "//foo:foo1.cc",
         "//foo:foo1.h",
-        "//foo:BUILD",
+        "//foo:UCBUILD",
         "//foo:baz/bang");
     if (hasImplicitCcOutputs) {
       targetsInFoo.addAll(labels("//foo:libfoo1.a", "//foo:libfoo1.so"));
@@ -115,7 +115,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     targetsInFooBar = labels(
         "//foo/bar:bar1",
         "//foo/bar:bar2",
-        "//foo/bar:BUILD",
+        "//foo/bar:UCBUILD",
         "//foo/bar:wiz/bang",
         "//foo/bar:wiz/all",
         "//foo/bar:baz",
@@ -132,7 +132,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
         "//otherrules:group",
         "//otherrules:wiz",
         "//otherrules:suite1",
-        "//otherrules:BUILD",
+        "//otherrules:UCBUILD",
         "//otherrules:suite/somefile",
         "//otherrules:wiz",
         "//otherrules:suite1");
@@ -230,14 +230,14 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testAbsolutePatternEndsWithSlashAll() throws Exception {
-    scratch.file("foo/all/BUILD", "cc_library(name = 'all')");
+    scratch.file("foo/all/UCBUILD", "cc_library(name = 'all')");
     assertEquals("//foo/all:all", parseIndividualTarget("//foo/all").toString());
     assertNoEvents();
   }
 
   @Test
   public void testWildcardConflict() throws Exception {
-    scratch.file("foo/lib/BUILD",
+    scratch.file("foo/lib/UCBUILD",
         "cc_library(name = 'lib1')",
         "cc_library(name = 'lib2')",
         "cc_library(name = 'all-targets')",
@@ -316,7 +316,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   @Test
   public void testUnsupportedTargets() throws Exception {
     String expectedError = "no such target '//foo:foo': target 'foo' not declared in package 'foo'"
-        + " (did you mean 'foo1'?) defined by /workspace/foo/BUILD";
+        + " (did you mean 'foo1'?) defined by /workspace/foo/UCBUILD";
     expectError(expectedError, "foo");
     expectError("The package part of 'foo/' should not end in a slash", "foo/");
   }
@@ -326,18 +326,18 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     assertThat(parseList("foo:all")).containsExactlyElementsIn(rulesInFoo);
     assertNoEvents();
 
-    scratch.overwriteFile("foo/BUILD",
+    scratch.overwriteFile("foo/UCBUILD",
         "cc_library(name = 'foo1', srcs = [ 'foo1.cc' ], hdrs = [ 'foo1.h' ])",
         "cc_library(name = 'foo2', srcs = [ 'foo1.cc' ], hdrs = [ 'foo1.h' ])");
-    invalidate("foo/BUILD");
+    invalidate("foo/UCBUILD");
     assertThat(parseList("foo:all")).containsExactlyElementsIn(labels("//foo:foo1", "//foo:foo2"));
   }
 
   @Test
   public void testParserOffsetUpdated() throws Exception {
-    scratch.file("nest/BUILD",
+    scratch.file("nest/UCBUILD",
         "cc_library(name = 'nested1', srcs = [ ])");
-    scratch.file("nest/nest/BUILD",
+    scratch.file("nest/nest/UCBUILD",
         "cc_library(name = 'nested2', srcs = [ ])");
 
     updateOffset(new PathFragment("nest"));
@@ -357,12 +357,12 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     assertThat(parseList("otherrules" + suffix)).containsExactlyElementsIn(rulesInOtherrules);
     assertNoEvents();
     String msg1 = "while parsing 'nosuchpkg" + suffix + "': no such package 'nosuchpkg': "
-        + "BUILD file not found on package path";
+        + "UCBUILD file not found on package path";
     expectError(msg1, "nosuchpkg" + suffix);
 
     String msg2 = "while parsing 'nosuchdirectory" + suffix
         + "': no such package 'nosuchdirectory': "
-        + "BUILD file not found on package path";
+        + "UCBUILD file not found on package path";
     expectError(msg2, "nosuchdirectory" + suffix);
     assertThat(parsingListener.events).containsExactly(Pair.of("nosuchpkg" + suffix, msg1),
         Pair.of("nosuchdirectory" + suffix, msg2));
@@ -375,10 +375,10 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     assertThat(parseList("//otherrules" + suffix)).containsExactlyElementsIn(rulesInOtherrules);
     assertNoEvents();
     expectError("while parsing '//nosuchpkg" + suffix + "': no such package 'nosuchpkg': "
-            + "BUILD file not found on package path",
+            + "UCBUILD file not found on package path",
         "//nosuchpkg" + suffix);
     expectError("while parsing '//nosuchpkg" + suffix + "': no such package 'nosuchpkg': "
-            + "BUILD file not found on package path",
+            + "UCBUILD file not found on package path",
         "//nosuchpkg" + suffix);
   }
 
@@ -453,7 +453,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testFindAllRulesRecursivelyWithExperimental() throws Exception {
-    scratch.file("experimental/BUILD",
+    scratch.file("experimental/UCBUILD",
         "cc_library(name = 'experimental', srcs = [ 'experimental.cc' ])");
     assertThat(parseList("//..."))
         .containsExactlyElementsIn(ImmutableSet.builder()
@@ -466,7 +466,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testFindAllRulesRecursivelyExperimental() throws Exception {
-    scratch.file("experimental/BUILD",
+    scratch.file("experimental/UCBUILD",
         "cc_library(name = 'experimental', srcs = [ 'experimental.cc' ])");
     assertThat(parseList("//experimental/..."))
         .containsExactlyElementsIn(labels("//experimental:experimental"));
@@ -475,7 +475,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testDefaultPackage() throws Exception {
-    scratch.file("experimental/BUILD",
+    scratch.file("experimental/UCBUILD",
                 "cc_library(name = 'experimental', srcs = [ 'experimental.cc' ])");
     assertEquals("//experimental:experimental", parseIndividualTarget("//experimental").toString());
     assertEquals("//experimental:experimental", parseIndividualTarget("experimental").toString());
@@ -487,9 +487,9 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
    */
   @Test
   public void testRelativePathLabel() throws Exception {
-    scratch.file("sub/BUILD", "exports_files(['dir2/dir2'])");
-    scratch.file("sub/dir/BUILD", "exports_files(['dir2'])");
-    scratch.file("sub/dir/dir/BUILD", "exports_files(['dir'])");
+    scratch.file("sub/UCBUILD", "exports_files(['dir2/dir2'])");
+    scratch.file("sub/dir/UCBUILD", "exports_files(['dir2'])");
+    scratch.file("sub/dir/dir/UCBUILD", "exports_files(['dir'])");
     // sub/dir/dir is a package
     assertEquals("//sub/dir/dir:dir", parseIndividualTarget("sub/dir/dir").toString());
     // sub/dir is a package but not sub/dir/dir2
@@ -543,8 +543,8 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   /** Regression test for a bug. */
   @Test
   public void testDotDotDotDoesntMatchDeletedPackages() throws Exception {
-    scratch.file("x/y/BUILD", "cc_library(name='y')");
-    scratch.file("x/z/BUILD", "cc_library(name='z')");
+    scratch.file("x/y/UCBUILD", "cc_library(name='y')");
+    scratch.file("x/z/UCBUILD", "cc_library(name='z')");
     setDeletedPackages(Sets.newHashSet(PackageIdentifier.createInMainRepo("x/y")));
     assertEquals(Sets.newHashSet(Label.parseAbsolute("//x/z")),
         parseList("x/..."));
@@ -552,8 +552,8 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testDotDotDotDoesntMatchDeletedPackagesRelative() throws Exception {
-    scratch.file("x/y/BUILD", "cc_library(name='y')");
-    scratch.file("x/z/BUILD", "cc_library(name='z')");
+    scratch.file("x/y/UCBUILD", "cc_library(name='y')");
+    scratch.file("x/z/UCBUILD", "cc_library(name='z')");
     setDeletedPackages(Sets.newHashSet(PackageIdentifier.createInMainRepo("x/y")));
 
     parser.updateOffset(new PathFragment("x"));
@@ -563,8 +563,8 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testDeletedPackagesIncrementality() throws Exception {
-    scratch.file("x/y/BUILD", "cc_library(name='y')");
-    scratch.file("x/z/BUILD", "cc_library(name='z')");
+    scratch.file("x/y/UCBUILD", "cc_library(name='y')");
+    scratch.file("x/z/UCBUILD", "cc_library(name='z')");
 
     assertEquals(Sets.newHashSet(Label.parseAbsolute("//x/y"), Label.parseAbsolute("//x/z")),
         parseList("x/..."));
@@ -659,10 +659,10 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   }
 
   private void setupSubDirectoryCircularSymlink() throws Exception {
-    Path parent = scratch.file("parent/BUILD", "sh_library(name = 'parent')").getParentDirectory();
+    Path parent = scratch.file("parent/UCBUILD", "sh_library(name = 'parent')").getParentDirectory();
     Path child = parent.getRelative("child");
     child.createDirectory();
-    Path badBuild = child.getRelative("BUILD");
+    Path badBuild = child.getRelative("UCBUILD");
     badBuild.createSymbolicLink(badBuild);
     reporter.removeHandler(failFastHandler);
   }
@@ -703,19 +703,19 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   /** Regression test for bug: "Bogus 'helpful' error message" */
   @Test
   public void testHelpfulMessageForDirectoryWhichIsASubdirectoryOfAPackage() throws Exception {
-    scratch.file("bar/BUILD");
+    scratch.file("bar/UCBUILD");
     scratch.file("bar/quux/somefile");
     expectError("no such target '//bar:quux': target 'quux' not declared in package 'bar'; "
             + "however, a source directory of this name exists.  (Perhaps add "
-            + "'exports_files([\"quux\"])' to bar/BUILD, or define a filegroup?) defined by "
-            + "/workspace/bar/BUILD",
+            + "'exports_files([\"quux\"])' to bar/UCBUILD, or define a filegroup?) defined by "
+            + "/workspace/bar/UCBUILD",
         "bar/quux");
   }
 
   /** Regression test for bug: "Uplevel references in blaze target patterns cause crash" */
   @Test
   public void testNoCrashWhenUplevelReferencesUsed() throws Exception {
-    scratch.file("/other/workspace/project/BUILD");
+    scratch.file("/other/workspace/project/UCBUILD");
     expectError(
         "Invalid package name '../other/workspace/project': ",
         "../other/workspace/project/...:all");
@@ -792,7 +792,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testTestTargetParsing() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "cc_library(name = 'bar1', alwayslink = 1)",
         "cc_library(name = 'bar2')",
         "cc_test(name = 'test1', deps = ['bar1'], tags = ['local'])",
@@ -825,17 +825,17 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   public void testKeepGoingBadPackage() throws Exception {
     assertKeepGoing(rulesBeneathFoo,
         "Skipping '//missing_pkg': no such package 'missing_pkg': "
-            + "BUILD file not found on package path",
+            + "UCBUILD file not found on package path",
         "//missing_pkg", "foo/...");
     assertKeepGoing(rulesBeneathFoo,
         "Skipping '//missing_pkg': no such package 'missing_pkg': "
-            + "BUILD file not found on package path",
+            + "UCBUILD file not found on package path",
         "//missing_pkg", "foo/...");
   }
 
   @Test
   public void testKeepGoingPartiallyBadPackage() throws Exception {
-    scratch.file("x/y/BUILD",
+    scratch.file("x/y/UCBUILD",
         "filegroup(name = 'a')",
         "BROKEN",
         "filegroup(name = 'b')");
@@ -872,7 +872,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testKeepGoingOnAllRulesBeneath() throws Exception {
-    scratch.file("foo/bar/bad/BUILD", "invalid build file");
+    scratch.file("foo/bar/bad/UCBUILD", "invalid build file");
 
     reporter.removeHandler(failFastHandler);
     Pair<Set<Label>, Boolean> result = parseListKeepGoing("foo/...");
@@ -908,13 +908,13 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   @Test
   public void testMentioningBuildFile() throws Exception {
     ResolvedTargets<Target> result = parseTargetPatternList(parser, parsingListener,
-        Arrays.asList("//foo/bar/BUILD"), false);
+        Arrays.asList("//foo/bar/UCBUILD"), false);
 
     assertFalse(result.hasError());
     assertThat(result.getTargets()).hasSize(1);
 
     Label label = Iterables.getOnlyElement(result.getTargets()).getLabel();
-    assertEquals("BUILD", label.getName());
+    assertEquals("UCBUILD", label.getName());
     assertEquals("foo/bar", label.getPackageName());
 
   }
@@ -926,7 +926,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   @Test
   public void testLoadingErrorsAreNotParsingErrors() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("loading/BUILD",
+    scratch.file("loading/UCBUILD",
         "cc_library(name='y', deps=['a'])",
         "cc_library(name='a', deps=['b'])",
         "cc_library(name='b', deps=['c'])",
@@ -949,7 +949,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   /** Regression test for bug: "IllegalStateException in BuildTool.prepareToBuild()" */
   @Test
   public void testTestingIsSubset() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "cc_library(name = 'bar1')",
         "cc_test(name = 'test', deps = [':bar1'], tags = ['manual'])");
 
@@ -960,17 +960,17 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   @Test
   public void testAddedPkg() throws Exception {
     invalidate(ModifiedFileSet.EVERYTHING_MODIFIED);
-    scratch.dir("h/i/j/k/BUILD");
-    scratch.file("h/BUILD", "sh_library(name='h')");
+    scratch.dir("h/i/j/k/UCBUILD");
+    scratch.file("h/UCBUILD", "sh_library(name='h')");
     assertThat(parseList("//h/...")).containsExactlyElementsIn(labels("//h"));
 
-    scratch.file("h/i/j/BUILD", "sh_library(name='j')");
+    scratch.file("h/i/j/UCBUILD", "sh_library(name='j')");
 
     // Modifications not yet known.
     assertThat(parseList("//h/...")).containsExactlyElementsIn(labels("//h"));
 
     ModifiedFileSet modifiedFileSet = ModifiedFileSet.builder()
-        .modify(new PathFragment("h/i/j/BUILD")).build();
+        .modify(new PathFragment("h/i/j/UCBUILD")).build();
     invalidate(modifiedFileSet);
 
     assertThat(parseList("//h/...")).containsExactly(Label.parseAbsolute("//h/i/j:j"),
@@ -989,13 +989,13 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
       // expected
     }
 
-    scratch.file("h/i/j/k/BUILD", "sh_library(name='l')");
+    scratch.file("h/i/j/k/UCBUILD", "sh_library(name='l')");
     ModifiedFileSet modifiedFileSet = ModifiedFileSet.builder()
         .modify(new PathFragment("h"))
         .modify(new PathFragment("h/i"))
         .modify(new PathFragment("h/i/j"))
         .modify(new PathFragment("h/i/j/k"))
-        .modify(new PathFragment("h/i/j/k/BUILD"))
+        .modify(new PathFragment("h/i/j/k/UCBUILD"))
         .build();
     invalidate(modifiedFileSet);
     reporter.addHandler(failFastHandler);
@@ -1007,7 +1007,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   public void testBrokenSymlinkRepaired() throws Exception {
     reporter.removeHandler(failFastHandler);
     Path tuv = scratch.dir("t/u/v");
-    tuv.getChild("BUILD").createSymbolicLink(new PathFragment("../../BUILD"));
+    tuv.getChild("UCBUILD").createSymbolicLink(new PathFragment("../../UCBUILD"));
 
     try {
       parseList("//t/...");
@@ -1016,9 +1016,9 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
       // expected
     }
 
-    scratch.file("t/BUILD", "sh_library(name='t')");
+    scratch.file("t/UCBUILD", "sh_library(name='t')");
     ModifiedFileSet modifiedFileSet = ModifiedFileSet.builder()
-        .modify(new PathFragment("t/BUILD"))
+        .modify(new PathFragment("t/UCBUILD"))
         .build();
 
     invalidate(modifiedFileSet);
@@ -1034,7 +1034,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     reporter.removeHandler(failFastHandler);
     Path ab = scratch.dir("a/b");
     ab.getChild("c").createSymbolicLink(new PathFragment("../b"));
-    scratch.file("a/b/BUILD", "filegroup(name='g')");
+    scratch.file("a/b/UCBUILD", "filegroup(name='g')");
     ResolvedTargets<Target> result = parseTargetPatternList(parser, parsingListener,
         ImmutableList.of("//a/b/..."), true);
     assertThat(targetsToLabels(result.getTargets())).containsExactly(
@@ -1046,7 +1046,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
     reporter.removeHandler(failFastHandler);
     Path ab = scratch.dir("a/b");
     ab.getChild("c").createSymbolicLink(new PathFragment("c"));
-    scratch.file("a/b/BUILD", "filegroup(name='g')");
+    scratch.file("a/b/UCBUILD", "filegroup(name='g')");
     ResolvedTargets<Target> result = parseTargetPatternList(parser, parsingListener,
         ImmutableList.of("//a/b/..."), true);
     assertThat(targetsToLabels(result.getTargets())).contains(
@@ -1056,13 +1056,13 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
   @Test
   public void testPerDirectorySymlinkTraversalOptOut() throws Exception {
     scratch.dir("from-b");
-    scratch.file("from-b/BUILD", "filegroup(name = 'from-b')");
+    scratch.file("from-b/UCBUILD", "filegroup(name = 'from-b')");
     scratch.dir("from-c");
-    scratch.file("from-c/BUILD", "filegroup(name = 'from-c')");
+    scratch.file("from-c/UCBUILD", "filegroup(name = 'from-c')");
     Path ab = scratch.dir("a/b");
     ab.getChild("symlink").createSymbolicLink(new PathFragment("../../from-b"));
     scratch.dir("a/b/not-a-symlink");
-    scratch.file("a/b/not-a-symlink/BUILD", "filegroup(name = 'not-a-symlink')");
+    scratch.file("a/b/not-a-symlink/UCBUILD", "filegroup(name = 'not-a-symlink')");
     scratch.file(
         "a/b/DONT_FOLLOW_SYMLINKS_WHEN_TRAVERSING_THIS_DIRECTORY_VIA_A_RECURSIVE_TARGET_PATTERN");
     Path ac = scratch.dir("a/c");
@@ -1076,7 +1076,7 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testDoesNotRecurseIntoSymlinksToOutputBase() throws Exception {
-    Path outputBaseBuildFile = outputBase.getRelative("workspace/test/BUILD");
+    Path outputBaseBuildFile = outputBase.getRelative("workspace/test/UCBUILD");
     scratch.file(outputBaseBuildFile.getPathString(), "filegroup(name='c')");
     PathFragment targetFragment = outputBase.asFragment().getRelative("workspace/test");
     Path d = scratch.dir("d");
@@ -1094,8 +1094,8 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testTopLevelPackage_Relative_BuildFile() throws Exception {
-    Set<Label> result = parseList("BUILD");
-    assertThat(result).containsExactly(Label.parseAbsolute("//:BUILD"));
+    Set<Label> result = parseList("UCBUILD");
+    assertThat(result).containsExactly(Label.parseAbsolute("//:UCBUILD"));
   }
 
   @Test
@@ -1128,8 +1128,8 @@ public class TargetPatternEvaluatorTest extends AbstractTargetPatternEvaluatorTe
 
   @Test
   public void testTopLevelPackage_Absolute_BuildFile() throws Exception {
-    Set<Label> result = parseList("//:BUILD");
-    assertThat(result).containsExactly(Label.parseAbsolute("//:BUILD"));
+    Set<Label> result = parseList("//:UCBUILD");
+    assertThat(result).containsExactly(Label.parseAbsolute("//:UCBUILD"));
   }
 
   @Test

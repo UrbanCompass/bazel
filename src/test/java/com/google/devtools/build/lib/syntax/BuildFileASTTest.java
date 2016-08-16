@@ -48,13 +48,13 @@ public class BuildFileASTTest extends EvaluationTestCase {
    * filename) and returns the AST. Resets the error handler beforehand.
    */
   private BuildFileAST parseBuildFile(String... lines) throws IOException {
-    Path file = scratch.file("/a/build/file/BUILD", lines);
+    Path file = scratch.file("/a/build/file/UCBUILD", lines);
     return BuildFileAST.parseBuildFile(file, getEventHandler());
   }
 
   @Test
   public void testParseBuildFileOK() throws Exception {
-    Path buildFile = scratch.file("/BUILD",
+    Path buildFile = scratch.file("/UCBUILD",
         "# a file in the build language",
         "",
         "x = [1,2,'foo',4] + [1,2, \"%s%d\" % ('foo', 1)]");
@@ -65,7 +65,7 @@ public class BuildFileASTTest extends EvaluationTestCase {
 
     // Test final environment is correctly modified:
     //
-    // input1.BUILD contains:
+    // input1.UCBUILD contains:
     // x = [1,2,'foo',4] + [1,2, "%s%d" % ('foo', 1)]
     assertEquals(new MutableList(Tuple.of(1, 2, "foo", 4, 1, 2, "foo1")),
         env.lookup("x"));
@@ -73,7 +73,7 @@ public class BuildFileASTTest extends EvaluationTestCase {
 
   @Test
   public void testEvalException() throws Exception {
-    Path buildFile = scratch.file("/input1.BUILD",
+    Path buildFile = scratch.file("/input1.UCBUILD",
         "x = 1",
         "y = [2,3]",
         "",
@@ -104,7 +104,7 @@ public class BuildFileASTTest extends EvaluationTestCase {
       parseBuildFile("foo() bar() something = baz() bar()");
 
     Event event = assertContainsError("syntax error at \'bar\': expected newline");
-    assertEquals("/a/build/file/BUILD",
+    assertEquals("/a/build/file/UCBUILD",
                  event.getLocation().getPath().toString());
     assertEquals(1, event.getLocation().getStartLineAndColumn().getLine());
     assertTrue(buildFileAST.containsErrors());
@@ -116,7 +116,7 @@ public class BuildFileASTTest extends EvaluationTestCase {
     BuildFileAST buildFileAST = parseBuildFile("a = 'foo' 'bar'");
     Event event = assertContainsError(
         "Implicit string concatenation is forbidden, use the + operator");
-    assertEquals("/a/build/file/BUILD",
+    assertEquals("/a/build/file/UCBUILD",
                  event.getLocation().getPath().toString());
     assertEquals(1, event.getLocation().getStartLineAndColumn().getLine());
     assertEquals(10, event.getLocation().getStartLineAndColumn().getColumn());
@@ -129,7 +129,7 @@ public class BuildFileASTTest extends EvaluationTestCase {
     BuildFileAST buildFileAST = parseBuildFile("a = 'foo'\n  'bar'");
 
     Event event = assertContainsError("indentation error");
-    assertEquals("/a/build/file/BUILD",
+    assertEquals("/a/build/file/UCBUILD",
                  event.getLocation().getPath().toString());
     assertEquals(2, event.getLocation().getStartLineAndColumn().getLine());
     assertEquals(2, event.getLocation().getStartLineAndColumn().getColumn());

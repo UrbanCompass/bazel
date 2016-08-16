@@ -88,12 +88,12 @@ public class TargetMarkerFunctionTest extends BuildViewTestCase {
   @Test
   public void testLabelCrossingSubpackageBoundary() throws Exception {
     scratch.file("a/b/c/foo.sh", "echo 'FOO'");
-    scratch.file("a/BUILD", "sh_library(name = 'foo', srcs = ['b/c/foo.sh'])");
+    scratch.file("a/UCBUILD", "sh_library(name = 'foo', srcs = ['b/c/foo.sh'])");
     String labelName = "//a:b/c/foo.sh";
 
-    scratch.file("a/b/BUILD");
+    scratch.file("a/b/UCBUILD");
     ModifiedFileSet subpackageBuildFile =
-        ModifiedFileSet.builder().modify(new PathFragment("a/b/BUILD")).build();
+        ModifiedFileSet.builder().modify(new PathFragment("a/b/UCBUILD")).build();
     skyframeExecutor.invalidateFilesUnderPathForTesting(
         reporter, subpackageBuildFile, rootDirectory);
 
@@ -111,7 +111,7 @@ public class TargetMarkerFunctionTest extends BuildViewTestCase {
         (BuildFileNotFoundException) getErrorFromTargetValue(labelName);
     assertEquals(PackageIdentifier.createInMainRepo("no/such/package"), exn.getPackageId());
     String expectedMessage =
-        "no such package 'no/such/package': BUILD file not found on "
+        "no such package 'no/such/package': UCBUILD file not found on "
             + "package path for 'no/such/package'";
     assertThat(exn).hasMessage(expectedMessage);
   }
@@ -120,7 +120,7 @@ public class TargetMarkerFunctionTest extends BuildViewTestCase {
   public void testRuleWithError() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file(
-        "a/BUILD",
+        "a/UCBUILD",
         "genrule(name = 'conflict1', cmd = '', srcs = [], outs = ['conflict'])",
         "genrule(name = 'conflict2', cmd = '', srcs = [], outs = ['conflict'])");
     NoSuchTargetException exn = (NoSuchTargetException) getErrorFromTargetValue("@//a:conflict1");
@@ -133,8 +133,8 @@ public class TargetMarkerFunctionTest extends BuildViewTestCase {
   @Test
   public void testTargetFunctionRethrowsExceptions() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("a/BUILD", "sh_library(name = 'b/c')");
-    Path subpackageBuildFile = scratch.file("a/b/BUILD", "sh_library(name = 'c')");
+    scratch.file("a/UCBUILD", "sh_library(name = 'b/c')");
+    Path subpackageBuildFile = scratch.file("a/b/UCBUILD", "sh_library(name = 'c')");
     fs.stubStatIOException(subpackageBuildFile, new IOException("nope"));
     BuildFileNotFoundException exn =
         (BuildFileNotFoundException) getErrorFromTargetValue("//a:b/c");

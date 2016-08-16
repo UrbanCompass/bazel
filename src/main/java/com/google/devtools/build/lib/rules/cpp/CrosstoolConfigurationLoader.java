@@ -132,7 +132,7 @@ public class CrosstoolConfigurationLoader {
   /**
    * This class is the in-memory representation of a text-formatted Crosstool proto file.
    *
-   * <p>This layer of abstraction is here so that we can load these protos either from BUILD files
+   * <p>This layer of abstraction is here so that we can load these protos either from UCBUILD files
    * or from CROSSTOOL files.
    *
    * <p>An implementation of this class should override {@link #getContents()} and call
@@ -203,7 +203,7 @@ public class CrosstoolConfigurationLoader {
       throws IOException, InvalidConfigurationException, InterruptedException {
     final Path path;
     try {
-      Package containingPackage = env.getTarget(crosstoolTop.getLocalTargetLabel("BUILD"))
+      Package containingPackage = env.getTarget(crosstoolTop.getLocalTargetLabel("UCBUILD"))
           .getPackage();
       if (containingPackage == null) {
         return null;

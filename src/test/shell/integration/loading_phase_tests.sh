@@ -43,22 +43,22 @@ function tear_down() {
 
 function test_query_buildfiles_with_load() {
     mkdir -p x || fail "mkdir x failed"
-    echo "load('/y/rules', 'a')" >x/BUILD
-    echo "cc_library(name='x')"   >>x/BUILD
+    echo "load('/y/rules', 'a')" >x/UCBUILD
+    echo "cc_library(name='x')"   >>x/UCBUILD
     mkdir -p y || fail "mkdir y failed"
-    touch y/BUILD
+    touch y/UCBUILD
     echo "a=1" >y/rules.bzl
 
     bazel query --noshow_progress 'buildfiles(//x)' >$TEST_log ||
         fail "Expected success"
-    expect_log //x:BUILD
-    expect_log //y:BUILD
+    expect_log //x:UCBUILD
+    expect_log //y:UCBUILD
     expect_log //y:rules.bzl
 
     # null terminated:
     bazel query --noshow_progress --null 'buildfiles(//x)' >null.log ||
         fail "Expected null success"
-    printf '//y:rules.bzl\0//y:BUILD\0//x:BUILD\0' >null.ref.log
+    printf '//y:rules.bzl\0//y:UCBUILD\0//x:UCBUILD\0' >null.ref.log
     cmp null.ref.log null.log || fail "Expected match"
 
     # Missing skylark file:
@@ -75,10 +75,10 @@ function test_non_error_target_in_bad_pkg() {
     mkdir -p a || fail "mkdir a failed"
     mkdir -p b || fail "mkdir b failed"
 
-    echo "sh_library(name = 'a', data = ['//b'])" > a/BUILD
-    echo "exports_files(['b'])" > b/BUILD
-    echo "genrule(name='r1', cmd = '', outs = ['conflict'])" >> b/BUILD
-    echo "genrule(name='r2', cmd = '', outs = ['conflict'])" >> b/BUILD
+    echo "sh_library(name = 'a', data = ['//b'])" > a/UCBUILD
+    echo "exports_files(['b'])" > b/UCBUILD
+    echo "genrule(name='r1', cmd = '', outs = ['conflict'])" >> b/UCBUILD
+    echo "genrule(name='r2', cmd = '', outs = ['conflict'])" >> b/UCBUILD
 
     bazel build --nobuild -k //a >& $TEST_log && fail "Expected failure"
     expect_log "'conflict' in rule"
@@ -142,10 +142,10 @@ function test_all_help_topics_succeed() {
 # Regression for "Sticky error during analysis phase when input is cyclic".
 function test_regress_cycle_during_analysis_phase() {
   mkdir -p cycle main
-  cat >main/BUILD <<EOF
+  cat >main/UCBUILD <<EOF
 genrule(name='mygenrule', outs=['baz.h'], srcs=['//cycle:foo.h'], cmd=':')
 EOF
-  cat >cycle/BUILD <<EOF
+  cat >cycle/UCBUILD <<EOF
 genrule(name='foo.h', outs=['bar.h'], srcs=['foo.h'], cmd=':')
 EOF
   bazel build --nobuild //cycle:foo.h >$TEST_log 2>&1 || true
@@ -172,8 +172,8 @@ function test_glob_with_subpackage() {
     mkdir -p p/subpkg || fail "mkdir p/subpkg failed"
     mkdir -p p/dir || fail "mkdir p/dir failed"
 
-    echo "exports_files(glob(['**/*.txt']))" >p/BUILD
-    echo "# Empty" >p/subpkg/BUILD
+    echo "exports_files(glob(['**/*.txt']))" >p/UCBUILD
+    echo "# Empty" >p/subpkg/UCBUILD
 
     echo "p/t1.txt" > p/t1.txt
     echo "p/dir/t2.txt" > p/dir/t2.txt
@@ -182,28 +182,28 @@ function test_glob_with_subpackage() {
     bazel query 'p:*' >$TEST_log || fail "Expected success"
     expect_log '//p:t1\.txt'
     expect_log '//p:dir/t2\.txt'
-    expect_log '//p:BUILD'
+    expect_log '//p:UCBUILD'
     expect_not_log 't3\.txt'
     assert_equals "3" $(wc -l "$TEST_log")
 
     # glob returns an empty list, because t3.txt is outside the package
-    echo "exports_files(glob(['subpkg/t3.txt']))" >p/BUILD
+    echo "exports_files(glob(['subpkg/t3.txt']))" >p/UCBUILD
     bazel query 'p:*' -k >$TEST_log || fail "Expected success"
-    expect_log '//p:BUILD'
+    expect_log '//p:UCBUILD'
     assert_equals "1" $(wc -l "$TEST_log")
 
     # same test, with a nonexisting file
-    echo "exports_files(glob(['subpkg/no_glob.txt']))" >p/BUILD
+    echo "exports_files(glob(['subpkg/no_glob.txt']))" >p/UCBUILD
     bazel query 'p:*' -k >$TEST_log || fail "Expected success"
-    expect_log '//p:BUILD'
+    expect_log '//p:UCBUILD'
     assert_equals "1" $(wc -l "$TEST_log")
 
     # Non-recursive wildcard gives the same result as the recursive wildcard
-    echo "exports_files(glob(['*.txt', '*/*.txt']))" >p/BUILD
+    echo "exports_files(glob(['*.txt', '*/*.txt']))" >p/UCBUILD
     bazel query 'p:*' >$TEST_log || fail "Expected success"
     expect_log '//p:t1\.txt'
     expect_log '//p:dir/t2\.txt'
-    expect_log '//p:BUILD'
+    expect_log '//p:UCBUILD'
     expect_not_log 't3\.txt'
     assert_equals "3" $(wc -l "$TEST_log")
 }
@@ -212,8 +212,8 @@ function test_glob_with_subpackage2() {
     mkdir -p p/q/subpkg || fail "mkdir p/q/subpkg failed"
     mkdir -p p/q/dir || fail "mkdir p/q/dir failed"
 
-    echo "exports_files(glob(['**/*.txt']))" >p/q/BUILD
-    echo "# Empty" >p/q/subpkg/BUILD
+    echo "exports_files(glob(['**/*.txt']))" >p/q/UCBUILD
+    echo "# Empty" >p/q/subpkg/UCBUILD
 
     echo "p/q/t1.txt" > p/q/t1.txt
     echo "p/q/dir/t2.txt" > p/q/dir/t2.txt
@@ -222,7 +222,7 @@ function test_glob_with_subpackage2() {
     bazel query 'p/q:*' >$TEST_log || fail "Expected success"
     expect_log '//p/q:t1\.txt'
     expect_log '//p/q:dir/t2\.txt'
-    expect_log '//p/q:BUILD'
+    expect_log '//p/q:UCBUILD'
     expect_not_log 't3\.txt'
     assert_equals "3" $(wc -l "$TEST_log")
 }
@@ -231,7 +231,7 @@ function test_glob_with_io_error() {
   mkdir -p t/u
   touch t/u/v
 
-  echo "filegroup(name='t', srcs=glob(['u/*']))" > t/BUILD
+  echo "filegroup(name='t', srcs=glob(['u/*']))" > t/UCBUILD
   chmod 000 t/u
 
   bazel query '//t:*' >& $TEST_log && fail "Expected failure"
@@ -251,7 +251,7 @@ function test_build_file_symlinks() {
   bazel query a:all >& $TEST_log && fail "Expected failure"
   expect_log "no such package 'a'"
 
-  touch b/BUILD
+  touch b/UCBUILD
   bazel query a:all >& $TEST_log || fail "Expected success"
   expect_log "Empty results"
 
@@ -261,7 +261,7 @@ function test_build_file_symlinks() {
   expect_log "no such package 'a'"
 
   mkdir c || fail "couldn't make c"
-  ln -s foo c/BUILD || "couldn't link c/BUILD to c/foo"
+  ln -s foo c/UCBUILD || "couldn't link c/UCBUILD to c/foo"
   bazel query a:all >& $TEST_log && fail "Expected failure"
   expect_log "no such package 'a'"
 
@@ -272,15 +272,15 @@ function test_build_file_symlinks() {
 
 function test_visibility_edge_causes_cycle() {
   mkdir -p a b || fail "mkdir failed"
-  echo 'sh_library(name="a", visibility=["//b"])' > a/BUILD
-  echo 'sh_library(name="b", deps=["//a"])' > b/BUILD
+  echo 'sh_library(name="a", visibility=["//b"])' > a/UCBUILD
+  echo 'sh_library(name="b", deps=["//a"])' > b/UCBUILD
   bazel query 'deps(//a)' >& $TEST_log && fail "Expected failure"
   expect_log "cycle in dependency graph"
   expect_log "The cycle is caused by a visibility edge"
   bazel query 'deps(//b)' >& $TEST_log && fail "Expected failure"
   expect_log "cycle in dependency graph"
   expect_log "The cycle is caused by a visibility edge"
-  echo 'sh_library(name="a", visibility=["//b:__pkg__"])' > a/BUILD
+  echo 'sh_library(name="a", visibility=["//b:__pkg__"])' > a/UCBUILD
   bazel query 'deps(//a)' >& $TEST_log || fail "Expected success"
   expect_log "//a:a"
   expect_not_log "//b:b"
@@ -295,9 +295,9 @@ function test_incremental_deleting_package_roots() {
   local other_root=$TEST_TMPDIR/other_root/${WORKSPACE_NAME}
   mkdir -p $other_root/a
   touch $other_root/WORKSPACE
-  echo 'sh_library(name="external")' > $other_root/a/BUILD
+  echo 'sh_library(name="external")' > $other_root/a/UCBUILD
   mkdir -p a
-  echo 'sh_library(name="internal")' > a/BUILD
+  echo 'sh_library(name="internal")' > a/UCBUILD
 
   bazel query --package_path=$other_root:. a:all >& $TEST_log \
       || fail "Expected success"

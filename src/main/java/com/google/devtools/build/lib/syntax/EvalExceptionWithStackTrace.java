@@ -89,9 +89,9 @@ public class EvalExceptionWithStackTrace extends EvalException {
      * Similar to Python, all functions that were entered (except for the top-level ones) appear
      * twice in the stack trace output. This would lead to the following trace:
      *
-     * File BUILD, line X, in <module>
+     * File UCBUILD, line X, in <module>
      *     rule_definition()
-     * File BUILD, line X, in rule_definition
+     * File UCBUILD, line X, in rule_definition
      *     rule_implementation()
      * File bzl, line Y, in rule_implementation
      *     ...
@@ -101,7 +101,7 @@ public class EvalExceptionWithStackTrace extends EvalException {
      * any sense.
      * Consequently, we decided to omit lines 3 and 4 from the output via canPrint = false:
      *
-     * File BUILD, line X, in <module>
+     * File UCBUILD, line X, in <module>
      *     rule_definition()
      * File bzl, line Y, in rule_implementation
      *     ...

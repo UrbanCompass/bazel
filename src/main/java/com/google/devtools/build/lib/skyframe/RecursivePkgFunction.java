@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
  * RecursivePkgFunction builds up the set of packages underneath a given directory
  * transitively.
  *
- * <p>Example: foo/BUILD, foo/sub/x, foo/subpkg/BUILD would yield transitive packages "foo" and
+ * <p>Example: foo/UCBUILD, foo/sub/x, foo/subpkg/UCBUILD would yield transitive packages "foo" and
  * "foo/subpkg".
  */
 public class RecursivePkgFunction implements SkyFunction {

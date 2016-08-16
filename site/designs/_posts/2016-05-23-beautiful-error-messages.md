@@ -78,10 +78,10 @@ t = [x for x in my\_obj]
 </code></pre>
 
 Current:
-<pre><code>ERROR: /path/BUILD:6:5: type 'select' is not iterable
+<pre><code>ERROR: /path/UCBUILD:6:5: type 'select' is not iterable
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:6:16: <strong>my\_obj of type 'select' is not iterable.</strong> You can iterate only on string, lists, tuples, or dicts.
+<pre><code>ERROR: /path/UCBUILD:6:16: <strong>my\_obj of type 'select' is not iterable.</strong> You can iterate only on string, lists, tuples, or dicts.
 t = [x for x in my\_obj]
                 ^-----
 Related documentation: http://www.bazel.io/docs/be/functions.html#select
@@ -93,10 +93,10 @@ Input:
 <pre><code>t = [x for x in]
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:16: syntax error at ']': expected expression
+<pre><code>ERROR: /path/UCBUILD:1:16: syntax error at ']': expected expression
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:1:16: <strong>Syntax error: expected expression, got ']'.</strong>
+<pre><code>ERROR: /path/UCBUILD:1:16: <strong>Syntax error: expected expression, got ']'.</strong>
 t = [x for x in]
                ^
 </code></pre>
@@ -108,10 +108,10 @@ Input:
 </code></pre>
 
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: unexpected keyword 'excludes' in call to glob(include: sequence of strings, exclude: sequence of strings = [], exclude\_directories: int = 1)
+<pre><code>ERROR: /path/UCBUILD:1:1: unexpected keyword 'excludes' in call to glob(include: sequence of strings, exclude: sequence of strings = [], exclude\_directories: int = 1)
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:1:5: <strong>'excludes' is an invalid keyword argument for the function glob(include, exclude, exclude\_directories).</strong> Did you mean exclude?
+<pre><code>ERROR: /path/UCBUILD:1:5: <strong>'excludes' is an invalid keyword argument for the function glob(include, exclude, exclude\_directories).</strong> Did you mean exclude?
 glob(["*.cc"], excludes = ["foo.cc"])
                ^-------
                exclude
@@ -124,10 +124,10 @@ Input:
 <pre><code>cclibrary(name = "x")
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: name 'cclibrary' is not defined
+<pre><code>ERROR: /path/UCBUILD:1:1: name 'cclibrary' is not defined
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:1:1: <strong>Name 'cclibrary' is not defined.</strong> Did you mean cc\_library?
+<pre><code>ERROR: /path/UCBUILD:1:1: <strong>Name 'cclibrary' is not defined.</strong> Did you mean cc\_library?
 cclibrary(name = "x")
 ^--------
 cc\_library
@@ -142,10 +142,10 @@ Input:
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: //test:x: expected value of type 'list(label)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string)
+<pre><code>ERROR: /path/UCBUILD:1:1: //test:x: expected value of type 'list(label)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string)
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:3:5: <strong>Expected value of type 'list(string)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string). </strong>Did you mean [":lib"]?
+<pre><code>ERROR: /path/UCBUILD:3:5: <strong>Expected value of type 'list(string)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string). </strong>Did you mean [":lib"]?
     deps = ":lib",
            ^-----
            [":lib"]
@@ -162,10 +162,10 @@ cc\_library(
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:3:1: //test:x: expected value of type 'list(label)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string)
+<pre><code>ERROR: /path/UCBUILD:3:1: //test:x: expected value of type 'list(label)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string)
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:5:5: <strong>Expected value of type 'list(string)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string).</strong> Did you mean [VAR]?
+<pre><code>ERROR: /path/UCBUILD:5:5: <strong>Expected value of type 'list(string)' for attribute 'deps' in 'cc\_library' rule, but got ":lib" (string).</strong> Did you mean [VAR]?
     deps = VAR,
            ^--
           [VAR]
@@ -181,10 +181,10 @@ Input:
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: //test:name: invalid label '/test/foo.cc' in element 0 of attribute 'srcs' in 'cc\_library' rule: invalid target name '/test/foo.cc': target names may not start with '/'
+<pre><code>ERROR: /path/UCBUILD:1:1: //test:name: invalid label '/test/foo.cc' in element 0 of attribute 'srcs' in 'cc\_library' rule: invalid target name '/test/foo.cc': target names may not start with '/'
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:3:13: <strong>Invalid label '/test:foo.cc' in deps. Labels relative to the root start with //.</strong> Did you mean '//test:foo.cc'?
+<pre><code>ERROR: /path/UCBUILD:3:13: <strong>Invalid label '/test:foo.cc' in deps. Labels relative to the root start with //.</strong> Did you mean '//test:foo.cc'?
     deps = ["/test:foo.cc"],
             ^-------------
             "//test:foo.cc"
@@ -205,10 +205,10 @@ genrule(
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:3:12: in srcs attribute of cc\_library rule //test:name: '//test:x' does not produce any cc\_library srcs files (expected .cc, .cpp, .cxx, .c++, .C, .c, .h, .hh, .hpp, .hxx, .inc, .S, .s, .asm, .a, .pic.a, .lo, .pic.lo, .so, .dylib, .o or .pic.o)
+<pre><code>ERROR: /path/UCBUILD:3:12: in srcs attribute of cc\_library rule //test:name: '//test:x' does not produce any cc\_library srcs files (expected .cc, .cpp, .cxx, .c++, .C, .c, .h, .hh, .hpp, .hxx, .inc, .S, .s, .asm, .a, .pic.a, .lo, .pic.lo, .so, .dylib, .o or .pic.o)
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:3:12: <strong>In srcs attribute of //test:name (cc\_library), '//test:x' does not produce any cc\_library srcs files</strong> (expected extension .cc, .cpp, .cxx, .c++, .C, .c, .h, .hh, .hpp, .hxx, .inc, .S, .s, .asm, .a, .pic.a, .lo, .pic.lo, .so, .dylib, .o or .pic.o). <strong>Target //test:x (genrule) generated 'file.ext'</strong>.
+<pre><code>ERROR: /path/UCBUILD:3:12: <strong>In srcs attribute of //test:name (cc\_library), '//test:x' does not produce any cc\_library srcs files</strong> (expected extension .cc, .cpp, .cxx, .c++, .C, .c, .h, .hh, .hpp, .hxx, .inc, .S, .s, .asm, .a, .pic.a, .lo, .pic.lo, .so, .dylib, .o or .pic.o). <strong>Target //test:x (genrule) generated 'file.ext'</strong>.
 Related documentation: http://www.bazel.io/docs/be/c-cpp.html#cc\_library
 </code></pre>
 
@@ -221,10 +221,10 @@ Input:
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: in cc\_library rule //test:name: non-test target '//test:name' depends on testonly target '//base:scheduling\_domain-test' and doesn't have testonly attribute set
+<pre><code>ERROR: /path/UCBUILD:1:1: in cc\_library rule //test:name: non-test target '//test:name' depends on testonly target '//base:scheduling\_domain-test' and doesn't have testonly attribute set
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:3:5: <strong>In deps attribute of //test:name (cc\_library), '//base:scheduling\_domain-test' (cc\_library) is marked as testonly.</strong> You may either add:
+<pre><code>ERROR: /path/UCBUILD:3:5: <strong>In deps attribute of //test:name (cc\_library), '//base:scheduling\_domain-test' (cc\_library) is marked as testonly.</strong> You may either add:
     testonly = 1
 to //test:name definition, or remove testonly from //base:scheduling\_domain-test, or remove the dependency.
 Related documentation: http://www.bazel.io/docs/be/common-definitions.html#common.testonly
@@ -239,10 +239,10 @@ Input:
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: Target '//base:arena.cc' is not visible from target '//test:name'. Check the visibility declaration of the former target if you think the dependency is legitimate
+<pre><code>ERROR: /path/UCBUILD:1:1: Target '//base:arena.cc' is not visible from target '//test:name'. Check the visibility declaration of the former target if you think the dependency is legitimate
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:3:5: <strong>In srcs attribute of //test:name (cc\_library), '//base:arena.cc' (file) is not visible.</strong> You may change the visibility of the file using exports\_file, or expose the file via a library rule, or remove the dependency.
+<pre><code>ERROR: /path/UCBUILD:3:5: <strong>In srcs attribute of //test:name (cc\_library), '//base:arena.cc' (file) is not visible.</strong> You may change the visibility of the file using exports\_file, or expose the file via a library rule, or remove the dependency.
 //base:arena.cc has currently private visibility.
 Related documentation: http://www.bazel.io/docs/be/common-definitions.html#common.visibility
 </code></pre>
@@ -266,7 +266,7 @@ genrule(
 )
 </code></pre>
 Current:
-<pre><code>ERROR: /path/BUILD:1:1: in cc\_binary rule //test:bin: cycle in dependency graph:
+<pre><code>ERROR: /path/UCBUILD:1:1: in cc\_binary rule //test:bin: cycle in dependency graph:
     //test:bin
     //test:lib
     //test:src
@@ -276,7 +276,7 @@ Current:
   \* //test:bin (host)
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:1:1: <strong>Cycle in dependency graph detected:</strong>
+<pre><code>ERROR: /path/UCBUILD:1:1: <strong>Cycle in dependency graph detected:</strong>
     cc\_binary //test:bin depends on (via deps):
     cc\_library //test:lib depends on (via srcs):
     genrule //test:src depends on (via tools):
@@ -299,7 +299,7 @@ ext.bzl
       cmd = "touch $@",
 )
 </code></pre>
-BUILD
+UCBUILD
 <pre><code>load(":ext.bzl", "foo")
 foo("src2")
 files = ["file.cc"]
@@ -310,10 +310,10 @@ genrule(
 )
 </code></pre>
 Current:
-<pre><code>ERROR:/path/BUILD:7:1: generated file 'file.cc' in rule 'src' conflicts with existing generated file from rule 'src2'
+<pre><code>ERROR:/path/UCBUILD:7:1: generated file 'file.cc' in rule 'src' conflicts with existing generated file from rule 'src2'
 </code></pre>
 Suggested:
-<pre><code>ERROR: /path/BUILD:7:1: <strong>Generated file 'file.cc' in rule 'src' conflicts with existing generated file from rule 'src2'.</strong>
+<pre><code>ERROR: /path/UCBUILD:7:1: <strong>Generated file 'file.cc' in rule 'src' conflicts with existing generated file from rule 'src2'.</strong>
 'src' is defined line 7:
     genrule(
         name = "src",

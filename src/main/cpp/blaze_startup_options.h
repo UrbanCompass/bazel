@@ -168,7 +168,7 @@ class BlazeStartupOptions {
   bool watchfs;
 
   // Temporary experimental flag that permits configurable attribute syntax
-  // in BUILD files. This will be removed when configurable attributes is
+  // in UCBUILD files. This will be removed when configurable attributes is
   // a more stable feature.
   bool allow_configurable_attributes;
 

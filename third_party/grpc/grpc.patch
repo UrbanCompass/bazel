@@ -1,7 +1,7 @@
-diff --git a/third_party/grpc/BUILD b/third_party/grpc/BUILD
+diff --git a/third_party/grpc/UCBUILD b/third_party/grpc/UCBUILD
 index 51e861f..a635ebc 100644
---- a/third_party/grpc/BUILD
-+++ b/third_party/grpc/BUILD
+--- a/third_party/grpc/UCBUILD
++++ b/third_party/grpc/UCBUILD
 @@ -438,7 +438,7 @@ cc_library(
      ],
      copts = [

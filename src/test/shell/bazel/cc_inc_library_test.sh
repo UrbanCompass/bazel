@@ -23,7 +23,7 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test-setup.sh \
 function set_up() {
   rm -rf package
   mkdir -p package
-  cat > package/BUILD <<EOF
+  cat > package/UCBUILD <<EOF
 cc_binary(
   name = "bin",
   srcs = ["a.cc"],

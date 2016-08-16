@@ -12,7 +12,7 @@ app is a simple mobile app that communicates with the
 Here, you'll do the following:
 
 *   Review the source files for the app
-*   Create a `BUILD` file
+*   Create a `UCBUILD` file
 *   Build the app for the simulator
 *   Find the build outputs
 *   Run/Debug the app on the simulator
@@ -33,12 +33,12 @@ Let's take a look at the source files for the app. These are located in
 become familiar with the structure of the app. You don't have to edit any of the
 source files to complete this tutorial.
 
-## Create a BUILD file
+## Create a UCBUILD file
 
-At a command-line prompt, open your new `BUILD` file for editing:
+At a command-line prompt, open your new `UCBUILD` file for editing:
 
 ```bash
-$ vi $WORKSPACE/ios-app/BUILD
+$ vi $WORKSPACE/ios-app/UCBUILD
 ```
 
 ## Add an objc_library rule
@@ -54,7 +54,7 @@ this is a minimal use case of the Objective-C rules in Bazel. For example, you
 have to use the `ios_application` rule to build multi-architecture iOS
 apps.)
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 objc_library(
@@ -75,7 +75,7 @@ Note the name of the rule, `UrlGetClasses`.
 The [`objc_binary`](/docs/be/objective-c.html#objc_binary) rule creates a
 binary to be bundled in the application.
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 objc_binary(
@@ -90,7 +90,7 @@ objc_binary(
 
 ```
 Note how the `deps` attribute references the output of the
-`UrlGetClasses` rule you added to the `BUILD` file above.
+`UrlGetClasses` rule you added to the `UCBUILD` file above.
 
 ## Add an ios_application rule
 
@@ -98,7 +98,7 @@ The [`ios_application`](/docs/be/objective-c.html#ios_application) rule
 creates the bundled `.ipa` archive file for the application and also generates
 an Xcode project file.
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 ios_application(
@@ -108,8 +108,8 @@ ios_application(
 )
 ```
 
-Now, save and close the file. You can compare your `BUILD` file to the
-[completed example](https://github.com/bazelbuild/examples/blob/master/tutorial/ios-app/BUILD)
+Now, save and close the file. You can compare your `UCBUILD` file to the
+[completed example](https://github.com/bazelbuild/examples/blob/master/tutorial/ios-app/UCBUILD)
 in the `master` branch of the GitHub repo.
 
 ## Build the app for the simulator
@@ -164,7 +164,7 @@ provisioning profile for all bazel builds:
       If this is confusing, please refer to [Apple's documentation](https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/MaintainingProfiles/MaintainingProfiles.html).
    1. Move your profile into `$WORKSPACE/tools/objc`.
    1. Optional - You may want to add your profile to your `.gitignore`.
-   1. Edit `$WORKSPACE/tools/objc/BUILD` and add:
+   1. Edit `$WORKSPACE/tools/objc/UCBUILD` and add:
 
       ```python
       filegroup(

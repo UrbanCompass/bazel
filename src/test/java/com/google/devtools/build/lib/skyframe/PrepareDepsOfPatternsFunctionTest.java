@@ -219,7 +219,7 @@ public class PrepareDepsOfPatternsFunctionTest extends BuildViewTestCase {
   private void createFooAndFoo2(boolean dependent) throws IOException {
     String dependencyIfAny = dependent ? "srcs = [':foo2']," : "";
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         dependencyIfAny,
         "    outs = ['out.txt'],",
@@ -231,7 +231,7 @@ public class PrepareDepsOfPatternsFunctionTest extends BuildViewTestCase {
 
   private void createFooWithDependencyOnMissingBarPackage() throws IOException {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         "    srcs = ['//bar:bar'],",
         "    outs = ['out.txt'],",
@@ -240,12 +240,12 @@ public class PrepareDepsOfPatternsFunctionTest extends BuildViewTestCase {
 
   private void createFooWithDependencyOnBarPackageWithMissingTarget() throws IOException {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         "    srcs = ['//bar:bar'],",
         "    outs = ['out.txt'],",
         "    cmd = 'touch $@')");
-    scratch.file("bar/BUILD");
+    scratch.file("bar/UCBUILD");
   }
 
   private static void assertValidValue(WalkableGraph graph, SkyKey key)

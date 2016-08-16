@@ -47,12 +47,12 @@ public class Greeting {
 EOF
 {% endhighlight %}
 
-Bazel figures out what to build by looking for files named `BUILD` in your
-workspace, so we'll create a `BUILD` file in the `~/gitroot/my-project`
-directory.  Add the following lines to this BUILD file:
+Bazel figures out what to build by looking for files named `UCBUILD` in your
+workspace, so we'll create a `UCBUILD` file in the `~/gitroot/my-project`
+directory.  Add the following lines to this UCBUILD file:
 
 {% highlight python %}
-# ~/gitroot/my-project/BUILD
+# ~/gitroot/my-project/UCBUILD
 java_binary(
     name = "my-runner",
     srcs = glob(["**/*.java"]),
@@ -93,7 +93,7 @@ parallelize more of the build steps.
 
 To break up a project, create separate rules for each subcomponent and then
 make them depend on each other. For the example above, add the following rules
-to the `BUILD` file:
+to the `UCBUILD` file:
 
 {% highlight python %}
 java_binary(
@@ -131,7 +131,7 @@ Now if you edit `ProjectRunner.java` and rebuild `my-other-runner`,
 ## Using Multiple Packages
 
 For larger projects, you will often be dealing with several directories. You
-can refer to targets defined in other BUILD files using the syntax
+can refer to targets defined in other UCBUILD files using the syntax
 `//path/to/directory:target-name`.  For example, suppose
 `src/main/java/com/example/` has a `cmdline/` subdirectory with the following
 file:
@@ -151,11 +151,11 @@ public class Runner {
 EOF
 {% endhighlight %}
 
-`Runner.java` depends on `com.example.Greeting`, so we could add a `BUILD` file
-at `src/main/java/com/example/cmdline/BUILD` that contained the following rule:
+`Runner.java` depends on `com.example.Greeting`, so we could add a `UCBUILD` file
+at `src/main/java/com/example/cmdline/UCBUILD` that contained the following rule:
 
 {% highlight python %}
-# ~/gitroot/my-project/src/main/java/com/example/cmdline/BUILD
+# ~/gitroot/my-project/src/main/java/com/example/cmdline/UCBUILD
 java_binary(
     name = "runner",
     srcs = ["Runner.java"],
@@ -165,23 +165,23 @@ java_binary(
 {% endhighlight %}
 
 However, by default, build rules are _private_. This means that they can only be
-referred to by rules in the same BUILD file. This prevents libraries that are
+referred to by rules in the same UCBUILD file. This prevents libraries that are
 implementation details from leaking into public APIs, but it also means that you
 must explicitly allow `runner` to depend on `//:greeter`. As is, if we
 build `runner` we'll get a permissions error:
 
 {% highlight bash %}
 $ bazel build //src/main/java/com/example/cmdline:runner
-ERROR: /home/user/gitroot/my-project/src/main/java/com/example/cmdline/BUILD:2:1:
+ERROR: /home/user/gitroot/my-project/src/main/java/com/example/cmdline/UCBUILD:2:1:
   Target '//:greeter' is not visible from target '//src/main/java/com/example/cmdline:runner'.
   Check the visibility declaration of the former target if you think the dependency is legitimate.
 ERROR: Analysis of target '//src/main/java/com/example/cmdline:runner' failed; build aborted.
 INFO: Elapsed time: 0.091s
 {% endhighlight %}
 
-You can make a rule visible to rules in other BUILD files by adding a
+You can make a rule visible to rules in other UCBUILD files by adding a
 `visibility = level` attribute.  Change the `greeter` rule in
-`~/gitroot/my-project/BUILD` to be visible to our new rule:
+`~/gitroot/my-project/UCBUILD` to be visible to our new rule:
 
 {% highlight python %}
 java_library(

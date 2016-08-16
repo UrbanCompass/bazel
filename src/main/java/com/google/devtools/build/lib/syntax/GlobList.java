@@ -115,7 +115,7 @@ public final class GlobList<E> extends ForwardingList<E> implements SkylarkValue
   }
 
   /**
-   * Returns a String that represents this glob list as a BUILD expression.
+   * Returns a String that represents this glob list as a UCBUILD expression.
    */
   public String toExpression() {
     return Joiner.on(" + ").join(criteria);

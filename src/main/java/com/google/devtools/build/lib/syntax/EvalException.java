@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import javax.annotation.Nullable;
 
 /**
- * Exceptions thrown during evaluation of BUILD ASTs or Skylark extensions.
+ * Exceptions thrown during evaluation of UCBUILD ASTs or Skylark extensions.
  *
  * <p>This exception must always correspond to a repeatable, permanent error, i.e. evaluating the
  * same package again must yield the same exception. Notably, do not use this for reporting I/O

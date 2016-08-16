@@ -56,15 +56,15 @@ import java.util.Set;
  *
  *  <li> On starting a build, the <code>//tools/defaults</code> package is synthesized, using
  *  the values as specified on the command-line. The contents of
- *  <code>tools/defaults/BUILD</code> is ignored.
+ *  <code>tools/defaults/UCBUILD</code> is ignored.
  *
  *  <li> Hence, changes in the command line values for tools are now handled exactly as if they
- *  were changes in a BUILD file.
+ *  were changes in a UCBUILD file.
  *
- *  <li> The file <code>tools/defaults/BUILD</code> must exist, so we create a package in that
+ *  <li> The file <code>tools/defaults/UCBUILD</code> must exist, so we create a package in that
  *  location.
  *
- *  <li> The code in {@link DefaultsPackage} can dump the synthesized package as a BUILD file,
+ *  <li> The code in {@link DefaultsPackage} can dump the synthesized package as a UCBUILD file,
  * so external tooling does not need to understand the intricacies of handling command-line
  * options.
  *

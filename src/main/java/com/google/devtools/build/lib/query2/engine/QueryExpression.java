@@ -65,7 +65,7 @@ public abstract class QueryExpression {
    * <p>Failures resulting from evaluation of an ill-formed query cause
    * QueryException to be thrown.
    *
-   * <p>The reporting of failures arising from errors in BUILD files depends on
+   * <p>The reporting of failures arising from errors in UCBUILD files depends on
    * the --keep_going flag.  If enabled (the default), then QueryException is
    * thrown.  If disabled, evaluation will stumble on to produce a (possibly
    * inaccurate) result, but a result nonetheless.

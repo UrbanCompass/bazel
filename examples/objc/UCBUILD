@@ -79,7 +79,7 @@ filegroup(
     name = "srcs",
     srcs = glob([
         "**",
-        "BUILD",
+        "UCBUILD",
     ]),
     visibility = ["//examples:__pkg__"],
 )

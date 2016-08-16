@@ -113,7 +113,7 @@ public abstract class CcBinary implements RuleConfiguredTargetFactory {
     }
     // For cc_binary and cc_test rules, there is an implicit dependency on
     // the malloc library package, which is specified by the "malloc" attribute.
-    // As the BUILD encyclopedia says, the "malloc" attribute should be ignored
+    // As the UCBUILD encyclopedia says, the "malloc" attribute should be ignored
     // if linkshared=1.
     if (!linkshared) {
       TransitiveInfoCollection malloc = CppHelper.mallocForTarget(context);

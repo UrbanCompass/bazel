@@ -287,7 +287,7 @@ public abstract class BlazeModule {
   }
 
   /**
-   * Returns the extensions this module contributes to the global namespace of the BUILD language.
+   * Returns the extensions this module contributes to the global namespace of the UCBUILD language.
    */
   public PackageFactory.EnvironmentExtension getPackageEnvironmentExtension() {
     return new PackageFactory.EmptyEnvironmentExtension();

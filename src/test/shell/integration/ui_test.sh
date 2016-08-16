@@ -35,7 +35,7 @@ function set_up() {
 exit 0
 EOF
   chmod 755 pkg/true.sh
-  cat > pkg/BUILD <<EOF
+  cat > pkg/UCBUILD <<EOF
 sh_test(
   name = "true",
   srcs = ["true.sh"],

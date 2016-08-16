@@ -132,7 +132,7 @@ public abstract class AbstractBlazeQueryEnvironment<T>
         // This case represents loading-phase errors reported during evaluation
         // of target patterns that don't cause evaluation to fail per se.
         throw new QueryException("Evaluation of query \"" + expr
-            + "\" failed due to BUILD file errors");
+            + "\" failed due to UCBUILD file errors");
       } else {
         eventHandler.handle(Event.warn("--keep_going specified, ignoring errors.  "
             + "Results may be inaccurate"));

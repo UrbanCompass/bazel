@@ -27,7 +27,7 @@ import java.util.List;
  * a usual List.toString() representation (using '[' as first character, ']' as
  * last character and ", " as a delimiter between multiple values). Also, all
  * label-based attributes will use fully-qualified label names instead of
- * original value specified in the BUILD file.
+ * original value specified in the UCBUILD file.
  *
  * <pre>expr ::= ATTR '(' ATTRNAME ',' WORD ',' expr ')'</pre>
  *

@@ -33,7 +33,7 @@ public class SyntaxTreeVisitorTest {
 
   /** Parses the contents of the specified string and returns the AST. */
   private BuildFileAST parse(String... lines) throws IOException {
-    Path file = scratch.file("/a/build/file/BUILD", lines);
+    Path file = scratch.file("/a/build/file/UCBUILD", lines);
     return BuildFileAST.parseSkylarkFile(file, null /* reporter */);
   }
 

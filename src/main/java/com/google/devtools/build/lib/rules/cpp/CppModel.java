@@ -197,7 +197,7 @@ public final class CppModel {
    * <p>In general, we prefer the build variables (especially those that derive strictly from
    * the configuration) be learned by inspecting the CcToolchain, as passed to the rule in the
    * CcToolchainProvider.  However, for build variables that must be injected into the rule
-   * implementation (ex. build variables learned from the BUILD file), should be added using the
+   * implementation (ex. build variables learned from the UCBUILD file), should be added using the
    * VariablesExtension abstraction.  This allows the injection to construct non-trivial build
    * variables (lists, ect.).
    */
@@ -924,7 +924,7 @@ public final class CppModel {
       mainLibraryIdentifier = libraryIdentifier;
     } else {
       // This branch is only used for vestigial Google-internal rules where the name of the output
-      // file is explicitly specified in the BUILD file and as such, is platform-dependent. Thus,
+      // file is explicitly specified in the UCBUILD file and as such, is platform-dependent. Thus,
       // we just hardcode some reasonable logic to compute the library identifier and hope that this
       // will eventually go away.
       soImpl = soImplArtifact;

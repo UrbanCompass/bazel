@@ -81,7 +81,7 @@ public final class FilesetEntryFunction implements SkyFunction {
       }
     } else {
       // The "nested" traversal params are absent if and only if the "direct" traversal params are
-      // present, which is the case when the FilesetEntry specifies a package's BUILD file, a
+      // present, which is the case when the FilesetEntry specifies a package's UCBUILD file, a
       // directory or a list of files.
 
       // The root of the direct traversal is defined as follows.
@@ -94,8 +94,8 @@ public final class FilesetEntryFunction implements SkyFunction {
       // (NB: there seems to be no good reason for this, it's just how legacy Fileset works. We may
       // want to consider creating a symlink just for the directory and not for its child elements.)
       //
-      // If FilesetEntry.files is not specified, then srcdir refers to either a BUILD file or a
-      // directory. For the former, the root will be the parent of the BUILD file. For the latter,
+      // If FilesetEntry.files is not specified, then srcdir refers to either a UCBUILD file or a
+      // directory. For the former, the root will be the parent of the UCBUILD file. For the latter,
       // the root will be srcdir itself.
       DirectTraversal direct = t.getDirectTraversal().get();
 

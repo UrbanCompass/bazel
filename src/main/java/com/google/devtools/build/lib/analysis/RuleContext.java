@@ -220,7 +220,7 @@ public final class RuleContext extends TargetContext
       if (feature.startsWith("-")) {
         disabled.add(feature.substring(1));
       } else if (feature.equals("no_layering_check")) {
-        // TODO(bazel-team): Remove once we do not have BUILD files left that contain
+        // TODO(bazel-team): Remove once we do not have UCBUILD files left that contain
         // 'no_layering_check'.
         disabled.add(feature.substring(3));
       } else {
@@ -817,7 +817,7 @@ public final class RuleContext extends TargetContext
 
   /**
    * Returns all the providers of the specified type that are listed under the specified attribute
-   * of this target in the BUILD file.
+   * of this target in the UCBUILD file.
    */
   public <C extends TransitiveInfoProvider> Iterable<C> getPrerequisites(String attributeName,
       Mode mode, final Class<C> classType) {
@@ -827,7 +827,7 @@ public final class RuleContext extends TargetContext
 
   /**
    * Returns all the providers of the specified type that are listed under the specified attribute
-   * of this target in the BUILD file, and that contain the specified provider.
+   * of this target in the UCBUILD file, and that contain the specified provider.
    */
   public <C extends TransitiveInfoProvider> Iterable<? extends TransitiveInfoCollection>
       getPrerequisitesIf(String attributeName, Mode mode, final Class<C> classType) {

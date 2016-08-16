@@ -26,7 +26,7 @@ source ${src_dir}/bazel_sandboxing_test_utils.sh \
 
 function set_up {
   mkdir -p examples/cpp/{bin,lib}
-  cat << 'EOF' > examples/cpp/BUILD
+  cat << 'EOF' > examples/cpp/UCBUILD
 cc_library(
     name = "hello-lib",
     srcs = ["lib/hello-lib.c"],
@@ -95,7 +95,7 @@ function test_sandboxed_cpp_build_rebuilds_on_change() {
 }
 
 function test_sandboxed_cpp_build_catches_missing_header_via_sandbox() {
-  cat << 'EOF' > examples/cpp/BUILD
+  cat << 'EOF' > examples/cpp/UCBUILD
 cc_library(
     name = "hello-lib",
     srcs = ["lib/hello-lib.c"],
@@ -114,7 +114,7 @@ EOF
 # header files from libraries that are specified in "hdrs" and not "srcs", but we never check that,
 # so the test fails. :(
 function DISABLED_test_sandboxed_cpp_build_catches_header_only_in_srcs() {
-  cat << 'EOF' > examples/cpp/BUILD
+  cat << 'EOF' > examples/cpp/UCBUILD
 cc_library(
     name = "hello-lib",
     srcs = ["hello-lib.c", "hello-lib.h"],
@@ -158,7 +158,7 @@ function test_standalone_cpp_build_rebuilds_on_change() {
 }
 
 function test_standalone_cpp_build_catches_missing_header() {
-  cat << 'EOF' > examples/cpp/BUILD
+  cat << 'EOF' > examples/cpp/UCBUILD
 cc_library(
     name = "hello-lib",
     srcs = ["lib/hello-lib.c"],
@@ -175,7 +175,7 @@ EOF
 # TODO(philwo) disabled for the same reason as test_sandboxed_cpp_build_catches_header_only_in_srcs
 # above.
 function DISABLED_test_standalone_cpp_build_catches_header_only_in_srcs() {
-  cat << 'EOF' > examples/cpp/BUILD
+  cat << 'EOF' > examples/cpp/UCBUILD
 cc_library(
     name = "hello-lib",
     srcs = ["hello-lib.c", "hello-lib.h"],

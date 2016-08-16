@@ -23,7 +23,7 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test-setup.sh \
 
 function test_sh_test() {
   mkdir -p a
-  cat > a/BUILD <<EOF
+  cat > a/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 sh_test(
 name = 'success_test',
@@ -81,7 +81,7 @@ EOF
 
   touch mypkg/runfile
 
-  cat > mypkg/BUILD <<EOF
+  cat > mypkg/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 
 extra_action(
@@ -115,7 +115,7 @@ EOF
 
 function test_with_arguments() {
   mkdir -p mypkg
-  cat > mypkg/BUILD <<EOF
+  cat > mypkg/UCBUILD <<EOF
 sh_test(
     name = "expected_arg_test",
     srcs = ["check_expected_argument.sh"],
@@ -140,7 +140,7 @@ EOF
 }
 
 function test_top_level_test() {
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 sh_test(
     name = "trivial_test",
     srcs = ["true.sh"],
@@ -160,7 +160,7 @@ EOF
 # C++ library depedending on C++ library fails to compile on Darwin
 function test_cpp_libdeps() {
   mkdir -p pkg
-  cat <<'EOF' >pkg/BUILD
+  cat <<'EOF' >pkg/UCBUILD
 cc_library(
   name = "a",
   srcs = ["a.cc"],
@@ -222,7 +222,7 @@ EOF
 
 function test_genrule_default_env() {
   mkdir -p pkg
-  cat <<'EOF' >pkg/BUILD
+  cat <<'EOF' >pkg/UCBUILD
 genrule(
   name = "test",
   outs = ["test.out"],
@@ -260,7 +260,7 @@ local_repository(
 )
 EOF
   mkdir package
-  cat > package/BUILD <<EOF
+  cat > package/UCBUILD <<EOF
 genrule(
     name = "abs_dep",
     srcs = ["//package:in"],
@@ -291,7 +291,7 @@ local_repository(
 )
 EOF
   mkdir package
-  cat > package/BUILD <<'EOF'
+  cat > package/UCBUILD <<'EOF'
 genrule(
     name = "hi",
     outs = [
@@ -314,12 +314,12 @@ function test_python_with_workspace_name() {
  mkdir -p {module_a,module_b}
  local remote_path="${new_workspace_dir}"
 
- cat > module_a/BUILD <<EOF
+ cat > module_a/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 py_library(name = "foo", srcs=["foo.py"])
 EOF
 
- cat > module_b/BUILD <<EOF
+ cat > module_b/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 py_library(name = "bar", deps = ["//module_a:foo"], srcs=["bar.py"],)
 py_binary(name = "bar2", deps = ["//module_a:foo"], srcs=["bar2.py"],)
@@ -347,11 +347,11 @@ EOF
 workspace(name = "foobar")
 local_repository(name="remote", path="${remote_path}")
 EOF
- cat > module1/BUILD <<EOF
+ cat > module1/UCBUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 py_library(name = "fib", srcs=["fib.py"],)
 EOF
- cat > module2/BUILD <<EOF
+ cat > module2/UCBUILD <<EOF
 py_binary(name = "bez",
   deps = ["@remote//module_a:foo", "@remote//module_b:bar", "//module1:fib"],
   srcs = ["bez.py"],)
@@ -384,7 +384,7 @@ EOF
 
 function test_build_with_aliased_input_file() {
   mkdir -p a
-  cat > a/BUILD <<EOF
+  cat > a/UCBUILD <<EOF
 exports_files(['f'])
 alias(name='a', actual=':f')
 EOF
@@ -395,7 +395,7 @@ EOF
 
 function test_visibility() {
   mkdir visibility
-  cat > visibility/BUILD <<EOF
+  cat > visibility/UCBUILD <<EOF
 cc_library(
   name = "foo",
   visibility = [

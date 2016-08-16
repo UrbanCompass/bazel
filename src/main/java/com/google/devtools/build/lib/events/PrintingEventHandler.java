@@ -23,7 +23,7 @@ import java.util.Set;
  * An event handler that prints to an OutErr stream pair in a
  * canonical format, for example:
  * <pre>
- * ERROR: /home/jrluser/src/workspace/x/BUILD:23:1: syntax error.
+ * ERROR: /home/jrluser/src/workspace/x/UCBUILD:23:1: syntax error.
  * </pre>
  * This syntax is parseable by Emacs's compile.el.
  *

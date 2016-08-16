@@ -70,40 +70,40 @@ public class PathPackageLocatorTest extends FoundationTestCase {
   public final void createFiles() throws Exception {
     // Root 1:
     //   WORKSPACE
-    //   /A/BUILD
-    //   /B/BUILD
-    //   /C/I/BUILD
+    //   /A/UCBUILD
+    //   /B/UCBUILD
+    //   /C/I/UCBUILD
     //   /C/D
     //   /C/E
     //   /F/G         // This is a file, not a directory.
     //
     // Root 2:
     //   WORKSPACE
-    //   /B/BUILD
-    //   /C/BUILD
-    //   /C/D/BUILD
-    //   /F/BUILD
+    //   /B/UCBUILD
+    //   /C/UCBUILD
+    //   /C/D/UCBUILD
+    //   /F/UCBUILD
     //   /F/G
-    //   /F/G/H/BUILD
-    //   /I/BUILD         // This is a directory, not a file.
+    //   /F/G/H/UCBUILD
+    //   /I/UCBUILD         // This is a directory, not a file.
     //
     // Root 3:
     //   /usr/local/google/jrluser-foo/READONLY -> root4
     //
     // Root 4 (not used as a package root, but root 3 points to this)
     //   /A -> root1/A
-    //   /B/BUILD -> root1/B/BUILD
-    //   /C/I/BUILD -> root1/C/I/BUILD
+    //   /B/UCBUILD -> root1/B/UCBUILD
+    //   /C/I/UCBUILD -> root1/C/I/UCBUILD
     //   /C/D -> root1/C/D
     //   /C/E -> root1/C/E
     //   /F/G -> root1/F/G
     //   /H/I -> root5/H/I
     //
     // Root 5 (pointed to by Root 4)
-    //   Note: the following BUILD file will be found if explicitly specified, but it
+    //   Note: the following UCBUILD file will be found if explicitly specified, but it
     //     would not be found if using wildcards.  That is because isDirectory
     //     will return false since the symlink target is not in the workspace.
-    //   /H/I/BUILD
+    //   /H/I/UCBUILD
     rootDir1 = scratch.resolve("/home/user/src-foo/workspace");
     rootDir2 = scratch.resolve("/somewhere/1234567/build/workspace");
     rootDir3ParentParent = scratch.resolve("/usr/local/google/jrluser-foo");
@@ -134,23 +134,23 @@ public class PathPackageLocatorTest extends FoundationTestCase {
     // Root3 just needs a symlink to 4
     FileSystemUtils.ensureSymbolicLink(
         rootDir3ParentParent.getRelative("READONLY"), rootDir4Parent);
-    buildFile_3A = rootDir3.getRelative("A/BUILD");
-    buildFile_3B = rootDir3.getRelative("B/BUILD");
-    buildFile_3CI = rootDir3.getRelative("C/I/BUILD");
+    buildFile_3A = rootDir3.getRelative("A/UCBUILD");
+    buildFile_3B = rootDir3.getRelative("B/UCBUILD");
+    buildFile_3CI = rootDir3.getRelative("C/I/UCBUILD");
 
     // Root4
     FileSystemUtils.ensureSymbolicLink(
         rootDir4.getRelative("A"), rootDir1.getRelative("A"));
     FileSystemUtils.ensureSymbolicLink(
-        rootDir4.getRelative("B/BUILD"), rootDir1.getRelative("B/BUILD"));
+        rootDir4.getRelative("B/UCBUILD"), rootDir1.getRelative("B/UCBUILD"));
     FileSystemUtils.ensureSymbolicLink(
-        rootDir4.getRelative("C/I/BUILD"), rootDir1.getRelative("C/I/BUILD"));
+        rootDir4.getRelative("C/I/UCBUILD"), rootDir1.getRelative("C/I/UCBUILD"));
     FileSystemUtils.ensureSymbolicLink(
-        rootDir4.getRelative("C/D/BUILD"), rootDir1.getRelative("C/D/BUILD"));
+        rootDir4.getRelative("C/D/UCBUILD"), rootDir1.getRelative("C/D/UCBUILD"));
     FileSystemUtils.ensureSymbolicLink(
-        rootDir4.getRelative("C/E/BUILD"), rootDir1.getRelative("C/E/BUILD"));
+        rootDir4.getRelative("C/E/UCBUILD"), rootDir1.getRelative("C/E/UCBUILD"));
     FileSystemUtils.ensureSymbolicLink(
-        rootDir4.getRelative("F/G/BUILD"), rootDir1.getRelative("F/G/BUILD"));
+        rootDir4.getRelative("F/G/UCBUILD"), rootDir1.getRelative("F/G/UCBUILD"));
     FileSystemUtils.ensureSymbolicLink(
         rootDir4.getRelative("H/I"), rootDir5.getRelative("H/I"));
 
@@ -162,7 +162,7 @@ public class PathPackageLocatorTest extends FoundationTestCase {
   }
 
   private Path createBuildFile(Path workspace, String packageName) throws IOException {
-    return scratch.file(workspace + "/" + packageName + "/BUILD");
+    return scratch.file(workspace + "/" + packageName + "/UCBUILD");
   }
 
   private void checkFails(String packageName, String expectorError) {
@@ -194,20 +194,20 @@ public class PathPackageLocatorTest extends FoundationTestCase {
     assertEquals(buildFile_2CD, locator.getPackageBuildFileNullable(
         PackageIdentifier.createInMainRepo("C/D"), cache));
     checkFails("C/E",
-               "no such package 'C/E': BUILD file not found on package path");
+               "no such package 'C/E': UCBUILD file not found on package path");
     assertNull(locator.getPackageBuildFileNullable(
         PackageIdentifier.createInMainRepo("C/E"), cache));
     assertEquals(buildFile_2F,
                  locator.getPackageBuildFile(PackageIdentifier.createInMainRepo("F")));
     checkFails("F/G",
-               "no such package 'F/G': BUILD file not found on package path");
+               "no such package 'F/G': UCBUILD file not found on package path");
     assertNull(locator.getPackageBuildFileNullable(
         PackageIdentifier.createInMainRepo("F/G"), cache));
     assertEquals(buildFile_2FGH, locator.getPackageBuildFile(
         PackageIdentifier.createInMainRepo("F/G/H")));
     assertEquals(buildFile_2FGH, locator.getPackageBuildFileNullable(
         PackageIdentifier.createInMainRepo("F/G/H"), cache));
-    checkFails("I", "no such package 'I': BUILD file not found on package path");
+    checkFails("I", "no such package 'I': UCBUILD file not found on package path");
   }
 
   @Test
@@ -222,7 +222,7 @@ public class PathPackageLocatorTest extends FoundationTestCase {
       locatorWithSymlinks.getPackageBuildFile(PackageIdentifier.createInMainRepo("C/D"));
       fail();
     } catch (BuildFileNotFoundException e) {
-      assertThat(e).hasMessage("no such package 'C/D': BUILD file not found on package path");
+      assertThat(e).hasMessage("no such package 'C/D': UCBUILD file not found on package path");
     }
   }
 
@@ -256,7 +256,7 @@ public class PathPackageLocatorTest extends FoundationTestCase {
     createBuildFile(nonExistentRoot2, "X");
     // ...but the package is still not found, because we dropped the root:
     checkFails("X",
-               "no such package 'X': BUILD file not found on package path");
+               "no such package 'X': UCBUILD file not found on package path");
   }
 
   @Test

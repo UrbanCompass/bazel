@@ -41,7 +41,7 @@ public class EvaluationTest extends EvaluationTestCase {
 
   @Before
   public final void setBuildMode() throws Exception {
-    super.setMode(TestMode.BUILD);
+    super.setMode(TestMode.UCBUILD);
   }
 
   /**

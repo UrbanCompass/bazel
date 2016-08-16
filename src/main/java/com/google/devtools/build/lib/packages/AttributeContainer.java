@@ -40,7 +40,7 @@ public class AttributeContainer {
 
   // Holds two lists of attribute indices.
   // The first byte gives the length of the first list.
-  // The first list records which attributes were set explicitly in the BUILD file.
+  // The first list records which attributes were set explicitly in the UCBUILD file.
   // The second list ends at the end of the array.
   // The second list records which attributes have Locations, in reverse order
   // from the attributeLocations array.
@@ -84,7 +84,7 @@ public class AttributeContainer {
 
   /**
    * Returns true iff the given attribute exists for this rule and its value
-   * is explicitly set in the BUILD file (as opposed to its default value).
+   * is explicitly set in the UCBUILD file (as opposed to its default value).
    */
   public boolean isAttributeValueExplicitlySpecified(Attribute attribute) {
     return isAttributeValueExplicitlySpecified(attribute.getName());
@@ -191,7 +191,7 @@ public class AttributeContainer {
     }
   }
 
-  // This sets the attribute "explicitly" as if it came from the BUILD file.
+  // This sets the attribute "explicitly" as if it came from the UCBUILD file.
   // At present, the sole use of this is for the test_suite.$implicit_tests
   // attribute, which is synthesized during package loading.  We do want to
   // consider that "explicitly set" so that it appears in query output.

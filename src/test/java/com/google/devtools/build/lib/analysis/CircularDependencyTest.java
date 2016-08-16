@@ -89,7 +89,7 @@ public class CircularDependencyTest extends BuildViewTestCase {
     assertNotNull(foundEvent);
     Location location = foundEvent.getLocation();
     assertEquals(3, location.getStartLineAndColumn().getLine());
-    assertEquals("/workspace/cycle/BUILD", location.getPath().toString());
+    assertEquals("/workspace/cycle/UCBUILD", location.getPath().toString());
   }
 
   /**
@@ -144,7 +144,7 @@ public class CircularDependencyTest extends BuildViewTestCase {
   public void testTwoRuleCycle2() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
     scratch.file(
-        "x/BUILD", "java_library(name='x', deps=['y'])", "java_library(name='y', deps=['x'])");
+        "x/UCBUILD", "java_library(name='x', deps=['y'])", "java_library(name='y', deps=['x'])");
     getConfiguredTarget("//x");
     assertContainsEvent("in java_library rule //x:x: cycle in dependency graph");
   }
@@ -182,7 +182,7 @@ public class CircularDependencyTest extends BuildViewTestCase {
   public void testTwoCycles() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "genrule(name='b', srcs=['c'], tools=['c'], outs=['b.out'], cmd=':')",
         "genrule(name='c', srcs=['b.out'], outs=[], cmd=':')");
     getConfiguredTarget("//x:b"); // doesn't crash!
@@ -192,7 +192,7 @@ public class CircularDependencyTest extends BuildViewTestCase {
   @Test
   public void testAspectCycle() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("x/BUILD",
+    scratch.file("x/UCBUILD",
         "load('//x:x.bzl', 'aspected', 'plain')",
         // Using data= makes the dependency graph clearer because then the aspect does not propagate
         // from aspectdep through a to b (and c)

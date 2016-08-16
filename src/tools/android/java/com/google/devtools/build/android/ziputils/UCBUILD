@@ -12,7 +12,7 @@ filegroup(
 filegroup(
     name = "embedded_tools",
     srcs = [
-        "BUILD.tools",
+        "UCBUILD.tools",
         "all_deploy.jar",
     ],
 )

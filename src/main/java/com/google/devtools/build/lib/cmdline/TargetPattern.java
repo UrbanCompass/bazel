@@ -281,7 +281,7 @@ public abstract class TargetPattern implements Serializable {
         List<String> pieces = SLASH_SPLITTER.splitToList(path);
 
         // Interprets the label as a file target.  This loop stops as soon as the
-        // first BUILD file is found (i.e. longest prefix match).
+        // first UCBUILD file is found (i.e. longest prefix match).
         for (int i = pieces.size() - 1; i >= 0; i--) {
           String packageName = SLASH_JOINER.join(pieces.subList(0, i));
           if (resolver.isPackage(PackageIdentifier.createInMainRepo(packageName))) {
@@ -624,10 +624,10 @@ public abstract class TargetPattern implements Serializable {
         throw new TargetParsingException("the empty string is not a valid target");
       }
 
-      // Transform "/BUILD" suffix into ":BUILD" to accept //foo/bar/BUILD
-      // syntax as a synonym to //foo/bar:BUILD.
-      if (pattern.endsWith("/BUILD")) {
-        pattern = pattern.substring(0, pattern.length() - 6) + ":BUILD";
+      // Transform "/UCBUILD" suffix into ":UCBUILD" to accept //foo/bar/UCBUILD
+      // syntax as a synonym to //foo/bar:UCBUILD.
+      if (pattern.endsWith("/UCBUILD")) {
+        pattern = pattern.substring(0, pattern.length() - 6) + ":UCBUILD";
       }
 
       int colonIndex = pattern.lastIndexOf(':');

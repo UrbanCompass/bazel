@@ -63,7 +63,7 @@ or force-disabled as follows:
 
 <p>
 A target pattern refers to a single or more targets, which are source files,
-output files, or rules specified in BUILD files. In addition to plain labels,
+output files, or rules specified in UCBUILD files. In addition to plain labels,
 Bazel also supports working-directory-relative labels, recursive patterns, and
 target subtraction.
 </p>
@@ -178,7 +178,7 @@ interpreting it as an option, e.g.:
 bazel build -- foo/... -foo/contrib/...
 </pre>
 Note that Bazel may still build targets matched by a negative target pattern due
-to dependencies, and may also load the corresponding BUILD files, even if the
+to dependencies, and may also load the corresponding UCBUILD files, even if the
 targets are never built.
 </p>
 

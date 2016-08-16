@@ -54,7 +54,7 @@ EOF
 
   echo 'stuff to serve' > file_to_serve
 
-  cat << 'EOF' > examples/genrule/BUILD
+  cat << 'EOF' > examples/genrule/UCBUILD
 genrule(
   name = "works",
   srcs = [ "a.txt" ],
@@ -326,7 +326,7 @@ function test_sandbox_cyclic_symlink_in_inputs() {
 
 function test_sandbox_network_access() {
   serve_file file_to_serve
-  cat << EOF >> examples/genrule/BUILD
+  cat << EOF >> examples/genrule/UCBUILD
 
 genrule(
   name = "breaks4",
@@ -345,7 +345,7 @@ EOF
 
 function test_sandbox_network_access_with_local() {
   serve_file file_to_serve
-  cat << EOF >> examples/genrule/BUILD
+  cat << EOF >> examples/genrule/UCBUILD
 
 genrule(
   name = "breaks4_works_with_local",
@@ -363,7 +363,7 @@ EOF
 
 function test_sandbox_network_access_with_requires_network() {
   serve_file file_to_serve
-  cat << EOF >> examples/genrule/BUILD
+  cat << EOF >> examples/genrule/UCBUILD
 
 genrule(
   name = "breaks4_works_with_requires_network",
@@ -420,7 +420,7 @@ function test_sandbox_add_path_workspace_child() {
 
 function test_sandbox_fail_command() {
   mkdir -p "javatests/orange"
-  echo "java_test(name = 'Orange', srcs = ['Orange.java'])" > javatests/orange/BUILD
+  echo "java_test(name = 'Orange', srcs = ['Orange.java'])" > javatests/orange/UCBUILD
   cat > javatests/orange/Orange.java <<EOF
 package orange;
 import junit.framework.TestCase;

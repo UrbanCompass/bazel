@@ -66,7 +66,7 @@ public class ZipDecompressor implements Decompressor {
    * ---------  ---------- -----   ----
    *        0  2014-11-20 15:50   WORKSPACE
    *        0  2014-11-20 16:10   foo/
-   *      236  2014-11-20 15:52   foo/BUILD
+   *      236  2014-11-20 15:52   foo/UCBUILD
    *      ...
    * </pre>
    */

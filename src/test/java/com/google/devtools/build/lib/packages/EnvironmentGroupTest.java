@@ -43,7 +43,7 @@ public class EnvironmentGroupTest extends PackageLoadingTestCase {
   public final void createPackage() throws Exception {
     Path buildfile =
         scratch.file(
-            "pkg/BUILD",
+            "pkg/UCBUILD",
             "environment(name='foo', fulfills = [':bar', ':baz'])",
             "environment(name='bar', fulfills = [':baz'])",
             "environment(name='baz')",

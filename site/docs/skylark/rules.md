@@ -27,7 +27,7 @@ my_rule = rule(...)
 ```
 
 See [the cookbook](cookbook.md#empty) for examples. The rule can then be
-loaded by BUILD files:
+loaded by UCBUILD files:
 
 ```python
 load('//some/pkg:whatever.bzl', 'my_rule')

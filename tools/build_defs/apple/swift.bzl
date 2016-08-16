@@ -246,7 +246,7 @@ Args:
   defines: A list of values for build configuration options (-D). These values
       can be then used for conditional compilation blocks in code. For example:
 
-      BUILD:
+      UCBUILD:
         swift_library(
           defines = ["VALUE"]
         )

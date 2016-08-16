@@ -87,7 +87,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testRuleConfiguredTarget() throws Exception {
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
         "genrule(name='foo', ",
         "        cmd = '',",
         "        srcs=['a.src'],",
@@ -103,7 +103,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testFilterByTargets() throws Exception {
-    scratch.file("tests/BUILD",
+    scratch.file("tests/UCBUILD",
         "sh_test(name = 'small_test_1',",
         "        srcs = ['small_test_1.sh'],",
         "        data = [':xUnit'],",
@@ -166,13 +166,13 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testReportsAnalysisRootCauses() throws Exception {
-    scratch.file("private/BUILD",
+    scratch.file("private/UCBUILD",
         "genrule(",
         "    name='private',",
         "    outs=['private.out'],",
         "    cmd='',",
         "    visibility=['//visibility:private'])");
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "genrule(",
         "    name='foo',",
         "    tools=[':bar'],",
@@ -201,7 +201,7 @@ public class BuildViewTest extends BuildViewTestBase {
     // This test checks that two simultaneous errors are both reported:
     // - missing outs attribute,
     // - package referenced in tools does not exist
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
         "genrule(name='foo',",
         "        tools=['//nopackage:missing'],",
         "        cmd='')");
@@ -229,15 +229,15 @@ public class BuildViewTest extends BuildViewTestBase {
   public void testConvolutedLoadRootCauseAnalysis() throws Exception {
     // You need license declarations in third_party. We use this constraint to
     // create targets that are loadable, but are in error.
-    scratch.file("third_party/first/BUILD",
+    scratch.file("third_party/first/UCBUILD",
         "sh_library(name='first', deps=['//third_party/second'], licenses=['notice'])");
-    scratch.file("third_party/second/BUILD",
+    scratch.file("third_party/second/UCBUILD",
         "sh_library(name='second', deps=['//third_party/third'], licenses=['notice'])");
-    scratch.file("third_party/third/BUILD",
+    scratch.file("third_party/third/UCBUILD",
         "sh_library(name='third', deps=['//third_party/fourth'], licenses=['notice'])");
-    scratch.file("third_party/fourth/BUILD",
+    scratch.file("third_party/fourth/UCBUILD",
         "sh_library(name='fourth', deps=['//third_party/fifth'])");
-    scratch.file("third_party/fifth/BUILD",
+    scratch.file("third_party/fifth/UCBUILD",
         "sh_library(name='fifth', licenses=['notice'])");
     reporter.removeHandler(failFastHandler);
     EventBus eventBus = new EventBus();
@@ -259,12 +259,12 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testMultipleRootCauseReporting() throws Exception {
-    scratch.file("gp/BUILD",
+    scratch.file("gp/UCBUILD",
         "sh_library(name = 'gp', deps = ['//p:p'])");
-    scratch.file("p/BUILD",
+    scratch.file("p/UCBUILD",
         "sh_library(name = 'p', deps = ['//c1:not', '//c2:not'])");
-    scratch.file("c1/BUILD");
-    scratch.file("c2/BUILD");
+    scratch.file("c1/UCBUILD");
+    scratch.file("c2/UCBUILD");
     reporter.removeHandler(failFastHandler);
     EventBus eventBus = new EventBus();
     LoadingFailureRecorder recorder = new LoadingFailureRecorder();
@@ -284,7 +284,7 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testTopLevelPackageGroup() throws Exception {
-    scratch.file("tropical/BUILD",
+    scratch.file("tropical/UCBUILD",
         "package_group(name='guava', includes=[':mango'])",
         "package_group(name='mango')");
 
@@ -297,7 +297,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testTopLevelInputFile() throws Exception {
-    scratch.file("tropical/BUILD",
+    scratch.file("tropical/UCBUILD",
         "exports_files(['file.txt'])");
     update("//tropical:file.txt");
     assertNotNull(getConfiguredTarget("//tropical:file.txt", null));
@@ -306,7 +306,7 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testGetDirectPrerequisites() throws Exception {
     scratch.file(
-        "package/BUILD",
+        "package/UCBUILD",
         "filegroup(name='top', srcs=[':inner', 'file'])",
         "sh_binary(name='inner', srcs=['script.sh'])");
     update("//package:top");
@@ -330,7 +330,7 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testGetDirectPrerequisiteDependencies() throws Exception {
     scratch.file(
-        "package/BUILD",
+        "package/UCBUILD",
         "filegroup(name='top', srcs=[':inner', 'file'])",
         "sh_binary(name='inner', srcs=['script.sh'])");
     update("//package:top");
@@ -385,10 +385,10 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testFileTranslations() throws Exception {
     scratch.file("foo/file");
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "exports_files(['file'])");
     useConfiguration("--message_translations=//foo:file");
-    scratch.file("bar/BUILD",
+    scratch.file("bar/UCBUILD",
         "sh_library(name = 'bar')");
     update("//bar");
   }
@@ -409,7 +409,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testAnalysisErrorMessageWithKeepGoing() throws Exception {
-    scratch.file("a/BUILD", "sh_binary(name='a', srcs=['a1.sh', 'a2.sh'])");
+    scratch.file("a/UCBUILD", "sh_binary(name='a', srcs=['a1.sh', 'a2.sh'])");
     reporter.removeHandler(failFastHandler);
     AnalysisResult result = update(defaultFlags().with(Flag.KEEP_GOING), "//a");
     assertThat(result.hasError()).isTrue();
@@ -422,7 +422,7 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testCircularDependencyBelowTwoTargets() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "sh_library(name = 'top1', srcs = ['top1.sh'], deps = [':rec1'])",
         "sh_library(name = 'top2', srcs = ['top2.sh'], deps = [':rec1'])",
         "sh_library(name = 'rec1', srcs = ['rec1.sh'], deps = [':rec2'])",
@@ -441,13 +441,13 @@ public class BuildViewTest extends BuildViewTestBase {
   // is detected during the bubbling-up phase.
   @Test
   public void testErrorBelowCycle() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "sh_library(name = 'top', deps = ['mid'])",
         "sh_library(name = 'mid', deps = ['bad', 'cycle1'])",
         "sh_library(name = 'bad', srcs = ['//badbuild:isweird'])",
         "sh_library(name = 'cycle1', deps = ['cycle2', 'mid'])",
         "sh_library(name = 'cycle2', deps = ['cycle1'])");
-    scratch.file("badbuild/BUILD", "");
+    scratch.file("badbuild/UCBUILD", "");
     reporter.removeHandler(failFastHandler);
     try {
       update("//foo:top");
@@ -467,13 +467,13 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testErrorBelowCycleKeepGoing() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "sh_library(name = 'top', deps = ['mid'])",
         "sh_library(name = 'mid', deps = ['bad', 'cycle1'])",
         "sh_library(name = 'bad', srcs = ['//badbuild:isweird'])",
         "sh_library(name = 'cycle1', deps = ['cycle2', 'mid'])",
         "sh_library(name = 'cycle2', deps = ['cycle1'])");
-    scratch.file("badbuild/BUILD", "");
+    scratch.file("badbuild/UCBUILD", "");
     reporter.removeHandler(failFastHandler);
     update(defaultFlags().with(Flag.KEEP_GOING), "//foo:top");
     assertContainsEvent("no such target '//badbuild:isweird': target 'isweird' not declared in "
@@ -494,7 +494,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testAnalysisEntryHasActionsEvenWithError() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_binary(name = 'foo', linkshared = 1, srcs = ['foo.cc'])");
     reporter.removeHandler(failFastHandler);
     try {
@@ -509,21 +509,21 @@ public class BuildViewTest extends BuildViewTestBase {
   public void testHelpfulErrorForWrongPackageLabels() throws Exception {
     reporter.removeHandler(failFastHandler);
 
-    scratch.file("x/BUILD",
+    scratch.file("x/UCBUILD",
         "cc_library(name='x', srcs=['x.cc'])");
-    scratch.file("y/BUILD",
+    scratch.file("y/UCBUILD",
         "cc_library(name='y', srcs=['y.cc'], deps=['//x:z'])");
 
     AnalysisResult result = update(defaultFlags().with(Flag.KEEP_GOING), "//y:y");
     assertThat(result.hasError()).isTrue();
     assertContainsEvent("no such target '//x:z': "
         + "target 'z' not declared in package 'x' "
-        + "defined by /workspace/x/BUILD and referenced by '//y:y'");
+        + "defined by /workspace/x/UCBUILD and referenced by '//y:y'");
   }
 
   @Test
   public void testNewActionsAreDifferentAndDontConflict() throws Exception {
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
         "genrule(name='a', ",
         "        cmd='',",
         "        outs=['a.out'])");
@@ -533,7 +533,7 @@ public class BuildViewTest extends BuildViewTestBase {
     Artifact outputArtifact = outputCT.getArtifact();
     Action action = getGeneratingAction(outputArtifact);
     assertNotNull(action);
-    scratch.overwriteFile("pkg/BUILD",
+    scratch.overwriteFile("pkg/UCBUILD",
         "genrule(name='a', ",
         "        cmd='false',",
         "        outs=['a.out'])");
@@ -560,7 +560,7 @@ public class BuildViewTest extends BuildViewTestBase {
   public void testMultiBuildInvalidationRevalidation() throws Exception {
     scratch.file("java/a/A.java", "bla1");
     scratch.file("java/a/C.java", "bla2");
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = glob(['A*.java']))",
         "java_test(name = 'B',",
@@ -580,16 +580,16 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testDepOnGoodTargetInBadPkgAndTransitivelyBadTarget() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'foo',",
         "           srcs = ['//badpkg1:okay-target', '//okaypkg:transitively-bad-target'])");
-    Path badpkg1BuildFile = scratch.file("badpkg1/BUILD",
+    Path badpkg1BuildFile = scratch.file("badpkg1/UCBUILD",
         "exports_files(['okay-target'])",
         "invalidbuildsyntax");
-    scratch.file("okaypkg/BUILD",
+    scratch.file("okaypkg/UCBUILD",
         "sh_library(name = 'transitively-bad-target',",
         "           srcs = ['//badpkg2:bad-target'])");
-    Path badpkg2BuildFile = scratch.file("badpkg2/BUILD",
+    Path badpkg2BuildFile = scratch.file("badpkg2/UCBUILD",
         "sh_library(name = 'bad-target')",
         "invalidbuildsyntax");
     update(defaultFlags().with(Flag.KEEP_GOING), "//parent:foo");
@@ -616,7 +616,7 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testCycleReporting_TargetCycleWhenPackageInError() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("cycles/BUILD",
+    scratch.file("cycles/UCBUILD",
         "sh_library(name = 'a', deps = [':b'])",
         "sh_library(name = 'b', deps = [':a'])",
         "notvalidbuildsyntax");
@@ -628,10 +628,10 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testTransitiveLoadingDoesntShortCircuitInKeepGoing() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'a', deps = ['//child:b'])",
         "parentisbad");
-    scratch.file("child/BUILD",
+    scratch.file("child/UCBUILD",
         "sh_library(name = 'b')",
         "childisbad");
     update(defaultFlags().with(Flag.KEEP_GOING), "//parent:a");
@@ -667,8 +667,8 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testActionsNotRegisteredInLegacyWhenError() throws Exception {
     // First find the artifact we want to make sure is not generated by an action with an error.
-    // Then update the BUILD file and re-analyze.
-    scratch.file("actions_not_registered/BUILD",
+    // Then update the UCBUILD file and re-analyze.
+    scratch.file("actions_not_registered/UCBUILD",
         "cc_binary(name = 'foo', srcs = ['foo.cc'])");
     update("//actions_not_registered:foo");
     Artifact fooOut = Iterables.getOnlyElement(
@@ -677,7 +677,7 @@ public class BuildViewTest extends BuildViewTestBase {
     assertNotNull(getActionGraph().getGeneratingAction(fooOut));
     clearAnalysisResult();
 
-    scratch.overwriteFile("actions_not_registered/BUILD",
+    scratch.overwriteFile("actions_not_registered/UCBUILD",
         "cc_binary(name = 'foo', linkshared = 1, srcs = ['foo.cc'])");
 
     reporter.removeHandler(failFastHandler);
@@ -696,12 +696,12 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testSkyframeAnalyzeRuleThenItsOutputFile() throws Exception {
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
         "testing_dummy_rule(name='foo', ",
         "                   srcs=['a.src'],",
         "                   outs=['a.out'])");
 
-    scratch.file("pkg2/BUILD",
+    scratch.file("pkg2/UCBUILD",
         "testing_dummy_rule(name='foo', ",
         "                   srcs=['a.src'],",
         "                   outs=['a.out'])");
@@ -709,7 +709,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
     update("//pkg2:foo");
     update("//pkg:foo");
-    scratch.overwriteFile("pkg2/BUILD",
+    scratch.overwriteFile("pkg2/UCBUILD",
         "testing_dummy_rule(name='foo', ",
         "                   srcs=['a.src'],",
         "                   outs=['a.out'])",
@@ -733,17 +733,17 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testRootCauseReportingFileSymlinks() throws Exception {
-    scratch.file("gp/BUILD",
+    scratch.file("gp/UCBUILD",
         "sh_library(name = 'gp', deps = ['//p'])");
-    scratch.file("p/BUILD",
+    scratch.file("p/UCBUILD",
         "sh_library(name = 'p', deps = ['//c'])");
-    scratch.file("c/BUILD",
+    scratch.file("c/UCBUILD",
         "sh_library(name = 'c', deps = [':c1', ':c2'])",
         "sh_library(name = 'c1', deps = ['//cycles1'])",
         "sh_library(name = 'c2', deps = ['//cycles2'])");
-    Path cycles1BuildFilePath = scratch.file("cycles1/BUILD",
+    Path cycles1BuildFilePath = scratch.file("cycles1/UCBUILD",
         "sh_library(name = 'cycles1', srcs = glob(['*.sh']))");
-    Path cycles2BuildFilePath = scratch.file("cycles2/BUILD",
+    Path cycles2BuildFilePath = scratch.file("cycles2/UCBUILD",
         "sh_library(name = 'cycles2', srcs = glob(['*.sh']))");
     cycles1BuildFilePath.getParentDirectory().getRelative("cycles1.sh").createSymbolicLink(
         new PathFragment("cycles1.sh"));
@@ -781,7 +781,7 @@ public class BuildViewTest extends BuildViewTestBase {
     // target pattern is requested before the exception is thrown, so we have both //foo:b and
     // //foo:z missing from the deps, in the hopes that at least one of them will come before
     // //foo:nosuchtarget.
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "genquery(name = 'query',",
         "         expression = 'deps(//foo:b) except //foo:nosuchtarget except //foo:z',",
         "         scope = ['//foo:a'])",
@@ -856,7 +856,7 @@ public class BuildViewTest extends BuildViewTestBase {
   @Test
   public void testPostProcessedConfigurableAttributes() throws Exception {
     reporter.removeHandler(failFastHandler); // Expect errors from action conflicts.
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
         "config_setting(name = 'a', values = {'test_arg': 'a'})",
         "cc_library(name='x', srcs=select({':a': ['a.cc'], '//conditions:default': ['foo.cc']}))",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
@@ -878,7 +878,7 @@ public class BuildViewTest extends BuildViewTestBase {
       // and won't get lost in the fog.
       return;
     }
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "java_binary(name = 'java', srcs = ['DoesntMatter.java'])",
         "cc_binary(name = 'cpp', data = [':java'])");
     // Everything is fine - the dependency graph is acyclic.
@@ -902,9 +902,9 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testDependsOnBrokenTarget() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "sh_test(name = 'test', srcs = ['test.sh'], data = ['//bar:data'])");
-    scratch.file("bar/BUILD",
+    scratch.file("bar/UCBUILD",
         "BROKEN BROKEN BROKEN!!!");
     reporter.removeHandler(failFastHandler);
     try {
@@ -925,7 +925,7 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testCircularDependency() throws Exception {
-    scratch.file("cycle/BUILD",
+    scratch.file("cycle/UCBUILD",
         "cc_library(name = 'foo', srcs = ['foo.cc'], deps = [':bar'])",
         "cc_library(name = 'bar', srcs = ['bar.cc'], deps = [':foo'])");
     reporter.removeHandler(failFastHandler);
@@ -952,7 +952,7 @@ public class BuildViewTest extends BuildViewTestBase {
    */
   @Test
   public void testCircularDependencyWithKeepGoing() throws Exception {
-    scratch.file("cycle/BUILD",
+    scratch.file("cycle/UCBUILD",
         "cc_library(name = 'foo', srcs = ['foo.cc'], deps = [':bar'])",
         "cc_library(name = 'bar', srcs = ['bar.cc'], deps = [':foo'])",
         "cc_library(name = 'bat', srcs = ['bat.cc'], deps = [':bas'])",
@@ -976,7 +976,7 @@ public class BuildViewTest extends BuildViewTestBase {
           "errors encountered while analyzing target '//cycle:bat': it will not be built");
       // With interleaved loading and analysis, we can no longer distinguish loading-phase cycles
       // and analysis-phase cycles. This was previously reported as a loading-phase cycle, as it
-      // happens with any configuration (cycle is hard-coded in the BUILD files). Also see the
+      // happens with any configuration (cycle is hard-coded in the UCBUILD files). Also see the
       // test below.
       assertThat(Iterables.transform(analysisFailureRecorder.events, ANALYSIS_EVENT_TO_STRING_PAIR))
           .containsExactly(
@@ -998,7 +998,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testCircularDependencyWithLateBoundLabel() throws Exception {
-    scratch.file("cycle/BUILD",
+    scratch.file("cycle/UCBUILD",
         "cc_library(name = 'foo', deps = [':bar'])",
         "cc_library(name = 'bar')");
     useConfiguration("--experimental_stl=//cycle:foo");
@@ -1021,8 +1021,8 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testLoadingErrorReportedCorrectly() throws Exception {
-    scratch.file("a/BUILD", "cc_library(name='a')");
-    scratch.file("b/BUILD", "cc_library(name='b', deps = ['//missing:lib'])");
+    scratch.file("a/UCBUILD", "cc_library(name='a')");
+    scratch.file("b/UCBUILD", "cc_library(name='b', deps = ['//missing:lib'])");
 
     reporter.removeHandler(failFastHandler);
     AnalysisResult result = update(defaultFlags().with(Flag.KEEP_GOING), "//a", "//b");
@@ -1033,7 +1033,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testMissingLabelInConfiguration() throws Exception {
-    scratch.file("nobuild/BUILD",
+    scratch.file("nobuild/UCBUILD",
         "cc_library(name= 'lib')");
     useConfiguration("--experimental_action_listener=//nobuild:bar");
     reporter.removeHandler(failFastHandler);
@@ -1074,7 +1074,7 @@ public class BuildViewTest extends BuildViewTestBase {
       fail();
     } catch (LoadingFailedException | InvalidConfigurationException e) {
       assertContainsEvent(
-          "no such package 'does/not/exist': BUILD file not found on package path");
+          "no such package 'does/not/exist': UCBUILD file not found on package path");
     }
   }
 
@@ -1082,10 +1082,10 @@ public class BuildViewTest extends BuildViewTestBase {
   public void testMissingJavabase() throws Exception {
     // The javabase flag uses yet another code path with its own redirection logic on top of the
     // redirect chaser.
-    scratch.file("jdk/BUILD",
+    scratch.file("jdk/UCBUILD",
         "filegroup(name = 'jdk', srcs = [",
         "    '//does/not/exist:a-piii', '//does/not/exist:b-k8', '//does/not/exist:c-default'])");
-    scratch.file("does/not/exist/BUILD");
+    scratch.file("does/not/exist/UCBUILD");
     useConfigurationFactory(AnalysisMock.get().createConfigurationFactory());
     useConfiguration("--javabase=//jdk");
     reporter.removeHandler(failFastHandler);
@@ -1102,7 +1102,7 @@ public class BuildViewTest extends BuildViewTestBase {
     // The xcode_version flag uses yet another code path on top of the redirect chaser.
     // Note that the redirect chaser throws if it can't find a package, but doesn't throw if it
     // can't find a label in a package - that's why we use an empty package here.
-    scratch.file("xcode/BUILD");
+    scratch.file("xcode/UCBUILD");
     useConfiguration("--xcode_version=1.2", "--xcode_version_config=//xcode:does_not_exist");
     reporter.removeHandler(failFastHandler);
     try {
@@ -1116,9 +1116,9 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testVisibilityReferencesNonexistentPackage() throws Exception {
-    scratch.file("z/a/BUILD",
+    scratch.file("z/a/UCBUILD",
         "py_library(name='a', visibility=['//nonexistent:nothing'])");
-    scratch.file("z/b/BUILD",
+    scratch.file("z/b/UCBUILD",
         "py_library(name='b', deps=['//z/a:a'])");
     reporter.removeHandler(failFastHandler);
     try {
@@ -1132,10 +1132,10 @@ public class BuildViewTest extends BuildViewTestBase {
   // regression test ("java.lang.IllegalStateException: cannot happen")
   @Test
   public void testDefaultVisibilityInNonexistentPackage() throws Exception {
-    scratch.file("z/a/BUILD",
+    scratch.file("z/a/UCBUILD",
         "package(default_visibility=['//b'])",
         "py_library(name='alib')");
-    scratch.file("z/b/BUILD",
+    scratch.file("z/b/UCBUILD",
         "py_library(name='b', deps=['//z/a:alib'])");
     reporter.removeHandler(failFastHandler);
     try {
@@ -1148,9 +1148,9 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testNonTopLevelErrorsPrintedExactlyOnce() throws Exception {
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'a', deps = ['//child:b'])");
-    scratch.file("child/BUILD",
+    scratch.file("child/UCBUILD",
         "sh_library(name = 'b')",
         "undefined_symbol");
     reporter.removeHandler(failFastHandler);
@@ -1167,9 +1167,9 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testNonTopLevelErrorsPrintedExactlyOnce_KeepGoing() throws Exception {
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'a', deps = ['//child:b'])");
-    scratch.file("child/BUILD",
+    scratch.file("child/UCBUILD",
         "sh_library(name = 'b')",
         "undefined_symbol");
     reporter.removeHandler(failFastHandler);
@@ -1182,12 +1182,12 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testNonTopLevelErrorsPrintedExactlyOnce_ActionListener() throws Exception {
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'a', deps = ['//child:b'])");
-    scratch.file("child/BUILD",
+    scratch.file("child/UCBUILD",
         "sh_library(name = 'b')",
         "undefined_symbol");
-    scratch.file("okay/BUILD",
+    scratch.file("okay/UCBUILD",
         "sh_binary(name = 'okay', srcs = ['okay.sh'])");
     useConfiguration("--experimental_action_listener=//parent:a");
     reporter.removeHandler(failFastHandler);
@@ -1204,12 +1204,12 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testNonTopLevelErrorsPrintedExactlyOnce_ActionListener_KeepGoing() throws Exception {
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'a', deps = ['//child:b'])");
-    scratch.file("child/BUILD",
+    scratch.file("child/UCBUILD",
         "sh_library(name = 'b')",
         "undefined_symbol");
-    scratch.file("okay/BUILD",
+    scratch.file("okay/UCBUILD",
         "sh_binary(name = 'okay', srcs = ['okay.sh'])");
     useConfiguration("--experimental_action_listener=//parent:a");
     reporter.removeHandler(failFastHandler);
@@ -1226,7 +1226,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void testTopLevelTargetsAreTrimmedWithDynamicConfigurations() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "sh_library(name='x', ",
         "        srcs=['x.sh'])");
     useConfiguration("--experimental_dynamic_configs");
@@ -1238,7 +1238,7 @@ public class BuildViewTest extends BuildViewTestBase {
 
   @Test
   public void errorOnMissingDepFragments() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_library(",
         "    name = 'ccbin', ",
         "    srcs = ['c.cc'],",
@@ -1266,7 +1266,7 @@ public class BuildViewTest extends BuildViewTestBase {
         ruleClassProvider.getConfigurationCollectionFactory(),
         ruleClassProvider.getConfigurationFragments()));
 
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "rule_with_latebound_split(",
         "    name = 'foo')",
         "rule_with_test_fragment(",

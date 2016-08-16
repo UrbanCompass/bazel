@@ -81,7 +81,7 @@ public final class LibraryLinkingTest extends BuildViewTestCase {
   @Test
   public void testCcLibraryLinkopts() throws Exception {
     scratch.overwriteFile(
-        "custom_malloc/BUILD",
+        "custom_malloc/UCBUILD",
         "cc_library(name = 'custom_malloc',",
         "           srcs = ['custom_malloc.cc'],",
         "           linkopts = ['-Lmalloc_dir -lmalloc_opt']);");

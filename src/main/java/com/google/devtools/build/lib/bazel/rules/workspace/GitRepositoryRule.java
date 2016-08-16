@@ -89,12 +89,12 @@ available for binding.</p>
 <pre class="code">
 WORKSPACE
 src/
-  BUILD
+  UCBUILD
   openssl.cc
   openssl.h
 </pre>
 
-<p><i>src/BUILD</i> contains the following target definition:</p>
+<p><i>src/UCBUILD</i> contains the following target definition:</p>
 
 <pre class="code">
 cc_library(

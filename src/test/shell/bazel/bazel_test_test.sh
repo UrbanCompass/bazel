@@ -56,7 +56,7 @@ EOF
 
   chmod +x dir/test.sh
 
-  cat <<EOF > dir/BUILD
+  cat <<EOF > dir/UCBUILD
 sh_test(
   name = "test",
   srcs = [ "test.sh" ],
@@ -96,7 +96,7 @@ function test_tmpdir() {
 echo TEST_TMPDIR=$TEST_TMPDIR
 EOF
   chmod +x foo/bar_test.sh
-  cat > foo/BUILD <<EOF
+  cat > foo/UCBUILD <<EOF
 sh_test(
     name = "bar_test",
     srcs = ["bar_test.sh"],
@@ -123,7 +123,7 @@ echo "src: $TEST_SRCDIR"
 echo "ws: $TEST_WORKSPACE"
 EOF
   chmod +x foo/testenv.sh
-  cat > foo/BUILD <<EOF
+  cat > foo/UCBUILD <<EOF
 sh_test(
     name = "foo",
     srcs = ["testenv.sh"],
@@ -138,7 +138,7 @@ EOF
 
 function test_run_under_label_with_options() {
   mkdir -p testing run || fail "mkdir testing run failed"
-  cat <<EOF > run/BUILD
+  cat <<EOF > run/UCBUILD
 sh_binary(
   name='under', srcs=['under.sh'],
   visibility=["//visibility:public"],
@@ -157,7 +157,7 @@ exit 0
 EOF
   chmod u+x testing/passing_test.sh
 
-  cat <<EOF > testing/BUILD
+  cat <<EOF > testing/UCBUILD
 sh_test(
   name = "passing_test" ,
   srcs = [ "passing_test.sh" ])
@@ -172,7 +172,7 @@ EOF
 
 function test_run_under_path() {
   mkdir -p testing || fail "mkdir testing failed"
-  echo "sh_test(name='t1', srcs=['t1.sh'])" > testing/BUILD
+  echo "sh_test(name='t1', srcs=['t1.sh'])" > testing/UCBUILD
   cat <<EOF > testing/t1.sh
 #!/bin/sh
 exit 0
@@ -214,7 +214,7 @@ EOF
 
   chmod +x dir/test.sh
 
-  cat <<EOF > dir/BUILD
+  cat <<EOF > dir/UCBUILD
   sh_test(
     name = "test",
     timeout = "short",
@@ -254,7 +254,7 @@ exit \$((i != $i))
 }
 EOF
     chmod +x test$i.sh
-    cat <<EOF > BUILD
+    cat <<EOF > UCBUILD
 sh_test(name = "test$i", srcs = [ "test$i.sh" ])
 EOF
     bazel test --spawn_strategy=standalone --jobs=1 \
@@ -276,7 +276,7 @@ EOF
 
   chmod +x dir/test.sh
 
-  cat <<'EOF' > dir/BUILD
+  cat <<'EOF' > dir/UCBUILD
   sh_test(
     name = "test",
     srcs = [ "test.sh" ],
@@ -303,7 +303,7 @@ EOF
 
   chmod +x dir/{success,fail}.sh
 
-  cat <<EOF > dir/BUILD
+  cat <<EOF > dir/UCBUILD
 sh_test(
     name = "success",
     srcs = [ "success.sh" ],

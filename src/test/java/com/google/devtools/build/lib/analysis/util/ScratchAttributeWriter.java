@@ -36,7 +36,7 @@ import java.util.Arrays;
  *     .write();
  * }</pre>
  *
- * <p>Would create the BUILD file "x/BUILD" with contents:
+ * <p>Would create the UCBUILD file "x/UCBUILD" with contents:
  *
  * <pre>{@code
  * cc_library(
@@ -159,7 +159,7 @@ public class ScratchAttributeWriter {
 
     buildString.append(")");
 
-    scratch.file(String.format("%s/BUILD", packageName), buildString.toString());
+    scratch.file(String.format("%s/UCBUILD", packageName), buildString.toString());
     return testCase.getConfiguredTarget(String.format("//%s:%s", packageName, targetName), config);
   }
 

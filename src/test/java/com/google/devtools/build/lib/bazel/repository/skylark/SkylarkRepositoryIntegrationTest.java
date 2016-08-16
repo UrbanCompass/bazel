@@ -113,7 +113,7 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
     // A simple test that recreates local_repository with Skylark.
     scratch.file("/repo2/WORKSPACE");
     scratch.file("/repo2/bar.txt");
-    scratch.file("/repo2/BUILD", "filegroup(name='bar', srcs=['bar.txt'], path='foo')");
+    scratch.file("/repo2/UCBUILD", "filegroup(name='bar', srcs=['bar.txt'], path='foo')");
     scratch.file(
         "def.bzl",
         "def _impl(repository_ctx):",
@@ -123,7 +123,7 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
         "    implementation=_impl,",
         "    local=True,",
         "    attrs={'path': attr.string(mandatory=True)})");
-    scratch.file(rootDirectory.getRelative("BUILD").getPathString());
+    scratch.file(rootDirectory.getRelative("UCBUILD").getPathString());
     scratch.overwriteFile(
         rootDirectory.getRelative("WORKSPACE").getPathString(),
         "load('//:def.bzl', 'repo')",
@@ -137,18 +137,18 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   @Test
   public void testSkylarkSymlinkFileFromRepository() throws Exception {
     scratch.file("/repo2/bar.txt", "filegroup(name='bar', srcs=['foo.txt'], path='foo')");
-    scratch.file("/repo2/BUILD");
+    scratch.file("/repo2/UCBUILD");
     scratch.file("/repo2/WORKSPACE");
     scratch.file(
         "def.bzl",
         "def _impl(repository_ctx):",
-        "  repository_ctx.symlink(Label('@repo2//:bar.txt'), 'BUILD')",
+        "  repository_ctx.symlink(Label('@repo2//:bar.txt'), 'UCBUILD')",
         "  repository_ctx.file('foo.txt', 'foo')",
         "",
         "repo = repository_rule(",
         "    implementation=_impl,",
         "    local=True)");
-    scratch.file(rootDirectory.getRelative("BUILD").getPathString());
+    scratch.file(rootDirectory.getRelative("UCBUILD").getPathString());
     scratch.overwriteFile(
         rootDirectory.getRelative("WORKSPACE").getPathString(),
         "local_repository(name='repo2', path='/repo2')",
@@ -163,19 +163,19 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   @Test
   public void testSkylarkRepositoryTemplate() throws Exception {
     scratch.file("/repo2/bar.txt", "filegroup(name='{target}', srcs=['foo.txt'], path='{path}')");
-    scratch.file("/repo2/BUILD");
+    scratch.file("/repo2/UCBUILD");
     scratch.file("/repo2/WORKSPACE");
     scratch.file(
         "def.bzl",
         "def _impl(repository_ctx):",
-        "  repository_ctx.template('BUILD', Label('@repo2//:bar.txt'), "
+        "  repository_ctx.template('UCBUILD', Label('@repo2//:bar.txt'), "
             + "{'{target}': 'bar', '{path}': 'foo'})",
         "  repository_ctx.file('foo.txt', 'foo')",
         "",
         "repo = repository_rule(",
         "    implementation=_impl,",
         "    local=True)");
-    scratch.file(rootDirectory.getRelative("BUILD").getPathString());
+    scratch.file(rootDirectory.getRelative("UCBUILD").getPathString());
     scratch.overwriteFile(
         rootDirectory.getRelative("WORKSPACE").getPathString(),
         "local_repository(name='repo2', path='/repo2')",
@@ -191,19 +191,19 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   public void testSkylarkRepositoryName() throws Exception {
     // Variation of the template rule to test the repository_ctx.name field.
     scratch.file("/repo2/bar.txt", "filegroup(name='bar', srcs=['foo.txt'], path='{path}')");
-    scratch.file("/repo2/BUILD");
+    scratch.file("/repo2/UCBUILD");
     scratch.file("/repo2/WORKSPACE");
     scratch.file(
         "def.bzl",
         "def _impl(repository_ctx):",
-        "  repository_ctx.template('BUILD', Label('@repo2//:bar.txt'), "
+        "  repository_ctx.template('UCBUILD', Label('@repo2//:bar.txt'), "
             + "{'{path}': repository_ctx.name})",
         "  repository_ctx.file('foo.txt', 'foo')",
         "",
         "repo = repository_rule(",
         "    implementation=_impl,",
         "    local=True)");
-    scratch.file(rootDirectory.getRelative("BUILD").getPathString());
+    scratch.file(rootDirectory.getRelative("UCBUILD").getPathString());
     scratch.overwriteFile(
         rootDirectory.getRelative("WORKSPACE").getPathString(),
         "local_repository(name='repo2', path='/repo2')",
@@ -219,7 +219,7 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   public void testCycleErrorWhenCallingRandomTarget() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file("/repo2/data.txt", "data");
-    scratch.file("/repo2/BUILD", "exports_files_(['data.txt'])");
+    scratch.file("/repo2/UCBUILD", "exports_files_(['data.txt'])");
     scratch.file("/repo2/def.bzl", "def macro():", "  print('bleh')");
     scratch.file("/repo2/WORKSPACE");
     scratch.overwriteFile(
@@ -243,7 +243,7 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   public void testCycleErrorWhenCallingCycleTarget() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file("/repo2/data.txt", "data");
-    scratch.file("/repo2/BUILD", "exports_files_(['data.txt'])");
+    scratch.file("/repo2/UCBUILD", "exports_files_(['data.txt'])");
     scratch.file("/repo2/def.bzl", "def macro():", "  print('bleh')");
     scratch.file("/repo2/WORKSPACE");
     scratch.overwriteFile(
@@ -267,7 +267,7 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
   public void testLoadDoesNotHideWorkspaceError() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file("/repo2/data.txt", "data");
-    scratch.file("/repo2/BUILD", "exports_files_(['data.txt'])");
+    scratch.file("/repo2/UCBUILD", "exports_files_(['data.txt'])");
     scratch.file("/repo2/def.bzl", "def macro():", "  print('bleh')");
     scratch.file("/repo2/WORKSPACE");
     scratch.overwriteFile(
@@ -296,9 +296,9 @@ public class SkylarkRepositoryIntegrationTest extends BuildViewTestCase {
         "local_repository(name='bazel_tools', path=__workspace_dir__)",
         "load('//:def.bzl', 'macro')");
     scratch.overwriteFile("tools/genrule/genrule-setup.sh");
-    scratch.overwriteFile("tools/genrule/BUILD", "exports_files(['genrule-setup.sh'])");
+    scratch.overwriteFile("tools/genrule/UCBUILD", "exports_files(['genrule-setup.sh'])");
     scratch.file("data.txt");
-    scratch.file("BUILD",
+    scratch.file("UCBUILD",
         "genrule(",
         "  name='data', ",
         "  outs=['data.out'],",

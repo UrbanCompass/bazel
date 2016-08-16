@@ -32,7 +32,7 @@ workspace(name = "$name")
 EOF
 
   mkdir foo
-  cat > foo/BUILD <<EOF
+  cat > foo/UCBUILD <<EOF
 java_test(
     name = "foo",
     srcs = ["Noise.java"],
@@ -60,11 +60,11 @@ workspace(name = "foo")
 new_local_repository(
     name = "bar",
     path = ".",
-    build_file = "BUILD",
+    build_file = "UCBUILD",
 )
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 exports_files(glob(["*"]))
 
 cc_binary(

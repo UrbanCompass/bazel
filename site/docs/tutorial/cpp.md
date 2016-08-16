@@ -22,11 +22,11 @@ We are going to create a small hello world project with the following directory 
 {% highlight bash %}
 └── my-project
     ├── lib
-    │   ├── BUILD
+    │   ├── UCBUILD
     │   ├── hello-greet.cc
     │   └── hello-greet.h
     ├── main
-    │   ├── BUILD
+    │   ├── UCBUILD
     │   ├── hello-time.cc
     │   ├── hello-time.h
     │   └── hello-world.cc
@@ -95,10 +95,10 @@ std::string get_greet(const std::string& who) {
 EOF
 {% endhighlight %}
 
-## Adding BUILD files
+## Adding UCBUILD files
 
 As you can see from the source code, `main/hello-world.cc` needs to include both `lib/hello-greet.h` and `main/hello-time.h`.
-First we create `lib/BUILD` for hello-greet.cc:
+First we create `lib/UCBUILD` for hello-greet.cc:
 
 {% highlight python %}
 cc_library(
@@ -109,8 +109,8 @@ cc_library(
 )
 {% endhighlight %}
 
-Note that `visibility = ["//main:__pkg__"]` indicates `hello-greet` is visible from `main/BUILD`.
-Then we'd create the following `main/BUILD` file:
+Note that `visibility = ["//main:__pkg__"]` indicates `hello-greet` is visible from `main/UCBUILD`.
+Then we'd create the following `main/UCBUILD` file:
 
 {% highlight python %}
 cc_library(
@@ -156,7 +156,7 @@ If a file includes a header, then the file's rule should depend on that header's
 library.  Conversely, only direct dependencies need to be specified as
 dependencies.  For example, suppose `sandwich.h` includes `bread.h` and
 `bread.h` includes `flour.h`.  `sandwich.h` doesn't include `flour.h` (who wants
-flour in their sandwich?), so the BUILD file would look like:
+flour in their sandwich?), so the UCBUILD file would look like:
 
 ```python
 cc_library(
@@ -194,7 +194,7 @@ directory structure:
 └── my-project
     ├── third_party
     │   └── some_lib
-    │       ├── BUILD
+    │       ├── UCBUILD
     │       ├── include
     │       │   └── some_lib.h
     │       └── some_lib.cc
@@ -204,7 +204,7 @@ directory structure:
 Bazel will expect `some_lib.h` to be included as
 `third_party/some_lib/include/some_lib.h`, but suppose `some_lib.cc` includes
 `"include/some_lib.h"`.  To make that include path valid,
-`third_party/some_lib/BUILD` will need to specify that the `some_lib/`
+`third_party/some_lib/UCBUILD` will need to specify that the `some_lib/`
 directory is an include directory:
 
 ```python
@@ -230,11 +230,11 @@ new_http_archive(
     name = "gtest",
     url = "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
     sha256 = "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
-    build_file = "gtest.BUILD",
+    build_file = "gtest.UCBUILD",
 )
 ```
 
-Then create `gtest.BUILD`, a BUILD file to use to compile Google Test.
+Then create `gtest.UCBUILD`, a UCBUILD file to use to compile Google Test.
 Google Test has several "special" requirements that make its `cc_library` rule
 more complicated:
 
@@ -275,12 +275,12 @@ new_http_archive(
     name = "gtest",
     url = "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
     sha256 = "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
-    build_file = "gtest.BUILD",
+    build_file = "gtest.UCBUILD",
     strip_prefix = "gtest-1.7.0",
 )
 ```
 
-Then `gtest.BUILD` would look like this:
+Then `gtest.UCBUILD` would look like this:
 
 ```python
 cc_library(
@@ -314,7 +314,7 @@ TEST(FactorialTest, Negative) {
 }
 ```
 
-Then create `./test/BUILD` file for your tests:
+Then create `./test/UCBUILD` file for your tests:
 
 ```python
 cc_test(
@@ -328,7 +328,7 @@ cc_test(
 )
 ```
 
-Note in order to make `hello-greet` visible to `hello-test`, we have to add `"//test:__pkg__",` to `visibility` attribute in `./lib/BUILD`.
+Note in order to make `hello-greet` visible to `hello-test`, we have to add `"//test:__pkg__",` to `visibility` attribute in `./lib/UCBUILD`.
 
 Now you can use `bazel test` to run the test.
 

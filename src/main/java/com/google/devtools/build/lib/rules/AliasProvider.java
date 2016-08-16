@@ -47,7 +47,7 @@ public final class AliasProvider implements TransitiveInfoProvider {
   }
 
   /**
-   * Returns the label by which it was referred to in the BUILD file.
+   * Returns the label by which it was referred to in the UCBUILD file.
    *
    * <p>For non-alias rules, it's the label of the rule itself, for alias rules, it's the label of
    * the alias rule.

@@ -579,13 +579,13 @@ public class PackageFunction implements SkyFunction {
           InconsistentFilesystemException.class);
     } catch (IOException | FileSymlinkException | InconsistentFilesystemException e) {
       throw new IllegalStateException("Package lookup succeeded but encountered error when "
-          + "getting FileValue for BUILD file directly.", e);
+          + "getting FileValue for UCBUILD file directly.", e);
     }
     if (buildFileValue == null) {
       return null;
     }
     Preconditions.checkState(buildFileValue.exists(),
-        "Package lookup succeeded but BUILD file doesn't exist");
+        "Package lookup succeeded but UCBUILD file doesn't exist");
     return buildFileValue;
   }
 
@@ -616,7 +616,7 @@ public class PackageFunction implements SkyFunction {
   }
 
   /**
-   * Fetch the skylark loads for this BUILD file. If any of them haven't been computed yet,
+   * Fetch the skylark loads for this UCBUILD file. If any of them haven't been computed yet,
    * returns null.
    */
   @Nullable
@@ -637,7 +637,7 @@ public class PackageFunction implements SkyFunction {
     // Find the labels corresponding to the load statements.
     Label labelForCurrBuildFile;
     try {
-      labelForCurrBuildFile = Label.create(packageId, "BUILD");
+      labelForCurrBuildFile = Label.create(packageId, "UCBUILD");
     } catch (LabelSyntaxException e) {
       // Shouldn't happen; the Label is well-formed by construction.
       throw new IllegalStateException(e);
@@ -849,7 +849,7 @@ public class PackageFunction implements SkyFunction {
       // This label is referencing an imaginary package, because the containing package should
       // extend the label's package: if the label is //a/b:c/d, the containing package could be
       // //a/b/c or //a/b, but should never be //a. Usually such errors will be caught earlier, but
-      // in some exceptional cases (such as a Python-aware BUILD file catching its own io
+      // in some exceptional cases (such as a Python-aware UCBUILD file catching its own io
       // exceptions), it reaches here, and we tolerate it.
       return false;
     }
@@ -868,7 +868,7 @@ public class PackageFunction implements SkyFunction {
       }
       message += containingPkg + ":" + labelNameInContainingPackage + "'?)";
     } else {
-      message += " (have you deleted " + containingPkg + "/BUILD? "
+      message += " (have you deleted " + containingPkg + "/UCBUILD? "
           + "If so, use the --deleted_packages=" + containingPkg + " option)";
     }
     pkgBuilder.addEvent(Event.error(location, message));
@@ -887,9 +887,9 @@ public class PackageFunction implements SkyFunction {
    * <li>We trivially have the proper Skyframe {@link GlobValue} deps, whereas we would need to
    * request them after-the-fact if we solely used a {@link PackageFactory.LegacyGlobber}.
    * <li>We don't need to re-evaluate globs whose expression hasn't changed (e.g. in the common case
-   * of a BUILD file edit that doesn't change a glob expression), whereas legacy package loading
+   * of a UCBUILD file edit that doesn't change a glob expression), whereas legacy package loading
    * with a {@link PackageFactory.LegacyGlobber} would naively re-evaluate globs when re-evaluating
-   * the BUILD file.
+   * the UCBUILD file.
    * <li>We don't need to re-evaluate invalidated globs *twice* (the single re-evaluation via our
    * GlobValue deps is sufficient and optimal). See above for why the second evaluation would
    * happen.
@@ -1143,8 +1143,8 @@ public class PackageFunction implements SkyFunction {
    * <p>May return null if the computation has to be restarted.
    *
    * <p>Exactly one of {@code replacementContents} and {@code buildFileValue} will be
-   * non-{@code null}. The former indicates that we have a faux BUILD file with the given contents
-   * and the latter indicates that we have a legitimate BUILD file and should actually do
+   * non-{@code null}. The former indicates that we have a faux UCBUILD file with the given contents
+   * and the latter indicates that we have a legitimate UCBUILD file and should actually do
    * preprocessing.
    */
   @Nullable
@@ -1208,7 +1208,7 @@ public class PackageFunction implements SkyFunction {
           BuildFileAST ast = PackageFactory.parseBuildFile(packageId, preprocessingResult.result,
               preludeStatements, astParsingEventHandler);
           // If no globs were fetched during preprocessing, then there's no need to reuse the
-          // legacy globber instance during BUILD file evaluation since the performance argument
+          // legacy globber instance during UCBUILD file evaluation since the performance argument
           // below does not apply.
           Set<SkyKey> globDepsRequested = skyframeGlobber.getGlobDepsRequested();
           Globber legacyGlobberToStore = globDepsRequested.isEmpty() ? null : legacyGlobber;
@@ -1235,7 +1235,7 @@ public class PackageFunction implements SkyFunction {
         }
         astCache.invalidate(packageId);
         // If a legacy globber was used to evaluate globs during preprocessing, it's important that
-        // we reuse that globber during BUILD file evaluation for performance, in the case that
+        // we reuse that globber during UCBUILD file evaluation for performance, in the case that
         // globs were fetched lazily during preprocessing. See Preprocessor.Factory#considersGlobs.
         Globber legacyGlobber = astCacheEntry.legacyGlobber != null
             ? astCacheEntry.legacyGlobber

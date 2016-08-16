@@ -100,7 +100,7 @@ public class EnvironmentTest extends EvaluationTestCase {
     Environment innerEnv;
     try (Mutability mut = Mutability.create("outer")) {
       outerEnv = Environment.builder(mut)
-          .setGlobals(Environment.BUILD).build()
+          .setGlobals(Environment.UCBUILD).build()
           .update("foo", "bar")
           .update("wiz", 3);
     }
@@ -145,7 +145,7 @@ public class EnvironmentTest extends EvaluationTestCase {
     Environment env;
     try (Mutability mutability = Mutability.create("testFrozen")) {
       env = Environment.builder(mutability)
-          .setGlobals(Environment.BUILD).setEventHandler(Environment.FAIL_FAST_HANDLER).build();
+          .setGlobals(Environment.UCBUILD).setEventHandler(Environment.FAIL_FAST_HANDLER).build();
       env.update("x", 1);
       assertEquals(env.lookup("x"), 1);
       env.update("y", 2);

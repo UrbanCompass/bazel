@@ -64,17 +64,17 @@ public class CcCommonTest extends BuildViewTestCase {
   @Before
   public final void createBuildFiles() throws Exception {
     // Having lots of setUp code leads to bad running time. Don't add anything here!
-    scratch.file("empty/BUILD", "cc_library(name = 'emptylib')", "cc_binary(name = 'emptybinary')");
+    scratch.file("empty/UCBUILD", "cc_library(name = 'emptylib')", "cc_binary(name = 'emptybinary')");
 
-    scratch.file("foo/BUILD", "cc_library(name = 'foo',", "           srcs = ['foo.cc'])");
+    scratch.file("foo/UCBUILD", "cc_library(name = 'foo',", "           srcs = ['foo.cc'])");
 
-    scratch.file("bar/BUILD", "cc_library(name = 'bar',", "           srcs = ['bar.cc'])");
+    scratch.file("bar/UCBUILD", "cc_library(name = 'bar',", "           srcs = ['bar.cc'])");
   }
 
   @Test
   public void testSameCcFileTwice() throws Exception {
     scratch.file(
-        "a/BUILD",
+        "a/UCBUILD",
         "cc_library(name='a', srcs=['a1', 'a2'])",
         "filegroup(name='a1', srcs=['a.cc'])",
         "filegroup(name='a2', srcs=['a.cc'])");
@@ -86,7 +86,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testSameHeaderFileTwice() throws Exception {
     scratch.file(
-        "a/BUILD",
+        "a/UCBUILD",
         "package(features=['parse_headers'])",
         "cc_library(name='a', srcs=['a1', 'a2', 'a.cc'])",
         "filegroup(name='a1', srcs=['a.h'])",
@@ -135,7 +135,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testCopts() throws Exception {
     scratch.file(
-        "copts/BUILD",
+        "copts/UCBUILD",
         "cc_library(name = 'c_lib',",
         "    srcs = ['foo.cc'],",
         "    copts = [ '-Wmy-warning', '-frun-faster' ])");
@@ -145,7 +145,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testCoptsTokenization() throws Exception {
     scratch.file(
-        "copts/BUILD",
+        "copts/UCBUILD",
         "cc_library(name = 'c_lib',",
         "    srcs = ['foo.cc'],",
         "    copts = ['-Wmy-warning -frun-faster'])");
@@ -157,7 +157,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testCoptsNoTokenization() throws Exception {
     scratch.file(
-        "copts/BUILD",
+        "copts/UCBUILD",
         "package(features = ['no_copts_tokenization'])",
         "cc_library(name = 'c_lib',",
         "    srcs = ['foo.cc'],",
@@ -251,7 +251,7 @@ public class CcCommonTest extends BuildViewTestCase {
         // Prevent Android from trying to setup ARM crosstool by forcing it on system cpu.
         "--fat_apk_cpu=" + CrosstoolConfigurationHelper.defaultCpu(), "--start_end_lib");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "cc_library(name='lib',",
         "           srcs=['lib.c'])",
         "cc_binary(name='bin',",
@@ -269,7 +269,7 @@ public class CcCommonTest extends BuildViewTestCase {
   public void testTempsWithDifferentExtensions() throws Exception {
     useConfiguration("--save_temps");
     scratch.file(
-        "ananas/BUILD",
+        "ananas/UCBUILD",
         "cc_library(name='ananas',",
         "           srcs=['1.c', '2.cc', '3.cpp', '4.S', '5.h', '6.hpp'])");
 
@@ -313,7 +313,7 @@ public class CcCommonTest extends BuildViewTestCase {
   public void testTempsForC() throws Exception {
     useConfiguration("--save_temps");
     // Now try with a .c source file.
-    scratch.file("csrc/BUILD", "cc_library(name='csrc',", "           srcs=['foo.c'])");
+    scratch.file("csrc/UCBUILD", "cc_library(name='csrc',", "           srcs=['foo.c'])");
     ConfiguredTarget csrcTarget = getConfiguredTarget("//csrc:csrc");
     List<Artifact> cTemps =
         ImmutableList.copyOf(getOutputGroup(csrcTarget, OutputGroupProvider.TEMP_FILES));
@@ -330,7 +330,7 @@ public class CcCommonTest extends BuildViewTestCase {
 
     // For two source files we're expecting 4 temps.
     scratch.file(
-        "twosrc/BUILD", "cc_library(name='twosrc',", "           srcs=['foo1.cc', 'foo2.cc'])");
+        "twosrc/UCBUILD", "cc_library(name='twosrc',", "           srcs=['foo1.cc', 'foo2.cc'])");
     ConfiguredTarget twoSrcTarget = getConfiguredTarget("//twosrc:twosrc");
     assertThat(getOutputGroup(twoSrcTarget, OutputGroupProvider.TEMP_FILES)).hasSize(4);
   }
@@ -371,7 +371,7 @@ public class CcCommonTest extends BuildViewTestCase {
         "--fat_apk_cpu=" + CrosstoolConfigurationHelper.defaultCpu());
 
     scratch.file(
-        "a/BUILD",
+        "a/UCBUILD",
         "cc_binary(name = 'pic',",
         "           srcs = [ 'binary.cc' ])",
         "cc_binary(name = 'libpic.so',",
@@ -402,7 +402,7 @@ public class CcCommonTest extends BuildViewTestCase {
         directories.getWorkspace(),
         CrosstoolConfig.CToolchain.newBuilder().setNeedsPic(true).buildPartial());
 
-    scratch.file("a/BUILD", "cc_library(name='preprocess', srcs=['preprocess.S'])");
+    scratch.file("a/UCBUILD", "cc_library(name='preprocess', srcs=['preprocess.S'])");
 
     assertThat(getCppCompileAction("//a:preprocess").getArgv()).contains("-fPIC");
   }
@@ -422,7 +422,7 @@ public class CcCommonTest extends BuildViewTestCase {
     // cc_library.
 
     scratch.file(
-        "bang/BUILD",
+        "bang/UCBUILD",
         "cc_library(name = 'bang',",
         "           srcs = ['bang.cc'],",
         "           includes = ['bang_includes'])");
@@ -441,13 +441,13 @@ public class CcCommonTest extends BuildViewTestCase {
     // Tests the effect of --use_isystem_for_includes.
 
     scratch.file(
-        "no_includes/BUILD",
+        "no_includes/UCBUILD",
         "cc_library(name = 'no_includes',",
         "           srcs = ['no_includes.cc'])");
     ConfiguredTarget noIncludes = getConfiguredTarget("//no_includes:no_includes");
 
     scratch.file(
-        "bang/BUILD",
+        "bang/UCBUILD",
         "cc_library(name = 'bang',",
         "           srcs = ['bang.cc'],",
         "           includes = ['bang_includes'])");
@@ -468,7 +468,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testCcTestDisallowsAlwaysLink() throws Exception {
     scratch.file(
-        "cc/common/BUILD",
+        "cc/common/UCBUILD",
         "cc_library(name = 'lib1',",
         "           srcs = ['foo1.cc'],",
         "           deps = ['//left'])",
@@ -571,7 +571,7 @@ public class CcCommonTest extends BuildViewTestCase {
     FileSystemUtils.createDirectoryAndParents(scratch.resolve("/foo/bar"));
     scratch.file("/foo/WORKSPACE", "workspace(name = 'pkg')");
     scratch.file(
-        "/foo/bar/BUILD",
+        "/foo/bar/UCBUILD",
         "cc_library(name = 'lib',",
         "           srcs = ['foo.cc'],",
         "           includes = ['./'])");
@@ -603,7 +603,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testStaticallyLinkedBinaryNeedsSharedObject() throws Exception {
     scratch.file(
-        "third_party/sophos_av_pua/BUILD",
+        "third_party/sophos_av_pua/UCBUILD",
         "licenses(['notice'])",
         "cc_library(name = 'savi',",
         "           srcs = [ 'lib/libsavi.so' ])");
@@ -628,7 +628,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testExpandLabelInLinkoptsAgainstSrc() throws Exception {
     scratch.file(
-        "coolthing/BUILD",
+        "coolthing/UCBUILD",
         "genrule(name = 'build-that',",
         "  srcs = [ 'foo' ],",
         "  outs = [ 'nicelib.a' ],",
@@ -637,7 +637,7 @@ public class CcCommonTest extends BuildViewTestCase {
     // '.a' files with cyclic dependencies amongst them, but in this test
     // it suffices to show that one label in linkopts was resolved.
     scratch.file(
-        "myapp/BUILD",
+        "myapp/UCBUILD",
         "cc_binary(name = 'myapp',",
         "    srcs = [ '//coolthing:nicelib.a' ],",
         "    linkopts = [ '//coolthing:nicelib.a' ])");
@@ -654,7 +654,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testMissingLabelInLinkopts() throws Exception {
     scratch.file(
-        "linklow/BUILD",
+        "linklow/UCBUILD",
         "genrule(name = 'linklow_linker_script',",
         "  srcs = [ 'default_linker_script' ],",
         "  tools = [ 'default_linker_script' ],",
@@ -689,7 +689,7 @@ public class CcCommonTest extends BuildViewTestCase {
   @Test
   public void testStampTests() throws Exception {
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "cc_test(name ='a', srcs = ['a.cc'])",
         "cc_test(name ='b', srcs = ['b.cc'], stamp = 0)",
         "cc_test(name ='c', srcs = ['c.cc'], stamp = 1)",
@@ -825,7 +825,7 @@ public class CcCommonTest extends BuildViewTestCase {
 
   @Test
   public void testExplicitBadStl() throws Exception {
-    scratch.file("x/BUILD");
+    scratch.file("x/UCBUILD");
 
     reporter.removeHandler(failFastHandler);
     try {

@@ -10,8 +10,8 @@ title: Repository Rules
 An [external repository](/docs/external.md) is a rule that can be used only
 in the `WORKSPACE` file and enable non-hermetic operation at the loading phase
 of Bazel. Each external repository rule creates its own workspace, with its
-own BUILD files and artifacts. They can be used to depend on third-party
-libraries (such as Maven packaged libraries) but also to generate BUILD files
+own UCBUILD files and artifacts. They can be used to depend on third-party
+libraries (such as Maven packaged libraries) but also to generate UCBUILD files
 specific to the host Bazel is running on.
 
 ## Repository Rule creation
@@ -27,7 +27,7 @@ can be referred as `@<name>//package:target` where `<name>` is the value of the
 
 The rule is loaded when you explicitly build it, or if it is a dependency of
 the build. In this case, Bazel will execute its `implementation` function. This
-function describe how to creates the repository, its content and BUILD files.
+function describe how to creates the repository, its content and UCBUILD files.
 
 ## Attributes
 

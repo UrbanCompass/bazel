@@ -61,7 +61,7 @@ public interface AspectResolver {
         PackageProvider provider, EventHandler eventHandler);
   }
 
-  /** The way aspect dependencies for a BUILD file are calculated. */
+  /** The way aspect dependencies for a UCBUILD file are calculated. */
   enum BuildFileDependencyMode  {
 
     /** Return all the subincluded files that may affect the package. */
@@ -92,7 +92,7 @@ public interface AspectResolver {
       throws InterruptedException;
 
   /**
-   * Compute the labels of the BUILD and subinclude and Skylark files on which the results of the
+   * Compute the labels of the UCBUILD and subinclude and Skylark files on which the results of the
    * other two methods depend for a target in the given package.
    */
   Set<Label> computeBuildFileDependencies(Package pkg, BuildFileDependencyMode mode)

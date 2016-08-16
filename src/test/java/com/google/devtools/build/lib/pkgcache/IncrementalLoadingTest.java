@@ -112,7 +112,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testNoChange() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
@@ -125,11 +125,11 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testModifyBuildFile() throws Exception {
-    tester.addFile("base/BUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
+    tester.addFile("base/UCBUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
 
-    tester.modifyFile("base/BUILD", "filegroup(name = 'hello', srcs = ['bar.txt'])");
+    tester.modifyFile("base/UCBUILD", "filegroup(name = 'hello', srcs = ['bar.txt'])");
     tester.sync();
     Target newTarget = tester.getTarget("//base:hello");
     assertNotSame(oldTarget, newTarget);
@@ -137,7 +137,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testModifyNonBuildFile() throws Exception {
-    tester.addFile("base/BUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
+    tester.addFile("base/UCBUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.addFile("base/foo.txt", "nothing");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
@@ -150,7 +150,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testRemoveNonBuildFile() throws Exception {
-    tester.addFile("base/BUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
+    tester.addFile("base/UCBUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.addFile("base/foo.txt", "nothing");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
@@ -163,7 +163,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testModifySymlinkedFileSamePackage() throws Exception {
-    tester.addSymlink("base/BUILD", "mybuild");
+    tester.addSymlink("base/UCBUILD", "mybuild");
     tester.addFile("base/mybuild", "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
@@ -175,12 +175,12 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testModifySymlinkedFileDifferentPackage() throws Exception {
-    tester.addSymlink("base/BUILD", "../other/BUILD");
-    tester.addFile("other/BUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
+    tester.addSymlink("base/UCBUILD", "../other/UCBUILD");
+    tester.addFile("other/UCBUILD", "filegroup(name = 'hello', srcs = ['foo.txt'])");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
 
-    tester.modifyFile("other/BUILD", "filegroup(name = 'hello', srcs = ['bar.txt'])");
+    tester.modifyFile("other/UCBUILD", "filegroup(name = 'hello', srcs = ['bar.txt'])");
     tester.sync();
     Target newTarget = tester.getTarget("//base:hello");
     assertNotSame(oldTarget, newTarget);
@@ -197,11 +197,11 @@ public class IncrementalLoadingTest {
     tester.addFile("two", "filegroup(name='a', srcs=['2'])");
     tester.addSymlink("oldlink", "one");
     tester.addSymlink("newlink", "one");
-    tester.addSymlink("a/BUILD", "../oldlink");
+    tester.addSymlink("a/UCBUILD", "../oldlink");
     tester.sync();
     Target a1 = tester.getTarget("//a:a");
 
-    tester.modifySymlink("a/BUILD", "../newlink");
+    tester.modifySymlink("a/UCBUILD", "../newlink");
     tester.sync();
 
     tester.getTarget("//a:a");
@@ -216,7 +216,7 @@ public class IncrementalLoadingTest {
   @Test
   public void testBUILDFileIsExternalSymlinkAndChanges() throws Exception {
     tester.addFile("/nonroot/file", "filegroup(name='a', srcs=['file'])");
-    tester.addSymlink("a/BUILD", "/nonroot/file");
+    tester.addSymlink("a/UCBUILD", "/nonroot/file");
     tester.sync();
 
     Target a1 = tester.getTarget("//a:a");
@@ -231,8 +231,8 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testLabelWithTwoSegmentsAndTotalInvalidation() throws Exception {
-    tester.addFile("a/BUILD", "filegroup(name='fg', srcs=['b/c'])");
-    tester.addFile("a/b/BUILD");
+    tester.addFile("a/UCBUILD", "filegroup(name='fg', srcs=['b/c'])");
+    tester.addFile("a/b/UCBUILD");
     tester.sync();
 
     Target fg1 = tester.getTarget("//a:fg");
@@ -245,7 +245,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testAddGlobFile() throws Exception {
-    tester.addFile("base/BUILD", "filegroup(name = 'hello', srcs = glob(['*.txt']))");
+    tester.addFile("base/UCBUILD", "filegroup(name = 'hello', srcs = glob(['*.txt']))");
     tester.addFile("base/foo.txt", "nothing");
     tester.sync();
     Target oldTarget = tester.getTarget("//base:hello");
@@ -258,7 +258,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testRemoveGlobFile() throws Exception {
-    tester.addFile("base/BUILD", "filegroup(name = 'hello', srcs = glob(['*.txt']))");
+    tester.addFile("base/UCBUILD", "filegroup(name = 'hello', srcs = glob(['*.txt']))");
     tester.addFile("base/foo.txt", "nothing");
     tester.addFile("base/bar.txt", "also nothing");
     tester.sync();
@@ -272,12 +272,12 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testPackageNotInLastBuildReplaced() throws Exception {
-    tester.addFile("a/BUILD", "filegroup(name='a', srcs=['bad.sh'])");
+    tester.addFile("a/UCBUILD", "filegroup(name='a', srcs=['bad.sh'])");
     tester.sync();
     Target a1 = tester.getTarget("//a:a");
 
-    tester.addFile("b/BUILD", "filegroup(name='b', srcs=['b.sh'])");
-    tester.modifyFile("a/BUILD", "filegroup(name='a', srcs=['good.sh'])");
+    tester.addFile("b/UCBUILD", "filegroup(name='b', srcs=['b.sh'])");
+    tester.modifyFile("a/UCBUILD", "filegroup(name='a', srcs=['good.sh'])");
     tester.sync();
     tester.getTarget("//b:b");
 
@@ -288,7 +288,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testBrokenSymlinkAddedThenFixed() throws Exception {
-    tester.addFile("a/BUILD", "filegroup(name='a', srcs=glob(['**']))");
+    tester.addFile("a/UCBUILD", "filegroup(name='a', srcs=glob(['**']))");
     tester.sync();
     Target a1 = tester.getTarget("//a:a");
 
@@ -304,7 +304,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testBuildFileWithSyntaxError() throws Exception {
-    tester.addFile("a/BUILD", "sh_library(xyz='a')");
+    tester.addFile("a/UCBUILD", "sh_library(xyz='a')");
     tester.sync();
     try {
       tester.getTarget("//a:a");
@@ -313,15 +313,15 @@ public class IncrementalLoadingTest {
       // Expected
     }
 
-    tester.modifyFile("a/BUILD", "sh_library(name='a')");
+    tester.modifyFile("a/UCBUILD", "sh_library(name='a')");
     tester.sync();
     tester.getTarget("//a:a");
   }
 
   @Test
   public void testSymlinkedBuildFileWithSyntaxError() throws Exception {
-    tester.addFile("a/BUILD.real", "sh_library(xyz='a')");
-    tester.addSymlink("a/BUILD", "BUILD.real");
+    tester.addFile("a/UCBUILD.real", "sh_library(xyz='a')");
+    tester.addSymlink("a/UCBUILD", "UCBUILD.real");
     tester.sync();
     try {
       tester.getTarget("//a:a");
@@ -329,14 +329,14 @@ public class IncrementalLoadingTest {
     } catch (NoSuchThingException e) {
       // Expected
     }
-    tester.modifyFile("a/BUILD.real", "sh_library(name='a')");
+    tester.modifyFile("a/UCBUILD.real", "sh_library(name='a')");
     tester.sync();
     tester.getTarget("//a:a");
   }
 
   @Test
   public void testTransientErrorsInGlobbing() throws Exception {
-    Path buildFile = tester.addFile("e/BUILD", "sh_library(name = 'e', data = glob(['*.txt']))");
+    Path buildFile = tester.addFile("e/UCBUILD", "sh_library(name = 'e', data = glob(['*.txt']))");
     Path parentDir = buildFile.getParentDirectory();
     tester.addFile("e/data.txt");
     throwOnReaddir = parentDir;
@@ -355,7 +355,7 @@ public class IncrementalLoadingTest {
 
   @Test
   public void testIrrelevantFileInSubdirDoesntReloadPackage() throws Exception {
-    tester.addFile("pkg/BUILD", "sh_library(name = 'pkg', srcs = glob(['**/*.sh']))");
+    tester.addFile("pkg/UCBUILD", "sh_library(name = 'pkg', srcs = glob(['**/*.sh']))");
     tester.addFile("pkg/pkg.sh", "#!/bin/bash");
     tester.addFile("pkg/bar/bar.sh", "#!/bin/bash");
     Package pkg = tester.getTarget("//pkg:pkg").getPackage();
@@ -377,14 +377,14 @@ public class IncrementalLoadingTest {
       // expected
     }
 
-    tester.addFile("a/BUILD", "sh_library(name='a')");
+    tester.addFile("a/UCBUILD", "sh_library(name='a')");
     tester.sync();
     tester.getTarget("//a:a");
   }
 
   @Test
   public void testChangedExternalFile() throws Exception {
-    tester.addFile("a/BUILD",
+    tester.addFile("a/UCBUILD",
         "load('/a/b', 'b')",
         "b()");
 
@@ -393,12 +393,12 @@ public class IncrementalLoadingTest {
         "  pass");
     tester.addSymlink("a/b.bzl", "/b.bzl");
     tester.sync();
-    tester.getTarget("//a:BUILD");
+    tester.getTarget("//a:UCBUILD");
     tester.modifyFile("/b.bzl", "ERROR ERROR");
     tester.sync();
 
     try {
-      tester.getTarget("//a:BUILD");
+      tester.getTarget("//a:UCBUILD");
       fail();
     } catch (NoSuchThingException e) {
       // expected

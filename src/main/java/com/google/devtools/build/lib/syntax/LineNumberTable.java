@@ -59,7 +59,7 @@ public abstract class LineNumberTable implements Serializable {
   abstract PathFragment getPath(int offset);
 
   static LineNumberTable create(char[] buffer, PathFragment path) {
-    // If #line appears within a BUILD file, we assume it has been preprocessed
+    // If #line appears within a UCBUILD file, we assume it has been preprocessed
     // by gconfig2blaze.  We ignore all actual newlines and compute the logical
     // LNT based only on the presence of #line markers.
     return StringUtilities.containsSubarray(buffer, "\n#line ".toCharArray())

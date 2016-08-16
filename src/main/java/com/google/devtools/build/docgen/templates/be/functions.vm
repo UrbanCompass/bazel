@@ -43,7 +43,7 @@ build_test(name = ...)
   <a href="/docs/skylark/index.html">Skylark</a>
   module <code>tools/build_rules/build_test.bzl</code> and import the symbol
   <code>build_test</code> in the local environment. This is useful for
-  using macros or for sharing values between multiple BUILD files. By
+  using macros or for sharing values between multiple UCBUILD files. By
   using more arguments, you can load more symbols at once.</p>
 
 <pre class="code">
@@ -52,7 +52,7 @@ load(":build_defs.bzl", "COMPILER_FLAGS", "LINKER_FLAGS")
 
 <p>
   The label must refer to an existing package. For example, for the above
-  statement to work, <code>tools/build_rules/BUILD</code> must exist (an empty
+  statement to work, <code>tools/build_rules/UCBUILD</code> must exist (an empty
   file is sufficient) The name of the file must have the suffix
   <code>.bzl</code>. If the specified label is in the relative label syntax
   (<code>:a/b.bzl</code>), it will be resolved relative to the package the file
@@ -84,7 +84,7 @@ load("/tools/build_rules/build_test", "build_test")
 package(default_deprecation, default_testonly, default_visibility, features)
 </pre>
 <p>This function declares metadata that applies to every subsequent rule in the
-package. It is used at most once within a package (BUILD file).</p>
+package. It is used at most once within a package (UCBUILD file).</p>
 
 <p>It is recommended that the package function is called at the top of the
 file, before any rule.</p>
@@ -139,7 +139,7 @@ file, before any rule.</p>
       <td id="package.features"><code>features</code></td>
       <td>
         <p><code>List strings; optional</code></p>
-        <p>Sets various flags that affect the semantics of this BUILD file.</p>
+        <p>Sets various flags that affect the semantics of this UCBUILD file.</p>
         <p>This feature is mainly used by the people working on the build system to
         tag packages that need some kind of special handling. Do not use this unless
         explicitly requested by someone working on the build system.</p>
@@ -293,11 +293,11 @@ package_group(
 <pre>licenses(license_types)</pre>
 
 <p><code>licenses()</code> specifies the default license type (or types)
-   of the build rules in a <code>BUILD</code> file.
+   of the build rules in a <code>UCBUILD</code> file.
 
    The <code>licenses()</code> directive should appear close to the
-   beginning of the <code>BUILD</code> file, before any build rules, as it
-   sets the <code>BUILD</code>-file scope default for build rule license
+   beginning of the <code>UCBUILD</code> file, before any build rules, as it
+   sets the <code>UCBUILD</code>-file scope default for build rule license
    types.</p>
 
 <h3 id="licenses_args">Arguments</h3>
@@ -340,12 +340,12 @@ exports_files(["jquery-2.1.1.js"])
 <p>
   <code>exports_files()</code> specifies a list of files belonging to
   this package that are exported to other packages but not otherwise
-  mentioned in the BUILD file.
+  mentioned in the UCBUILD file.
 </p>
 
 <p>
-  The BUILD file for a package may only refer to files belonging to another
-  package if they are mentioned somewhere in the other packages's BUILD file,
+  The UCBUILD file for a package may only refer to files belonging to another
+  package if they are mentioned somewhere in the other packages's UCBUILD file,
   whether as an input to a rule or an explicit or implicit output from a rule.
   The remaining files are not associated with a specific rule but are just "data",
   and for these, <code>exports_files</code> ensures that they may be referenced by
@@ -375,7 +375,7 @@ exports_files(["jquery-2.1.1.js"])
 </p>
 
 <pre class="code">
-# from //test_data/BUILD
+# from //test_data/UCBUILD
 
 exports_files(["golden.txt"])
 </pre>
@@ -418,7 +418,7 @@ There are several important limitations and caveats:
 
 <ol>
   <li>
-    Since <code>glob()</code> runs during BUILD file evaluation,
+    Since <code>glob()</code> runs during UCBUILD file evaluation,
     <code>glob()</code> matches files only in your source tree, never
     generated files.  If you are building a target that requires both
     source and generated files, create a list of generated
@@ -443,9 +443,9 @@ There are several important limitations and caveats:
     For example, the glob expression <code>**/*.cc</code> in package
     <code>x</code> does not include <code>x/y/z.cc</code> if
     <code>x/y</code> exists as a package (either as
-    <code>x/y/BUILD</code>, or somewhere else on the package-path). This
+    <code>x/y/UCBUILD</code>, or somewhere else on the package-path). This
     means that the result of the glob expression actually depends on the
-    existence of BUILD files &mdash; that is, the same glob expression would
+    existence of UCBUILD files &mdash; that is, the same glob expression would
     include <code>x/y/z.cc</code> if there was no package called
     <code>x/y</code> or it was marked as deleted using the
     <a href="../bazel-user-manual.html#flag--deleted_packages">--deleted_packages</a>
@@ -528,7 +528,7 @@ sh_test(
 
 <p>Create a library built from all java files in this directory and all
 subdirectories except those whose path includes a directory named testing.
-Subdirectories containing a BUILD file are ignored.
+Subdirectories containing a UCBUILD file are ignored.
 <b>This should be a very common pattern.</b>
 </p>
 <pre class="code">
@@ -569,7 +569,7 @@ that counts the number of lines in the file.
 </pre>
 
 <p>
-If the BUILD file above is in package //foo and the package contains three
+If the UCBUILD file above is in package //foo and the package contains three
 matching files, a_test.cc, b_test.cc and c_test.cc then running
 <code>bazel query '//foo:all'</code> will list all rules that were generated:
 

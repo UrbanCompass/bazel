@@ -46,7 +46,7 @@ public class SubincludePreprocessorTest extends PackageLoadingTestCase {
   protected SubincludePreprocessor preprocessor;
   protected Environment globalEnv =
       Environment.builder(Mutability.create("test"))
-          .setGlobals(Environment.BUILD)
+          .setGlobals(Environment.UCBUILD)
           .setEventHandler(reporter)
           .build();
 
@@ -66,7 +66,7 @@ public class SubincludePreprocessorTest extends PackageLoadingTestCase {
   }
 
   private ParserInputSource createInputSource(String... lines) throws Exception {
-    Path buildFile = packageRoot.getChild("BUILD");
+    Path buildFile = packageRoot.getChild("UCBUILD");
     writeIsoLatin1(buildFile, lines);
     ParserInputSource in = ParserInputSource.create(buildFile);
     return in;
@@ -93,7 +93,7 @@ public class SubincludePreprocessorTest extends PackageLoadingTestCase {
   public void testPreprocessingInclude() throws Exception {
     ParserInputSource in = createInputSource("subinclude('//foo:bar')");
 
-    scratch.file("foo/BUILD");
+    scratch.file("foo/UCBUILD");
     scratch.file("foo/bar", "genrule('turtle1')", "subinclude('//foo:baz')");
     scratch.file("foo/baz", "genrule('turtle2')");
 
@@ -107,7 +107,7 @@ public class SubincludePreprocessorTest extends PackageLoadingTestCase {
   @Test
   public void testSubincludeNotFound() throws Exception {
     ParserInputSource in = createInputSource("subinclude('//nonexistent:bar')");
-    scratch.file("foo/BUILD");
+    scratch.file("foo/UCBUILD");
     String out = assertPreprocessingSucceeds(in);
     assertThat(out).containsMatch("mocksubinclude\\('//nonexistent:bar', *''\\)");
     assertContainsEvent("Cannot find subincluded file");
@@ -116,7 +116,7 @@ public class SubincludePreprocessorTest extends PackageLoadingTestCase {
   @Test
   public void testError() throws Exception {
     ParserInputSource in = createInputSource("subinclude('//foo:bar')");
-    scratch.file("foo/BUILD");
+    scratch.file("foo/UCBUILD");
     scratch.file("foo/bar", SubincludePreprocessor.TRANSIENT_ERROR);
     try {
       preprocess(in, "path/to/package");

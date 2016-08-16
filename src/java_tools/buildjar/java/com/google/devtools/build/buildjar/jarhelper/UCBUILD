@@ -14,7 +14,7 @@ JARHELPER_SRCS = [
 
 filegroup(
     name = "srcs",
-    # include this BUILD file for the default android tools repository
+    # include this UCBUILD file for the default android tools repository
     srcs = glob(["**"]),
     visibility = [
         "//src:__pkg__",

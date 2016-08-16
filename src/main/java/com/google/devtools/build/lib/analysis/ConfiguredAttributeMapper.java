@@ -41,7 +41,7 @@ import java.util.Set;
  * {@link AttributeMap} implementation that binds a rule's attribute as follows:
  *
  * <ol>
- *   <li>If the attribute is selectable (i.e. its BUILD declaration is of the form
+ *   <li>If the attribute is selectable (i.e. its UCBUILD declaration is of the form
  *   "attr = { config1: "value1", "config2: "value2", ... }", returns the subset of values
  *   chosen by the current configuration in accordance with Bazel's documented policy on
  *   configurable attribute selection.

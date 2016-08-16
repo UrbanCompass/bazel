@@ -25,7 +25,7 @@ import java.util.Set;
  * A "configuration target" that asserts whether or not it matches the
  * configuration it's bound to.
  *
- * <p>This can be used, e.g., to declare a BUILD target that defines the
+ * <p>This can be used, e.g., to declare a UCBUILD target that defines the
  * conditions which trigger a configurable attribute branch. In general,
  * this can be used to trigger for any user-configurable build behavior.
  */

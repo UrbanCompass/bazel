@@ -168,9 +168,9 @@ This is a rough overview of some of the `SkyFunction` implementations Bazel uses
    actually needed.
  - **DirectoryListingValue**. Essentially the result of `readdir()`. Depends on the associated
    `FileValue` associated with the directory.
- - **PackageValue**. Represents the parsed version of a BUILD file. Depends on the `FileValue` of
-   the associated `BUILD` file, and also transitively on any `DirectoryListingValue` that is used
-   to resolve the globs in the package (the data structure representing the contents of a `BUILD`
+ - **PackageValue**. Represents the parsed version of a UCBUILD file. Depends on the `FileValue` of
+   the associated `UCBUILD` file, and also transitively on any `DirectoryListingValue` that is used
+   to resolve the globs in the package (the data structure representing the contents of a `UCBUILD`
    file internally)
  - **ConfiguredTargetValue**. Represents a configured target, which is a tuple of the set of actions
    generated during the analysis of a target and information provided to configured targets that

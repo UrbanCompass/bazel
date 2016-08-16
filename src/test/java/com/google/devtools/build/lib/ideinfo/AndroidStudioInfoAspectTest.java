@@ -47,7 +47,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testSimpleJavaLibrary() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "java_library(",
             "    name = 'simple',",
             "    srcs = ['simple/Simple.java']",
@@ -57,7 +57,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
         "//com/google/example:simple", ruleIdeInfos);
     ArtifactLocation location = ruleIdeInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     assertThat(location.getIsSource()).isTrue();
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleIdeInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
@@ -84,7 +84,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testPackageManifestCreated() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -101,7 +101,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testPackageManifestNotCreatedForOnlyGeneratedSources() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "genrule(",
         "   name = 'gen_sources',",
         "   outs = ['Gen.java'],",
@@ -120,7 +120,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithDependencies() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -146,7 +146,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithTransitiveDependencies() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -189,7 +189,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithDiamondDependencies() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -228,7 +228,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithExports() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -274,7 +274,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithTransitiveExports() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",
@@ -315,7 +315,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaImport() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_import(",
         "   name = 'imp',",
         "   jars = ['a.jar', 'b.jar'],",
@@ -358,7 +358,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaImportWithExports() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -392,7 +392,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testNoPackageManifestForExports() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -420,7 +420,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testGeneratedJavaImportFilesAreAddedToOutputGroup() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_import(",
         "   name = 'imp',",
         "   jars = [':gen_jar'],",
@@ -446,7 +446,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAspectIsPropagatedAcrossExports() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -464,7 +464,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaTest() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -505,7 +505,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaBinary() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -545,7 +545,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaToolchain() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'a',",
         "    srcs = ['A.java'],",
@@ -573,7 +573,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaToolchainForAndroid() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "    name = 'a',",
         "    srcs = ['A.java'],",
@@ -589,7 +589,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibrary() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "  name = 'l1',",
         "  manifest = 'AndroidManifest.xml',",
@@ -649,7 +649,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidBinary() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "  name = 'l1',",
         "  manifest = 'AndroidManifest.xml',",
@@ -711,7 +711,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidInferredPackage() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "android_library(",
         "  name = 'l',",
         "  manifest = 'AndroidManifest.xml',",
@@ -733,7 +733,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryWithoutAidlHasNoIdlJars() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "android_library(",
         "  name = 'no_idl',",
         "  srcs = ['Test.java'],",
@@ -749,7 +749,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryWithAidlHasIdlJars() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "android_library(",
         "  name = 'has_idl',",
         "  idl_srcs = ['a.aidl'],",
@@ -776,7 +776,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryGeneratedManifestIsAddedToOutputGroup() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "  name = 'lib',",
         "  manifest = ':manifest',",
@@ -800,7 +800,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithoutGeneratedSourcesHasNoGenJars() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "java_library(",
         "  name = 'no_plugin',",
         "  srcs = ['Test.java'],",
@@ -817,7 +817,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryWithGeneratedSourcesHasGenJars() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "java_library(",
         "  name = 'test',",
         "  srcs = ['Test.java'],",
@@ -853,7 +853,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testTags() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'lib',",
         "    srcs = ['Test.java'],",
@@ -868,7 +868,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryWithoutSourcesExportsDependencies() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "android_library(",
         "  name = 'lib',",
         "  srcs = ['Test.java']",
@@ -893,7 +893,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryExportsDoNotOverReport() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "  name = 'lib',",
         "  deps = [':middle'],",
@@ -919,7 +919,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSourceFilesAreCorrectlyMarkedAsSourceOrGenerated() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "genrule(",
         "   name = 'gen',",
         "   outs = ['gen.java'],",
@@ -955,7 +955,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAspectIsPropagatedAcrossRuntimeDeps() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -976,7 +976,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testRuntimeDepsAddedToProto() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "   name = 'foobar',",
         "   srcs = ['FooBar.java'],",
@@ -1009,7 +1009,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testAndroidLibraryGeneratesResourceClass() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "android_library(",
         "   name = 'resource_files',",
         "   resource_files = ['res/drawable/a.png'],",
@@ -1041,7 +1041,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaPlugin() throws Exception {
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "java_plugin(",
         "  name = 'plugin',",
         "  srcs = ['Plugin.java'],",
@@ -1068,7 +1068,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testSimpleCCLibraryForCCToolchainExistence() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "cc_library(",
             "    name = 'simple',",
             "    srcs = ['simple/simple.cc'],",
@@ -1085,7 +1085,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
     RuleIdeInfo toolchainInfo = toolchainEntry.getValue();
     ArtifactLocation location = ruleInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
       assertThat(Paths.get(location.getRootPath(), location.getRelativePath()).toString())
@@ -1101,7 +1101,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testSimpleCCLibrary() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "cc_library(",
             "    name = 'simple',",
             "    srcs = ['simple/simple.cc'],",
@@ -1113,7 +1113,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
         "//com/google/example:simple", ruleIdeInfos);
     ArtifactLocation location = ruleIdeInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleIdeInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
       assertThat(Paths.get(location.getRootPath(), location.getRelativePath()).toString())
@@ -1148,7 +1148,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSimpleCCLibraryWithIncludes() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'simple',",
         "    srcs = ['simple/simple.cc'],",
@@ -1194,7 +1194,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSimpleCCLibraryWithCompilerFlags() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'simple',",
         "    srcs = ['simple/simple.cc'],",
@@ -1233,7 +1233,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSimpleCCLibraryWithDefines() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'simple',",
         "    srcs = ['simple/simple.cc'],",
@@ -1259,7 +1259,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testSimpleCCBinary() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "cc_binary(",
             "    name = 'simple',",
             "    srcs = ['simple/simple.cc'],",
@@ -1270,7 +1270,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
         "//com/google/example:simple", ruleIdeInfos);
     ArtifactLocation location = ruleIdeInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleIdeInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
       assertThat(Paths.get(location.getRootPath(), location.getRelativePath()).toString())
@@ -1301,7 +1301,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testSimpleCCTest() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "cc_test(",
             "    name = 'simple',",
             "    srcs = ['simple/simple.cc'],",
@@ -1312,7 +1312,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
         "//com/google/example:simple", ruleIdeInfos);
     ArtifactLocation location = ruleIdeInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleIdeInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
       assertThat(Paths.get(location.getRootPath(), location.getRelativePath()).toString())
@@ -1342,7 +1342,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSimpleCCLibraryWithDeps() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "   name = 'lib',",
         "   srcs = ['lib/lib.cc'],",
@@ -1370,7 +1370,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testSimpleAndroidBinaryThatDependsOnCCLibrary() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "android_library(",
         "    name = 'androidlib',",
         "    srcs = ['Lib.java'],",
@@ -1391,7 +1391,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testTransitiveCCLibraryWithIncludes() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'lib2',",
         "    srcs = ['lib2/lib2.cc'],",
@@ -1452,7 +1452,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testTransitiveCLibraryWithCompilerFlags() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'lib2',",
         "    srcs = ['lib2/lib2.cc'],",
@@ -1504,7 +1504,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testTransitiveCCLibraryWithDefines() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "cc_library(",
         "    name = 'lib2',",
         "    srcs = ['lib2/lib2.cc'],",
@@ -1545,7 +1545,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
         "    manifest = 'AndroidManifest.xml',",
         "),");
     scratch.file(
-        "java/com/google/example/BUILD",
+        "java/com/google/example/UCBUILD",
         "load('//java/com/google/example:build_defs.bzl', 'my_macro')",
         "my_macro(",
         "    name = 'simple',",
@@ -1578,7 +1578,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   public void testCcToolchainInfoIsOnlyPresentForToolchainRules() throws Exception {
     Path buildFilePath =
         scratch.file(
-            "com/google/example/BUILD",
+            "com/google/example/UCBUILD",
             "cc_library(",
             "    name = 'simple',",
             "    srcs = ['simple/simple.cc'],",
@@ -1595,7 +1595,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
     RuleIdeInfo toolchainInfo = toolchainEntry.getValue();
     ArtifactLocation location = ruleInfo.getBuildFileArtifactLocation();
     assertThat(Paths.get(location.getRelativePath()).toString())
-        .isEqualTo(Paths.get("com/google/example/BUILD").toString());
+        .isEqualTo(Paths.get("com/google/example/UCBUILD").toString());
     if (testLegacyAswbPluginVersionCompatibility()) {
       assertThat(ruleInfo.getBuildFile()).isEqualTo(buildFilePath.toString());
       assertThat(Paths.get(location.getRootPath(), location.getRelativePath()).toString())
@@ -1609,7 +1609,7 @@ public class AndroidStudioInfoAspectTest extends AndroidStudioInfoAspectTestBase
   @Test
   public void testJavaLibraryDoesNotHaveCInfo() throws Exception {
     scratch.file(
-        "com/google/example/BUILD",
+        "com/google/example/UCBUILD",
         "java_library(",
         "    name = 'simple',",
         "    srcs = ['simple/Simple.java']",

@@ -95,7 +95,7 @@ def all_unique_source_directories(resources):
           for (relative_path, is_source, root_execution_path_fragment) in source_directory_tuples]
 
 def build_file_artifact_location(build_file_path):
-  """Creates an ArtifactLocation proto representing a location of a given BUILD file."""
+  """Creates an ArtifactLocation proto representing a location of a given UCBUILD file."""
   return struct(
       relative_path = build_file_path,
       is_source = True,

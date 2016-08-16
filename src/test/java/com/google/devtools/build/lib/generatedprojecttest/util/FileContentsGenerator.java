@@ -16,7 +16,7 @@ package com.google.devtools.build.lib.generatedprojecttest.util;
 
 /**
  * Interface to generate the contents of useful files for tests.
- * It should be implemented to generate the contents of BUILD files, and any other
+ * It should be implemented to generate the contents of UCBUILD files, and any other
  * required files, for use in generated test projects.
  */
 public interface FileContentsGenerator {

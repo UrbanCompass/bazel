@@ -764,7 +764,7 @@ public abstract class BuildViewTestCase extends FoundationTestCase {
    */
   protected Rule scratchRule(String packageName, String ruleName, String... lines)
       throws Exception {
-    String buildFilePathString = packageName + "/BUILD";
+    String buildFilePathString = packageName + "/UCBUILD";
     if (packageName.equals(Label.EXTERNAL_PATH_PREFIX)) {
       buildFilePathString = "WORKSPACE";
       scratch.overwriteFile(buildFilePathString, lines);
@@ -804,11 +804,11 @@ public abstract class BuildViewTestCase extends FoundationTestCase {
 
   /**
    * Check that configuration of the target named 'ruleName' in the
-   * specified BUILD file fails with an error message ending in
+   * specified UCBUILD file fails with an error message ending in
    * 'expectedErrorMessage'.
    *
-   * @param packageName the package name of the generated BUILD file
-   * @param ruleName the rule name for the rule in the generated BUILD file
+   * @param packageName the package name of the generated UCBUILD file
+   * @param ruleName the rule name for the rule in the generated UCBUILD file
    * @param expectedErrorMessage the expected error message.
    * @param lines the text of the rule.
    * @return the found error.
@@ -850,11 +850,11 @@ public abstract class BuildViewTestCase extends FoundationTestCase {
 
   /**
    * Check that configuration of the target named 'ruleName' in the
-   * specified BUILD file reports a warning message ending in
+   * specified UCBUILD file reports a warning message ending in
    * 'expectedWarningMessage', and that no errors were reported.
    *
-   * @param packageName the package name of the generated BUILD file
-   * @param ruleName the rule name for the rule in the generated BUILD file
+   * @param packageName the package name of the generated UCBUILD file
+   * @param ruleName the rule name for the rule in the generated UCBUILD file
    * @param expectedWarningMessage the expected warning message.
    * @param lines the text of the rule.
    * @return the found error.
@@ -1613,7 +1613,7 @@ public abstract class BuildViewTestCase extends FoundationTestCase {
       String packageName, String... lines) throws Exception {
     eventCollector.clear();
     reporter.removeHandler(failFastHandler);
-    scratch.file("" + packageName + "/BUILD", lines);
+    scratch.file("" + packageName + "/UCBUILD", lines);
     return getPackageManager()
         .getPackage(reporter, PackageIdentifier.createInMainRepo(packageName));
   }

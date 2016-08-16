@@ -33,7 +33,7 @@ public class SkylarkCommandLineTest extends SkylarkTestCase {
   @Before
   public final void generateBuildFile() throws Exception {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         "  cmd = 'dummy_cmd',",
         "  srcs = ['a.txt', 'b.img'],",

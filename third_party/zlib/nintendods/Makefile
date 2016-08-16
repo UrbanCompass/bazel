@@ -10,13 +10,13 @@ include $(DEVKITARM)/ds_rules
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
-# BUILD is the directory where object files & intermediate files will be placed
+# UCBUILD is the directory where object files & intermediate files will be placed
 # SOURCES is a list of directories containing source code
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
 TARGET		:=	$(shell basename $(CURDIR))
-BUILD		:=	build
+UCBUILD		:=	build
 SOURCES		:=	../../
 DATA		:=	data
 INCLUDES	:=	include
@@ -47,7 +47,7 @@ LIBDIRS	:=	$(LIBNDS)
 # no real need to edit anything past this point unless you need to add additional
 # rules for different file extensions
 #---------------------------------------------------------------------------------
-ifneq ($(BUILD),$(notdir $(CURDIR)))
+ifneq ($(UCBUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
 
 export OUTPUT	:=	$(CURDIR)/lib/libz.a
@@ -55,7 +55,7 @@ export OUTPUT	:=	$(CURDIR)/lib/libz.a
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 			$(foreach dir,$(DATA),$(CURDIR)/$(dir))
 
-export DEPSDIR	:=	$(CURDIR)/$(BUILD)
+export DEPSDIR	:=	$(CURDIR)/$(UCBUILD)
 
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
@@ -81,26 +81,26 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD)
+			-I$(CURDIR)/$(UCBUILD)
 
-.PHONY: $(BUILD) clean all
+.PHONY: $(UCBUILD) clean all
 
 #---------------------------------------------------------------------------------
-all: $(BUILD)
+all: $(UCBUILD)
 	@[ -d $@ ] || mkdir -p include
 	@cp ../../*.h include
 
 lib:
 	@[ -d $@ ] || mkdir -p $@
 	
-$(BUILD): lib
+$(UCBUILD): lib
 	@[ -d $@ ] || mkdir -p $@
-	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@$(MAKE) --no-print-directory -C $(UCBUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) lib
+	@rm -fr $(UCBUILD) lib
 
 #---------------------------------------------------------------------------------
 else

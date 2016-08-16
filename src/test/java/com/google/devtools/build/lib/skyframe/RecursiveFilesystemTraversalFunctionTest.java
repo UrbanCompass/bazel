@@ -518,7 +518,7 @@ public final class RecursiveFilesystemTraversalFunctionTest extends FoundationTe
 
   @Test
   public void testTraversePackage() throws Exception {
-    Artifact buildFile = sourceArtifact("pkg/BUILD");
+    Artifact buildFile = sourceArtifact("pkg/UCBUILD");
     RootedPath buildFilePath = createFile(rootedPath(buildFile));
     RootedPath file1 = createFile(siblingOf(buildFile, "subdir/file.a"));
 
@@ -614,8 +614,8 @@ public final class RecursiveFilesystemTraversalFunctionTest extends FoundationTe
   private void assertTraverseSubpackages(PackageBoundaryMode traverseSubpackages) throws Exception {
     Artifact pkgDirArtifact = sourceArtifact("pkg1/foo");
     Artifact subpkgDirArtifact = sourceArtifact("pkg1/foo/subdir/subpkg");
-    RootedPath pkgBuildFile = childOf(pkgDirArtifact, "BUILD");
-    RootedPath subpkgBuildFile = childOf(subpkgDirArtifact, "BUILD");
+    RootedPath pkgBuildFile = childOf(pkgDirArtifact, "UCBUILD");
+    RootedPath subpkgBuildFile = childOf(subpkgDirArtifact, "UCBUILD");
     scratch.dir(rootedPath(pkgDirArtifact).asPath().getPathString());
     scratch.dir(rootedPath(subpkgDirArtifact).asPath().getPathString());
     createFile(pkgBuildFile);
@@ -662,22 +662,22 @@ public final class RecursiveFilesystemTraversalFunctionTest extends FoundationTe
   @Test
   public void testSwitchPackageRootsWhenUsingMultiplePackagePaths() throws Exception {
     // Layout:
-    //   pp1://a/BUILD
+    //   pp1://a/UCBUILD
     //   pp1://a/file.a
     //   pp1://a/b.sym -> b/   (only created later)
     //   pp1://a/b/
     //   pp1://a/b/file.fake
     //   pp1://a/subdir/file.b
     //
-    //   pp2://a/BUILD
+    //   pp2://a/UCBUILD
     //   pp2://a/b/
-    //   pp2://a/b/BUILD
+    //   pp2://a/b/UCBUILD
     //   pp2://a/b/file.a
     //   pp2://a/subdir.fake/
     //   pp2://a/subdir.fake/file.fake
     //
-    // Notice that pp1://a/b will be overlaid by pp2://a/b as the latter has a BUILD file and that
-    // takes precedence. On the other hand the package definition pp2://a/BUILD will be ignored
+    // Notice that pp1://a/b will be overlaid by pp2://a/b as the latter has a UCBUILD file and that
+    // takes precedence. On the other hand the package definition pp2://a/UCBUILD will be ignored
     // since package //a is already defined under pp1.
     //
     // Notice also that pp1://a/b.sym is a relative symlink pointing to b/. This should be resolved
@@ -688,15 +688,15 @@ public final class RecursiveFilesystemTraversalFunctionTest extends FoundationTe
         ImmutableList.of(rootDirectory.getRelative("pp1"), rootDirectory.getRelative("pp2"))));
     PrecomputedValue.PATH_PACKAGE_LOCATOR.set(differencer, pkgLocator.get());
 
-    Artifact aBuildArtifact = sourceArtifactUnderPackagePath("a/BUILD", "pp1");
-    Artifact bBuildArtifact = sourceArtifactUnderPackagePath("a/b/BUILD", "pp2");
+    Artifact aBuildArtifact = sourceArtifactUnderPackagePath("a/UCBUILD", "pp1");
+    Artifact bBuildArtifact = sourceArtifactUnderPackagePath("a/b/UCBUILD", "pp2");
 
     RootedPath pp1aBuild = createFile(rootedPath(aBuildArtifact));
     RootedPath pp1aFileA = createFile(siblingOf(pp1aBuild, "file.a"));
     RootedPath pp1bFileFake = createFile(siblingOf(pp1aBuild, "b/file.fake"));
     RootedPath pp1aSubdirFileB = createFile(siblingOf(pp1aBuild, "subdir/file.b"));
 
-    RootedPath pp2aBuild = createFile(rootedPath("a/BUILD", "pp2"));
+    RootedPath pp2aBuild = createFile(rootedPath("a/UCBUILD", "pp2"));
     RootedPath pp2bBuild = createFile(rootedPath(bBuildArtifact));
     RootedPath pp2bFileA = createFile(siblingOf(pp2bBuild, "file.a"));
     createFile(siblingOf(pp2aBuild, "subdir.fake/file.fake"));
@@ -804,7 +804,7 @@ public final class RecursiveFilesystemTraversalFunctionTest extends FoundationTe
     Artifact genDir = derivedArtifact("a/b");
     createFile(rootedPath(sourceArtifact("a/b/c/file.real")));
     createFile(rootedPath(derivedArtifact("a/b/c/file.fake")));
-    createFile(sourceArtifact("a/b/c/BUILD"));
+    createFile(sourceArtifact("a/b/c/UCBUILD"));
 
     SkyKey key = rftvSkyKey(fileLikeRoot(genDir, CROSS));
     EvaluationResult<SkyValue> result = eval(key);

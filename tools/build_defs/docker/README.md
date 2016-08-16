@@ -18,7 +18,7 @@ of commands inside of Docker containers, saving the intermediate results as
 layers; this approach is unsuitable for use in Bazel for a variety of reasons.
 
 The docker_build rule constructs a tarball that is compatible with
-`docker save/load`, and creates a single layer out of each BUILD rule in the chain.
+`docker save/load`, and creates a single layer out of each UCBUILD rule in the chain.
 
 * [Basic Example](#basic-example)
 * [Build Rule Reference](#reference)
@@ -27,7 +27,7 @@ The docker_build rule constructs a tarball that is compatible with
 <a name="basic-example"></a>
 ## Basic Example
 
-Consider the following BUILD file in `//third_party/debian`:
+Consider the following UCBUILD file in `//third_party/debian`:
 
 ```python
 load("@bazel_tools//tools/build_defs/docker:docker.bzl", "docker_build")
@@ -51,7 +51,7 @@ docker_build(
 )
 ```
 
-The `wheezy` target in that BUILD file roughly corresponds to the Dockerfile:
+The `wheezy` target in that UCBUILD file roughly corresponds to the Dockerfile:
 
 ```docker
 FROM scratch
@@ -159,7 +159,7 @@ Using the WORKSPACE file to add the actual files:
 new_http_archive(
     name = "docker_debian",
     url = "https://codeload.github.com/tianon/docker-brew-debian/zip/e9bafb113f432c48c7e86c616424cb4b2f2c7a51",
-    build_file = "debian.BUILD",
+    build_file = "debian.UCBUILD",
     type = "zip",
     sha256 = "515d385777643ef184729375bc5cb996134b3c1dc15c53acf104749b37334f68",
 )
@@ -171,7 +171,7 @@ http_file(
 )
 ```
 
-With the following `debian.BUILD` file:
+With the following `debian.UCBUILD` file:
 
 ```python
 load("@bazel_tools//tools/build_defs/docker:docker.bzl", "docker_build")

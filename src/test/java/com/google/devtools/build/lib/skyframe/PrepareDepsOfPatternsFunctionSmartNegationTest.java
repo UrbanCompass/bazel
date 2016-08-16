@@ -148,8 +148,8 @@ public class PrepareDepsOfPatternsFunctionSmartNegationTest extends BuildViewTes
 
   private void createFooAndFooFoo() throws IOException {
     scratch.file(
-        "foo/BUILD", "genrule(name = 'foo',", "    outs = ['out.txt'],", "    cmd = 'touch $@')");
+        "foo/UCBUILD", "genrule(name = 'foo',", "    outs = ['out.txt'],", "    cmd = 'touch $@')");
     scratch.file(
-        "foo/foo/BUILD", "genrule(name = 'foofoo',", "    This isn't even remotely grammatical.)");
+        "foo/foo/UCBUILD", "genrule(name = 'foofoo',", "    This isn't even remotely grammatical.)");
   }
 }

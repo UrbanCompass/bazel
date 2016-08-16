@@ -12,8 +12,8 @@ Here, you'll do the following:
 
 *   Review the source files for the app
 *   Update the `WORKSPACE` file
-*   Create the `appengine.BUILD` file
-*   Create a `BUILD` file
+*   Create the `appengine.UCBUILD` file
+*   Create a `UCBUILD` file
 *   Run the build
 *   Find the build outputs
 *   Deploy to a local development server
@@ -87,21 +87,21 @@ Now, save and close the file. You can compare your `WORKSPACE` file to the
 [completed example](https://github.com/bazelbuild/examples//blob/master/tutorial/WORKSPACE)
 in the `master` branch of the GitHub repo.
 
-## Create a BUILD file
+## Create a UCBUILD file
 
 Now that you have set up the external dependencies, you can go ahead and create
-the `BUILD` file for the backend server, as you did previously for the sample
+the `UCBUILD` file for the backend server, as you did previously for the sample
 Android and iOS apps.
 
-Open your new `BUILD` file for editing:
+Open your new `UCBUILD` file for editing:
 
 ```bash
-$ vi $WORKSPACE/backend/BUILD
+$ vi $WORKSPACE/backend/UCBUILD
 ```
 
 ### Add a java_binary rule
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 java_binary(
@@ -125,7 +125,7 @@ for the `main_class` attribute.
 
 ### Add an appengine_war rule
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 load("@io_bazel_rules_appengine//appengine:appengine.bzl", "appengine_war")
@@ -148,7 +148,7 @@ rule builds the final App Engine `war` file from the library `.jar` file and web
 application metadata files in the `webapp` directory.
 
 Save and close the file. Again, the
-[completed example](https://github.com/google/bazel-examples/blob/master/tutorial/backend/BUILD)
+[completed example](https://github.com/google/bazel-examples/blob/master/tutorial/backend/UCBUILD)
 is in the `master` branch of the GitHub repo.
 
 ## Run the build

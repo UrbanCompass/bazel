@@ -74,18 +74,18 @@ public abstract class BuildViewTestBase extends AnalysisTestCase {
   }
 
   protected final void setupDummyRule() throws Exception {
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
                 "testing_dummy_rule(name='foo', ",
                 "                   srcs=['a.src'],",
                 "                   outs=['a.out'])");
   }
 
   protected void runAnalysisWithOutputFilter(Pattern outputFilter) throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "exports_files(['A.java'])");
-    scratch.file("java/b/BUILD",
+    scratch.file("java/b/UCBUILD",
         "java_library(name = 'b', srcs = ['//java/a:A.java'])");
-    scratch.file("java/c/BUILD",
+    scratch.file("java/c/UCBUILD",
         "java_library(name = 'c', exports = ['//java/b:b'])");
     reporter.setOutputFilter(RegexOutputFilter.forPattern(outputFilter));
     update("//java/c:c");
@@ -101,17 +101,17 @@ public abstract class BuildViewTestBase extends AnalysisTestCase {
   protected void runTestDepOnGoodTargetInBadPkgAndTransitiveCycle(boolean incremental)
       throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("parent/BUILD",
+    scratch.file("parent/UCBUILD",
         "sh_library(name = 'foo',",
         "           srcs = ['//badpkg:okay-target', '//okaypkg:transitively-a-cycle'])");
-    Path symlinkcycleBuildFile = scratch.file("symlinkcycle/BUILD",
+    Path symlinkcycleBuildFile = scratch.file("symlinkcycle/UCBUILD",
         "sh_library(name = 'cycle', srcs = glob(['*.sh']))");
     Path dirPath = symlinkcycleBuildFile.getParentDirectory();
     dirPath.getRelative("foo.sh").createSymbolicLink(new PathFragment("foo.sh"));
-    scratch.file("okaypkg/BUILD",
+    scratch.file("okaypkg/UCBUILD",
         "sh_library(name = 'transitively-a-cycle',",
         "           srcs = ['//symlinkcycle:cycle'])");
-    Path badpkgBuildFile = scratch.file("badpkg/BUILD",
+    Path badpkgBuildFile = scratch.file("badpkg/UCBUILD",
         "exports_files(['okay-target'])",
         "invalidbuildsyntax");
     if (incremental) {
@@ -137,7 +137,7 @@ public abstract class BuildViewTestBase extends AnalysisTestCase {
   protected void runTestForMultiCpuAnalysisFailure(String badCpu, String goodCpu) throws Exception {
     reporter.removeHandler(failFastHandler);
     useConfiguration("--experimental_multi_cpu=" + badCpu + "," + goodCpu);
-    scratch.file("multi/BUILD",
+    scratch.file("multi/UCBUILD",
         "config_setting(",
         "    name = 'config',",
         "    values = {'cpu': '" + badCpu + "'})",

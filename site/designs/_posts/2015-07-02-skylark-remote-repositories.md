@@ -46,7 +46,7 @@ The load statement will now be available from the WORKSPACE, working
 the same way it does for build file but with WORKSPACE specific
 functions instead.
 
-In the same way that we have macros and rules for the BUILD file, we
+In the same way that we have macros and rules for the UCBUILD file, we
 are going to have macros and rule for the WORKSPACE file. The former
 will be a convenient way to combine remote repositories and the latter
 enable creation of new repositories kind.
@@ -60,7 +60,7 @@ all bindings and the local repository needed to build java target:
 
 ```python
 def setup_java():
-  native.new_local_repository(name = “jdk-local”, path = “/usr/share/java/jdk8”, build_file = “jdk.BUILD”)
+  native.new_local_repository(name = “jdk-local”, path = “/usr/share/java/jdk8”, build_file = “jdk.UCBUILD”)
   for target in ["jni_header", "jni_md_header", "langtools", "bootclasspath", "extdir", "toolchain", "jdk", "java", "javac", "jar"]:
     native.bind(name=target, actual="@%s//:%s" % (name, target))
   native.bind(name="jni_md_header-linux", actual="@%s//:jni_md_header" % name)

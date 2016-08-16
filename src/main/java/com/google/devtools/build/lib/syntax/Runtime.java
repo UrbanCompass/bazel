@@ -106,14 +106,14 @@ public final class Runtime {
 
   @SkylarkSignature(name = "PACKAGE_NAME", returnType = String.class,
       doc = "The name of the package the rule or build extension is called from. "
-          + "For example, in the BUILD file <code>some/package/BUILD</code>, its value "
+          + "For example, in the UCBUILD file <code>some/package/UCBUILD</code>, its value "
           + "will be <code>some/package</code>. "
           + "This variable is special, because its value comes from outside of the extension "
-          + "module (it comes from the BUILD file), so it can only be accessed in functions "
-          + "(transitively) called from BUILD files. For example:<br>"
+          + "module (it comes from the UCBUILD file), so it can only be accessed in functions "
+          + "(transitively) called from UCBUILD files. For example:<br>"
           + "<pre class=language-python>def extension():\n"
           + "  return PACKAGE_NAME</pre>"
-          + "In this case calling <code>extension()</code> works from the BUILD file (if the "
+          + "In this case calling <code>extension()</code> works from the UCBUILD file (if the "
           + "function is loaded), but not as a top level function call in the extension module.")
   public static final String PKG_NAME = "PACKAGE_NAME";
 
@@ -122,7 +122,7 @@ public final class Runtime {
           + "For example, in packages that are called into existence by the WORKSPACE stanza "
           + "<code>local_repository(name='local', path=...)</code> it will be set to "
           + "<code>@local</code>. In packages in the main repository, it will be empty. "
-          + "It can only be accessed in functions (transitively) called from BUILD files.")
+          + "It can only be accessed in functions (transitively) called from UCBUILD files.")
   public static final String REPOSITORY_NAME = "REPOSITORY_NAME";
 
   /**

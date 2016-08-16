@@ -47,7 +47,7 @@ public final class BazelMockCcSupport extends MockCcSupport {
 
   protected static void createBasePackage(MockToolsConfig config) throws IOException {
     config.create(
-        "base/BUILD",
+        "base/UCBUILD",
         "package(default_visibility=['//visibility:public'])",
         "cc_library(name = 'system_malloc', linkstatic = 1)",
         "cc_library(name = 'base', srcs=['timestamp.h'])");
@@ -78,7 +78,7 @@ public final class BazelMockCcSupport extends MockCcSupport {
   @Override
   public void setup(MockToolsConfig config) throws IOException {
     config.create(
-        "/bazel_tools_workspace/tools/cpp/BUILD",
+        "/bazel_tools_workspace/tools/cpp/UCBUILD",
         "cc_library(name = 'stl')",
         "cc_library(name = 'malloc')",
         "filegroup(name = 'toolchain', ",
@@ -122,7 +122,7 @@ public final class BazelMockCcSupport extends MockCcSupport {
     config.create(
         "/bazel_tools_workspace/tools/cpp/CROSSTOOL", readFromResources(MOCK_CROSSTOOL_PATH));
     config.create(
-        "/bazel_tools_workspace/tools/objc/BUILD",
+        "/bazel_tools_workspace/tools/objc/UCBUILD",
         "xcode_config(name = 'host_xcodes')");
   }
 

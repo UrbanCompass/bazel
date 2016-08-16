@@ -39,7 +39,7 @@ for i in $*; do
   fi
 
   case "$i" in
-    *tools/jdk/BUILD*) OUTPUT_PATH=tools/jdk/BUILD ;;
+    *tools/jdk/UCBUILD*) OUTPUT_PATH=tools/jdk/UCBUILD ;;
     *JavaBuilder*_deploy.jar) OUTPUT_PATH=tools/jdk/JavaBuilder_deploy.jar ;;
     *turbine_deploy.jar) OUTPUT_PATH=tools/jdk/turbine_deploy.jar ;;
     *javac.jar) OUTPUT_PATH=third_party/java/jdk/langtools/javac.jar ;;
@@ -72,9 +72,9 @@ cat > "${PACKAGE_DIR}/WORKSPACE" <<EOF
 workspace(name = "bazel_tools")
 EOF
 mkdir -p "${PACKAGE_DIR}/tools/defaults"
-touch "${PACKAGE_DIR}/tools/defaults/BUILD"
-for i in $(find "${PACKAGE_DIR}" -name BUILD.tools); do
-  mv "$i" "$(dirname "$i")/BUILD"
+touch "${PACKAGE_DIR}/tools/defaults/UCBUILD"
+for i in $(find "${PACKAGE_DIR}" -name UCBUILD.tools); do
+  mv "$i" "$(dirname "$i")/UCBUILD"
 done
 find "${PACKAGE_DIR}" -exec touch -t 198001010000.00 '{}' '+'
 (cd "${PACKAGE_DIR}" && find . -type f | sort | zip -qDX@ "${OUTPUT}")

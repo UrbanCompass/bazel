@@ -41,7 +41,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 /**
- * Tests for recovering from IOExceptions thrown by the filesystem when reading BUILD files. Needs
+ * Tests for recovering from IOExceptions thrown by the filesystem when reading UCBUILD files. Needs
  * its own test class because it uses a custom filesystem.
  */
 @RunWith(JUnit4.class)
@@ -89,7 +89,7 @@ public class IOExceptionsTest extends PackageLoadingTestCase {
   @Test
   public void testBasicFailure() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
-    final Path buildPath = scratch.file("pkg/BUILD",
+    final Path buildPath = scratch.file("pkg/UCBUILD",
         "sh_library(name = 'x')");
     crashMessage = new Function<Path, String>() {
       @Override
@@ -105,7 +105,7 @@ public class IOExceptionsTest extends PackageLoadingTestCase {
         /*parallelThreads=*/5, Integer.MAX_VALUE));
     assertContainsEvent("no such package 'pkg'");
     assertEquals(1, eventCollector.count());
-    scratch.overwriteFile("pkg/BUILD",
+    scratch.overwriteFile("pkg/UCBUILD",
         "# another comment to force reload",
         "sh_library(name = 'x')");
     crashMessage = NULL_FUNCTION;
@@ -122,9 +122,9 @@ public class IOExceptionsTest extends PackageLoadingTestCase {
   @Test
   public void testNestedFailure() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
-    scratch.file("top/BUILD",
+    scratch.file("top/UCBUILD",
         "sh_library(name = 'top', deps = ['//pkg:x'])");
-    final Path buildPath = scratch.file("pkg/BUILD",
+    final Path buildPath = scratch.file("pkg/UCBUILD",
         "sh_library(name = 'x')");
     crashMessage = new Function<Path, String>() {
       @Override
@@ -144,7 +144,7 @@ public class IOExceptionsTest extends PackageLoadingTestCase {
     // This fails in Skyframe because the top node has already printed out the error but
     // SkyframeLabelVisitor prints it out again.
     // assertEquals(1, eventCollector.count());
-    scratch.overwriteFile("pkg/BUILD",
+    scratch.overwriteFile("pkg/UCBUILD",
         "# another comment to force reload",
         "sh_library(name = 'x')");
     crashMessage = NULL_FUNCTION;
@@ -160,7 +160,7 @@ public class IOExceptionsTest extends PackageLoadingTestCase {
   @Test
   public void testOneLevelUpFailure() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
-    final Path buildPath = scratch.file("top/BUILD",
+    final Path buildPath = scratch.file("top/UCBUILD",
         "sh_library(name = 'x')");
     buildPath.getParentDirectory().getRelative("pkg").createDirectory();
     crashMessage = new Function<Path, String>() {

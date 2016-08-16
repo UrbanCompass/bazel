@@ -282,7 +282,7 @@ public class RuleDocumentation implements Comparable<RuleDocumentation> {
   }
 
   /**
-   * Returns a set of examples based on markups which can be used as BUILD file
+   * Returns a set of examples based on markups which can be used as UCBUILD file
    * contents for testing.
    */
   Set<String> extractExamples() throws BuildEncyclopediaDocException {

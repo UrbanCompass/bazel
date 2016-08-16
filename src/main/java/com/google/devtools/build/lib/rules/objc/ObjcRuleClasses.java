@@ -715,7 +715,7 @@ public class ObjcRuleClasses {
           /* <!-- #BLAZE_RULE($objc_compiling_rule).ATTRIBUTE(pch) -->
            Header file to prepend to every source file being compiled (both arc
            and non-arc).
-           Use of pch files is actively discouraged in BUILD files, and this should be
+           Use of pch files is actively discouraged in UCBUILD files, and this should be
            considered deprecated. Since pch files are not actually precompiled this is not
            a build-speed enhancement, and instead is just a global dependency. From a build
            efficiency point of view you are actually better including what you need directly

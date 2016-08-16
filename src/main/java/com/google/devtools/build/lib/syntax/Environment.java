@@ -40,7 +40,7 @@ import java.util.TreeSet;
 import javax.annotation.Nullable;
 
 /**
- * An Environment is the main entry point to evaluating code in the BUILD language or Skylark.
+ * An Environment is the main entry point to evaluating code in the UCBUILD language or Skylark.
  * It embodies all the state that is required to evaluate such code,
  * except for the current instruction pointer, which is an {@link ASTNode}
  * whose {@link Statement#exec exec} or {@link Expression#eval eval} method is invoked with
@@ -258,7 +258,7 @@ public final class Environment implements Freezable {
   }
 
   /**
-   * An Extension to be imported with load() into a BUILD or .bzl file.
+   * An Extension to be imported with load() into a UCBUILD or .bzl file.
    */
   public static final class Extension extends BaseExtension implements Serializable {
 
@@ -297,7 +297,7 @@ public final class Environment implements Freezable {
 
   /**
    * Static Frame for global variables; either the current lexical Frame if evaluation is currently
-   * happening at the global scope of a BUILD file, or the global Frame at the time of function
+   * happening at the global scope of a UCBUILD file, or the global Frame at the time of function
    * definition if evaluation is currently happening in the body of a function. Thus functions can
    * close over other functions defined in the same file.
    */
@@ -311,8 +311,8 @@ public final class Environment implements Freezable {
   private final Frame dynamicFrame;
 
   /**
-   * An EventHandler for errors and warnings. This is not used in the BUILD language,
-   * however it might be used in Skylark code called from the BUILD language, so shouldn't be null.
+   * An EventHandler for errors and warnings. This is not used in the UCBUILD language,
+   * however it might be used in Skylark code called from the UCBUILD language, so shouldn't be null.
    */
   private final EventHandler eventHandler;
 
@@ -351,7 +351,7 @@ public final class Environment implements Freezable {
   @Nullable private Continuation continuation;
 
   /**
-   * Gets the label of the BUILD file that is using this environment. For example, if a target
+   * Gets the label of the UCBUILD file that is using this environment. For example, if a target
    * //foo has a dependency on //bar which is a Skylark rule defined in //rules:my_rule.bzl being
    * evaluated in this environment, then this would return //foo.
    */
@@ -451,7 +451,7 @@ public final class Environment implements Freezable {
 
   /**
    * Returns an EventHandler for errors and warnings.
-   * The BUILD language doesn't use it directly, but can call Skylark code that does use it.
+   * The UCBUILD language doesn't use it directly, but can call Skylark code that does use it.
    * @return an EventHandler
    */
   public EventHandler getEventHandler() {
@@ -875,8 +875,8 @@ public final class Environment implements Freezable {
   /** A read-only Environment.Frame with global constants in it only */
   static final Frame CONSTANTS_ONLY = createConstantsGlobals();
 
-  /** A read-only Environment.Frame with initial globals for the BUILD language */
-  public static final Frame BUILD = createBuildGlobals();
+  /** A read-only Environment.Frame with initial globals for the UCBUILD language */
+  public static final Frame UCBUILD = createBuildGlobals();
 
   /** A read-only Environment.Frame with initial globals for Skylark */
   public static final Frame SKYLARK = createSkylarkGlobals();
@@ -890,7 +890,7 @@ public final class Environment implements Freezable {
   }
 
   private static Environment.Frame createBuildGlobals() {
-    try (Mutability mutability = Mutability.create("BUILD")) {
+    try (Mutability mutability = Mutability.create("UCBUILD")) {
       Environment env = Environment.builder(mutability).build();
       Runtime.setupConstants(env);
       Runtime.setupMethodEnvironment(env, MethodLibrary.buildGlobalFunctions);

@@ -27,7 +27,7 @@ function test_glob_local_repository_dangling_symlink() {
   rm -fr $r
   mkdir -p $r
   touch $r/WORKSPACE
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 filegroup(name='fg', srcs=glob(["fg/**"]), visibility=["//visibility:public"])
 EOF
 
@@ -40,7 +40,7 @@ local_repository(name="r", path="$r")
 bind(name="e", actual="@r//:fg")
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 filegroup(name="mfg", srcs=["//external:e"])
 EOF
 
@@ -53,14 +53,14 @@ EOF
 # ${WORKSPACE_DIR}/
 #     WORKSPACE
 #     zoo/
-#       BUILD
+#       UCBUILD
 #       dumper.sh
 #     red/
-#       BUILD
+#       UCBUILD
 #       day-keeper
 # repo2/
 #   red/
-#     BUILD
+#     UCBUILD
 #     baby-panda
 #
 # dumper.sh should be able to dump the contents of baby-panda.
@@ -69,7 +69,7 @@ function test_globbing_external_directory() {
   repo2=${new_workspace_dir}
 
   mkdir -p red
-  cat > red/BUILD <<EOF
+  cat > red/UCBUILD <<EOF
 filegroup(
     name = "panda",
     srcs = glob(['*-panda']),
@@ -85,7 +85,7 @@ EOF
 local_repository(name = 'pandas', path = '${repo2}')
 EOF
 
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 sh_binary(
     name = "dumper",
     srcs = ["dumper.sh"],
@@ -100,7 +100,7 @@ cat red/day-keeper
 EOF
   chmod +x zoo/dumper.sh
 
-  cat > red/BUILD <<EOF
+  cat > red/UCBUILD <<EOF
 filegroup(
     name = "keepers",
     srcs = glob(['*-keeper']),
@@ -123,7 +123,7 @@ function test_local_repository_java() {
   repo2=$new_workspace_dir
 
   mkdir -p carnivore
-  cat > carnivore/BUILD <<EOF
+  cat > carnivore/UCBUILD <<EOF
 java_library(
     name = "mongoose",
     srcs = ["Mongoose.java"],
@@ -145,7 +145,7 @@ local_repository(name = 'endangered', path = '$repo2')
 EOF
 
   mkdir -p zoo
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -173,7 +173,7 @@ EOF
 function test_non_existent_external_ref() {
   mkdir -p zoo
   touch zoo/BallPit.java
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -223,11 +223,11 @@ public class Mongoose {
 EOF
 
   if [ "$1" == "build_file" -o "$1" == "build_file+label" ] ; then
-    build_file=BUILD.carnivore
+    build_file=UCBUILD.carnivore
     build_file_str="${build_file}"
     if [ "$1" == "build_file+label" ]; then
       build_file_str="//:${build_file}"
-      cat > BUILD
+      cat > UCBUILD
     fi
     cat > WORKSPACE <<EOF
 new_local_repository(
@@ -260,7 +260,7 @@ EOF
   fi
 
    mkdir -p zoo
-   cat > zoo/BUILD <<EOF
+   cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -317,7 +317,7 @@ void greet() {
   printf("Hello");
 }
 EOF
-  cat > $external_ws/BUILD <<EOF
+  cat > $external_ws/UCBUILD <<EOF
 cc_library(
     name = "greet_lib",
     srcs = ["greet_lib.cc"],
@@ -337,7 +337,7 @@ int main() {
   return 0;
 }
 EOF
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 cc_binary(
     name = "greeter",
     srcs = ["greeter.cc"],
@@ -372,7 +372,7 @@ public class A {
   }
 }
 EOF
-  cat > a/BUILD <<EOF
+  cat > a/UCBUILD <<EOF
 java_binary(
     name = "a",
     main_class = "a.A",
@@ -391,7 +391,7 @@ public class B {
   }
 }
 EOF
-  cat > b/BUILD <<EOF
+  cat > b/UCBUILD <<EOF
 java_library(
     name = "b",
     srcs = ["B.java"],
@@ -412,7 +412,7 @@ public class X {
   }
 }
 EOF
-  cat > $external_dir/x/BUILD <<EOF
+  cat > $external_dir/x/UCBUILD <<EOF
 java_library(
     name = "x",
     srcs = ["X.java"],
@@ -448,7 +448,7 @@ int x() {
   return 3;
 }
 EOF
-  cat > $clib/BUILD <<EOF
+  cat > $clib/UCBUILD <<EOF
 cc_library(
     name = "clib",
     srcs = ["clib.cc"],
@@ -464,7 +464,7 @@ local_repository(
     path = "$clib",
 )
 EOF
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 cc_binary(
     name = "printer",
     srcs = ["printer.cc"],
@@ -508,14 +508,14 @@ function test_warning() {
   local bar=$TEST_TMPDIR/bar
   rm -rf "$bar"
   mkdir -p "$bar"
-  touch "$bar/WORKSPACE" "$bar/BUILD"
+  touch "$bar/WORKSPACE" "$bar/UCBUILD"
   cat > WORKSPACE <<EOF
 local_repository(
     name = "bar",
     path = "$bar",
 )
 EOF
-  touch BUILD
+  touch UCBUILD
   bazel build @bar//... &> $TEST_log || fail "Build failed"
   expect_not_log "Workspace name in .* does not match the name given in the repository's definition (@bar); this will cause a build error in future versions."
 
@@ -537,10 +537,10 @@ EOF
 new_local_repository(
     name = "bar",
     path = "$bar",
-    build_file = "BUILD",
+    build_file = "UCBUILD",
 )
 EOF
-  touch BUILD
+  touch UCBUILD
   bazel build @bar//... &> $TEST_log || fail "Build failed"
   expect_not_log "Workspace name in .* does not match the name given in the repository's definition (@bar); this will cause a build error in future versions."
 }
@@ -554,7 +554,7 @@ function test_overlaid_build_file() {
 new_local_repository(
     name = "mutant",
     path = "$mutant",
-    build_file = "mutant.BUILD"
+    build_file = "mutant.UCBUILD"
 )
 
 bind(
@@ -562,7 +562,7 @@ bind(
     actual = "@mutant//:turtle",
 )
 EOF
-  cat > mutant.BUILD <<EOF
+  cat > mutant.UCBUILD <<EOF
 genrule(
     name = "turtle",
     outs = ["tmnt"],
@@ -574,7 +574,7 @@ EOF
   bazel build //external:best-turtle &> $TEST_log || fail "First build failed"
   assert_contains "Leonardo" bazel-genfiles/external/mutant/tmnt
 
-  cat > mutant.BUILD <<EOF
+  cat > mutant.UCBUILD <<EOF
 genrule(
     name = "turtle",
     outs = ["tmnt"],
@@ -602,7 +602,7 @@ bind(
 )
 EOF
 
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 genrule(
     name = "r",
     srcs = ["//external:e"],
@@ -635,7 +635,7 @@ local_repository(
 EOF
 
   mkdir -p $r/a
-  cat > $r/a/BUILD <<'EOF'
+  cat > $r/a/UCBUILD <<'EOF'
 genrule(
     name = "a",
     srcs = ["//b:b"],
@@ -645,7 +645,7 @@ genrule(
 EOF
 
   mkdir -p $r/b
-  cat > $r/b/BUILD <<'EOF'
+  cat > $r/b/UCBUILD <<'EOF'
 genrule(
     name = "b",
     srcs = [],
@@ -670,7 +670,7 @@ local_repository(
 
 EOF
 
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 filegroup(
     name = "fg",
     srcs = glob(["**"]),
@@ -679,7 +679,7 @@ EOF
 
   touch $r/a
   mkdir -p $r/b
-  touch $r/b/{BUILD,b}
+  touch $r/b/{UCBUILD,b}
 
   bazel build @r//:fg || fail "build failed"
 }
@@ -689,7 +689,7 @@ function test_cc_binary_in_local_repository() {
   rm -fr $r
   mkdir $r
   touch $r/WORKSPACE
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 cc_binary(
     name = "bin",
     srcs = ["bin.cc"],
@@ -714,7 +714,7 @@ function test_output_file_in_local_repository() {
   rm -fr $r
   mkdir $r
   touch $r/WORKSPACE
-  cat > $r/BUILD <<'EOF'
+  cat > $r/UCBUILD <<'EOF'
 genrule(
     name="r",
     srcs=[],
@@ -727,7 +727,7 @@ EOF
 local_repository(name="r", path="$r")
 EOF
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(name="m", srcs=["@r//:r.out"], outs=["m.out"], cmd="touch $@")
 EOF
 
@@ -741,7 +741,7 @@ function test_remote_pkg_boundaries() {
   cat > $other_ws/a/b <<EOF
 abcxyz
 EOF
-  cat > $other_ws/BUILD <<EOF
+  cat > $other_ws/UCBUILD <<EOF
 exports_files(["a/b"])
 EOF
   cat > WORKSPACE <<EOF
@@ -750,7 +750,7 @@ local_repository(
     path = "$other_ws",
 )
 EOF
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 load('/sample', 'sample_bin')
 
 sample_bin(
@@ -787,7 +787,7 @@ function test_visibility_through_bind() {
   rm -fr $r
   mkdir $r
 
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 genrule(
     name = "public",
     srcs = ["//external:public"],
@@ -820,7 +820,7 @@ bind(
 )
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 genrule(
     name = "public",
     srcs = [],
@@ -846,7 +846,7 @@ function test_load_in_remote_repository() {
   local r=$TEST_TMPDIR/r
   rm -fr $r
   mkdir -p $r
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 load("r", "r_filegroup")
 r_filegroup(name="rfg", srcs=["rfgf"])
@@ -863,7 +863,7 @@ EOF
 local_repository(name="r", path="$r")
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 filegroup(name="fg", srcs=["@r//:rfg"])
 EOF
 
@@ -874,7 +874,7 @@ function test_python_in_remote_repository() {
   local r=$TEST_TMPDIR/r
   rm -fr $r
   mkdir -p $r/bin
-  cat > $r/bin/BUILD <<EOF
+  cat > $r/bin/UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 py_binary(name="bin", srcs=["bin.py"], deps=["//lib:lib"])
 EOF
@@ -888,7 +888,7 @@ EOF
   chmod +x $r/bin/bin.py
 
   mkdir -p $r/lib
-  cat > $r/lib/BUILD <<EOF
+  cat > $r/lib/UCBUILD <<EOF
 package(default_visibility=["//visibility:public"])
 py_library(name="lib", srcs=["lib.py"])
 EOF
@@ -911,11 +911,11 @@ function test_package_wildcard_in_remote_repository() {
   rm -fr $r
   mkdir -p $r/a
   touch $r/{x,y,a/g,a/h}
-  cat > $r/BUILD <<EOF
+  cat > $r/UCBUILD <<EOF
 exports_files(["x", "y"])
 EOF
 
-  cat > $r/a/BUILD <<EOF
+  cat > $r/a/UCBUILD <<EOF
 exports_files(["g", "h"])
 EOF
 
@@ -936,8 +936,8 @@ function test_recursive_wildcard_in_remote_repository() {
   mkdir -p $r/a/{x,y/z}
   touch $r/a/{x,y/z}/{m,n}
 
-  echo 'exports_files(["m", "n"])' > $r/a/x/BUILD
-  echo 'exports_files(["m", "n"])' > $r/a/y/z/BUILD
+  echo 'exports_files(["m", "n"])' > $r/a/x/UCBUILD
+  echo 'exports_files(["m", "n"])' > $r/a/y/z/UCBUILD
 
   echo "local_repository(name='r', path='$r')" > WORKSPACE
   bazel query @r//...:all-targets >& $TEST_log || fail "query failed"
@@ -957,7 +957,7 @@ function test_package_name_constants() {
   local r=$TEST_TMPDIR/r
   rm -fr $r
   mkdir -p $r/a
-  cat > $r/a/BUILD <<'EOF'
+  cat > $r/a/UCBUILD <<'EOF'
 genrule(
   name = 'b',
   srcs = [],
@@ -980,7 +980,7 @@ function test_slash_in_repo_name() {
   mkdir -p $r/a
 
   touch $r/a/WORKSPACE
-  cat > $r/a/BUILD <<EOF
+  cat > $r/a/UCBUILD <<EOF
 cc_binary(
     name = "bin",
     srcs = ["bin.cc"],
@@ -1007,7 +1007,7 @@ function test_remote_includes() {
   mkdir -p $remote/inc
 
   touch $remote/WORKSPACE
-  cat > $remote/BUILD <<EOF
+  cat > $remote/UCBUILD <<EOF
 cc_library(
     name = "bar",
     srcs = ["bar.cc"],
@@ -1031,7 +1031,7 @@ local_repository(
     path = "$remote",
 )
 EOF
-cat > BUILD <<EOF
+cat > UCBUILD <<EOF
 cc_binary(
     name = "foo",
     srcs = ["foo.cc"],
@@ -1064,17 +1064,17 @@ EOF
 new_local_repository(
     name="r",
     path="$r",
-    build_file="BUILD.r"
+    build_file="UCBUILD.r"
 )
 EOF
 
-  cat > BUILD.r <<EOF
+  cat > UCBUILD.r <<EOF
 cc_library(name = "a", srcs = ["a.cc"])
 EOF
 
   bazel build @r//:a || fail "build failed"
 
-  cat > BUILD.r <<EOF
+  cat > UCBUILD.r <<EOF
 cc_library(name = "a", srcs = ["a.cc", "b.cc"])
 EOF
 
@@ -1086,7 +1086,7 @@ function test_build_all() {
   local r=$TEST_TMPDIR/r
   mkdir -p $r
   touch $r/WORKSPACE
-  cat > $r/BUILD <<'EOF'
+  cat > $r/UCBUILD <<'EOF'
 genrule(
   name = "dummy1",
   outs = ["dummy.txt"],
@@ -1102,7 +1102,7 @@ local_repository(
 )
 EOF
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(
   name = "dummy2",
   srcs = ["@r//:dummy1"],

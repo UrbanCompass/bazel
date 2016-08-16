@@ -27,10 +27,10 @@ workspace(name = "$ws_name")
 EOF
 
   mkdir dir
-  cat > dir/BUILD <<'EOF'
+  cat > dir/UCBUILD <<'EOF'
 genrule(
   name = "use-srcs",
-  srcs = ["BUILD"],
+  srcs = ["UCBUILD"],
   cmd = "cp $< $@",
   outs = ["used-srcs"],
 )

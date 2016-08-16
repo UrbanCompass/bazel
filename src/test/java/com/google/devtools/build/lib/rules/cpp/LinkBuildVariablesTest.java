@@ -78,7 +78,7 @@ public class LinkBuildVariablesTest extends BuildViewTestCase {
   @Test
   public void testLinkstampBuildVariable() throws Exception {
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "cc_binary(",
         "   name = 'bin',",
         "   srcs = ['a.cc'],",
@@ -103,7 +103,7 @@ public class LinkBuildVariablesTest extends BuildViewTestCase {
   @Test
   public void testForcePicBuildVariable() throws Exception {
     useConfiguration("--force_pic");
-    scratch.file("x/BUILD", "cc_binary(", "   name = 'bin',", "   srcs = ['a.cc'],", ")");
+    scratch.file("x/UCBUILD", "cc_binary(", "   name = 'bin',", "   srcs = ['a.cc'],", ")");
     scratch.file("x/a.cc");
 
     ConfiguredTarget target = getConfiguredTarget("//x:bin");
@@ -116,7 +116,7 @@ public class LinkBuildVariablesTest extends BuildViewTestCase {
   @Test
   public void testWholeArchiveBuildVariables() throws Exception {
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "cc_binary(",
         "   name = 'bin.so',",
         "   srcs = ['a.cc'],",
@@ -139,7 +139,7 @@ public class LinkBuildVariablesTest extends BuildViewTestCase {
   @Test
   public void testGlobalWholeArchiveOrWholeArchiveBuildVariables() throws Exception {
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "cc_binary(",
         "   name = 'bin',",
         "   srcs = ['a.cc', 'b.lo'],",

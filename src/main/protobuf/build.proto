@@ -201,7 +201,7 @@ message Attribute {
   // The name of the attribute
   required string name = 1;
 
-  // The location of the target in the BUILD file in a machine-parseable form.
+  // The location of the target in the UCBUILD file in a machine-parseable form.
   optional Location DEPRECATED_parseable_location = 12;
 
   // Whether the attribute was explicitly specified
@@ -273,7 +273,7 @@ message Attribute {
   optional SelectorList selector_list = 21;
 }
 
-// A rule from a BUILD file (e.g., cc_library, java_binary).  The rule class
+// A rule from a UCBUILD file (e.g., cc_library, java_binary).  The rule class
 // is the actual name of the rule (e.g., cc_library) and the name is the full
 // label of the rule (e.g., //foo/bar:baz).
 message Rule {
@@ -283,7 +283,7 @@ message Rule {
   // The rule class (e.g., java_library)
   required string rule_class = 2;
 
-  // The BUILD file and line number of the rule.
+  // The UCBUILD file and line number of the rule.
   optional string location = 3;
 
   // All of the attributes that describe the rule.
@@ -305,7 +305,7 @@ message Rule {
   // - 'blaze': settings implemented in Blaze itself
   repeated string default_setting = 7;
 
-  // The location of the target in the BUILD file in a machine-parseable form.
+  // The location of the target in the UCBUILD file in a machine-parseable form.
   optional Location DEPRECATED_parseable_location = 8;
 
   // The rule's class's public by default value.
@@ -338,7 +338,7 @@ message SkylarkAspect {
 // Summary of all transitive dependencies of 'rule,' where each dependent
 // rule is included only once in the 'dependency' field.  Gives complete
 // information to analyze the single build target labeled rule.name,
-// including optional location of target in BUILD file.
+// including optional location of target in UCBUILD file.
 message RuleSummary {
   required Rule rule = 1;
   repeated Rule dependency = 2;
@@ -346,12 +346,12 @@ message RuleSummary {
 }
 
 // A package group. Aside from the name, it contains the list of packages
-// present in the group (as specified in the BUILD file).
+// present in the group (as specified in the UCBUILD file).
 message PackageGroup {
   // The name of the package group
   required string name = 1;
 
-  // The list of packages as specified in the BUILD file. Currently this is
+  // The list of packages as specified in the UCBUILD file. Currently this is
   // only a list of packages, but some time in the future, there might be
   // some type of wildcard mechanism.
   repeated string contained_package = 2;
@@ -359,7 +359,7 @@ message PackageGroup {
   // The list of sub package groups included in this one.
   repeated string included_package_group = 3;
 
-  // The location of the target in the BUILD file in a machine-parseable form.
+  // The location of the target in the UCBUILD file in a machine-parseable form.
   optional Location DEPRECATED_parseable_location = 4;
 }
 
@@ -386,12 +386,12 @@ message SourceFile {
   // a label in the build system.
   optional string location = 2;
 
-  // The location of the corresponding label in the BUILD file in a
+  // The location of the corresponding label in the UCBUILD file in a
   // machine-parseable form.
   optional Location DEPRECATED_parseable_location = 7;
 
-  // Labels of files that are transitively subincluded in this BUILD file. This
-  // is present only when the SourceFile represents a BUILD file that
+  // Labels of files that are transitively subincluded in this UCBUILD file. This
+  // is present only when the SourceFile represents a UCBUILD file that
   // subincludes other files. The subincluded file can be either a Python
   // preprocessed build extension or a Skylark file.
   repeated string subinclude = 3;
@@ -405,14 +405,14 @@ message SourceFile {
   repeated string visibility_label = 5;
 
   // The package-level features enabled for this package. Only present if the
-  // SourceFile represents a BUILD file.
+  // SourceFile represents a UCBUILD file.
   repeated string feature = 6;
 
   // License attribute for the file.
   optional License license = 8;
 
   // True if the package contains an error. Only present if the SourceFile
-  // represents a BUILD file.
+  // represents a UCBUILD file.
   optional bool package_contains_errors = 9;
 }
 
@@ -467,7 +467,7 @@ message QueryResult {
 }
 
 ////////////////////////////////////////////////////////////////////////////
-// Messages dealing with querying the BUILD language itself. For now, this is
+// Messages dealing with querying the UCBUILD language itself. For now, this is
 // quite simplistic: Blaze can only tell the names of the rule classes, their
 // attributes with their type.
 

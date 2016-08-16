@@ -196,7 +196,7 @@ public interface QueryEnvironment<T> {
   void reportBuildFileError(QueryExpression expression, String msg) throws QueryException;
 
   /**
-   * Returns the set of BUILD, and optionally sub-included and Skylark files that define the given
+   * Returns the set of UCBUILD, and optionally sub-included and Skylark files that define the given
    * set of targets. Each such file is itself represented as a target in the result.
    */
   Set<T> getBuildFiles(
@@ -238,7 +238,7 @@ public interface QueryEnvironment<T> {
     TESTS_EXPRESSION_STRICT,
 
     /**
-     * Do not consider implicit deps (any label that was not explicitly specified in the BUILD file)
+     * Do not consider implicit deps (any label that was not explicitly specified in the UCBUILD file)
      * when traversing dependency edges.
      */
     NO_IMPLICIT_DEPS,

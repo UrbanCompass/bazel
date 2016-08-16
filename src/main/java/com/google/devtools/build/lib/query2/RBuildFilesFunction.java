@@ -31,9 +31,9 @@ import java.util.List;
 
 /**
  * An "rbuildfiles" query expression, which computes the set of packages (as represented by their
- * BUILD source file targets) that depend on the given set of files, either as BUILD files directly
+ * UCBUILD source file targets) that depend on the given set of files, either as UCBUILD files directly
  * or as subincludes. Is morally the inverse of the "buildfiles" operator, although that operator
- * takes targets and returns subinclude targets, while this takes files and returns BUILD file
+ * takes targets and returns subinclude targets, while this takes files and returns UCBUILD file
  * targets.
  *
  * <pre>expr ::= RBUILDFILES '(' WORD, ... ')'</pre>

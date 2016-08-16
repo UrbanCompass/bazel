@@ -365,7 +365,7 @@ java_library(
 ########################################################################
 #
 # The "packages" library: syntax, packages, pkgcache.
-# BUILD file scanning, parsing and evaluation; package loading and caching.
+# UCBUILD file scanning, parsing and evaluation; package loading and caching.
 #
 
 # IMPORTANT:  NOT A PUBLIC INTERFACE.
@@ -377,7 +377,7 @@ java_library(
 # 1.  FRAGILITY. This is not a stable API, it's an internal interface.
 #     It changes from time to time, and your client *will* be broken.
 #
-# 2.  CORRECTNESS.  The BUILD file parser changes rapidly.  If
+# 2.  CORRECTNESS.  The UCBUILD file parser changes rapidly.  If
 #     your application depends upon it, your application will start to
 #     bit-rot almost immediately.
 

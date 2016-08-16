@@ -18,7 +18,7 @@ def _short_path_dirname(path):
   sp = path.short_path
   last_pkg = sp.rfind("/")
   if last_pkg == -1:
-    # Top-level BUILD file.
+    # Top-level UCBUILD file.
     return ""
   return sp[:last_pkg]
 

@@ -30,7 +30,7 @@ function test_macro_local_repository() {
   repo2=$new_workspace_dir
 
   mkdir -p carnivore
-  cat > carnivore/BUILD <<'EOF'
+  cat > carnivore/UCBUILD <<'EOF'
 genrule(
     name = "mongoose",
     cmd = "echo 'Tra-la!' | tee $@",
@@ -47,7 +47,7 @@ macro('$repo2')
 EOF
 
   # Empty package for the .bzl file
-  echo -n >BUILD
+  echo -n >UCBUILD
 
   # Our macro
   cat >test.bzl <<EOF
@@ -57,7 +57,7 @@ def macro(path):
   native.bind(name='mongoose', actual='@endangered//carnivore:mongoose')
 EOF
   mkdir -p zoo
-  cat > zoo/BUILD <<'EOF'
+  cat > zoo/UCBUILD <<'EOF'
 genrule(
     name = "ball-pit1",
     srcs = ["@endangered//carnivore:mongoose"],
@@ -92,7 +92,7 @@ EOF
   repo2=$new_workspace_dir
 
   mkdir -p carnivore
-  cat > carnivore/BUILD <<'EOF'
+  cat > carnivore/UCBUILD <<'EOF'
 genrule(
     name = "mongoose",
     cmd = "echo 'Tra-la-la!' | tee $@",
@@ -130,15 +130,15 @@ load("/a/b/c", "c")
 EOF
 
   mkdir -p $OTHER/a/b
-  touch $OTHER/a/b/BUILD
+  touch $OTHER/a/b/UCBUILD
   cat > $OTHER/a/b/c.bzl <<EOF
 def c():
   pass
 EOF
 
-  touch BUILD
+  touch UCBUILD
   ln -s $TEST_TMPDIR/other/a a
-  bazel build //:BUILD || fail "Failed to build"
+  bazel build //:UCBUILD || fail "Failed to build"
   rm -fr $TEST_TMPDIR/other
 }
 
@@ -148,7 +148,7 @@ function test_external_load_from_workspace() {
   repo2=$new_workspace_dir
 
   mkdir -p carnivore
-  cat > carnivore/BUILD <<'EOF'
+  cat > carnivore/UCBUILD <<'EOF'
 genrule(
     name = "mongoose",
     cmd = "echo 'Tra-la-la!' | tee $@",
@@ -166,7 +166,7 @@ def macro(path):
   print('bleh')
   native.local_repository(name='endangered', path=path)
 EOF
-  cat >BUILD <<'EOF'
+  cat >UCBUILD <<'EOF'
 exports_files(["test.bzl"])
 EOF
 
@@ -188,7 +188,7 @@ function test_load_repository_with_load() {
   repo2=$new_workspace_dir
 
   echo "Tra-la!" > data.txt
-  cat <<'EOF' >BUILD
+  cat <<'EOF' >UCBUILD
 exports_files(["data.txt"])
 EOF
 
@@ -210,7 +210,7 @@ load("@foo//:ext.bzl", "macro")
 macro()
 EOF
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(name = "foo", srcs=["@foo//:data.txt"], outs=["foo.txt"], cmd = "cat $< | tee $@")
 EOF
 
@@ -226,7 +226,7 @@ function test_cycle_load_repository() {
   repo2=$new_workspace_dir
 
   echo "Tra-la!" > data.txt
-  cat <<'EOF' >BUILD
+  cat <<'EOF' >UCBUILD
 exports_files(["data.txt"])
 EOF
 
@@ -260,7 +260,7 @@ function test_skylark_local_repository() {
   # create one.
   rm $repo2/WORKSPACE
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(name='bar', cmd='echo foo | tee $@', outs=['bar.txt'])
 EOF
 
@@ -281,7 +281,7 @@ repo = repository_rule(
     attrs={"path": attr.string(mandatory=True)})
 EOF
   # Need to be in a package
-  cat > BUILD
+  cat > UCBUILD
 
   bazel build @foo//:bar >& $TEST_log || fail "Failed to build"
   expect_log "foo"
@@ -295,7 +295,7 @@ function setup_skylark_repository() {
   repo2=$new_workspace_dir
 
   cat > bar.txt
-  echo "filegroup(name='bar', srcs=['bar.txt'])" > BUILD
+  echo "filegroup(name='bar', srcs=['bar.txt'])" > UCBUILD
 
   cd "${WORKSPACE_DIR}"
   cat > WORKSPACE <<EOF
@@ -303,7 +303,7 @@ load('/test', 'repo')
 repo(name = 'foo')
 EOF
   # Need to be in a package
-  cat > BUILD
+  cat > UCBUILD
 }
 
 function test_skylark_repository_which_and_execute() {
@@ -442,7 +442,7 @@ function test_skylark_repository_executable_flag() {
   cat >test.bzl <<EOF
 def _impl(repository_ctx):
   repository_ctx.file("test.sh", "exit 0")
-  repository_ctx.file("BUILD", "sh_binary(name='bar',srcs=['test.sh'])", False)
+  repository_ctx.file("UCBUILD", "sh_binary(name='bar',srcs=['test.sh'])", False)
   repository_ctx.template("test2", Label("//:bar"), {}, False)
   repository_ctx.template("test2.sh", Label("//:bar"), {}, True)
 repo = repository_rule(implementation=_impl, local=True)
@@ -453,7 +453,7 @@ EOF
   output_base=$(bazel info output_base)
   test -x "${output_base}/external/foo/test.sh" || fail "test.sh is not executable"
   test -x "${output_base}/external/foo/test2.sh" || fail "test2.sh is not executable"
-  test ! -x "${output_base}/external/foo/BUILD" || fail "BUILD is executable"
+  test ! -x "${output_base}/external/foo/UCBUILD" || fail "UCBUILD is executable"
   test ! -x "${output_base}/external/foo/test2" || fail "test2 is executable"
 }
 
@@ -485,7 +485,7 @@ def _impl(repository_ctx):
   repository_ctx.download(
     "http://localhost:${fileserver_port}/download_executable_file.sh",
     "download_executable_file.sh", True)
-  repository_ctx.file("BUILD")  # necessary directories should already created by download function
+  repository_ctx.file("UCBUILD")  # necessary directories should already created by download function
 repo = repository_rule(implementation=_impl, local=False)
 EOF
 
@@ -542,7 +542,7 @@ function test_skylark_repository_download_and_extract() {
   # Our custom repository rule
   cat >test.bzl <<EOF
 def _impl(repository_ctx):
-  repository_ctx.file("BUILD")
+  repository_ctx.file("UCBUILD")
   repository_ctx.download_and_extract(
     "http://localhost:${fileserver_port}/download_and_extract1.tar.gz", "")
   repository_ctx.download_and_extract(
@@ -586,7 +586,7 @@ function test_bazel_version() {
   create_new_workspace
   repo2=$new_workspace_dir
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(
     name = "test",
     cmd = "echo 'Tra-la!' | tee $@",
@@ -603,7 +603,7 @@ macro('$repo2')
 EOF
 
   # Empty package for the .bzl file
-  echo -n >BUILD
+  echo -n >UCBUILD
 
   # Our macro
   cat >test.bzl <<EOF
@@ -629,7 +629,7 @@ function test_existing_rule() {
   create_new_workspace
   repo2=$new_workspace_dir
 
-  cat > BUILD
+  cat > UCBUILD
   cat > WORKSPACE
 
   cd ${WORKSPACE_DIR}
@@ -641,7 +641,7 @@ macro()
 EOF
 
   # Empty package for the .bzl file
-  echo -n >BUILD
+  echo -n >UCBUILD
 
   # Our macro
   cat >test.bzl <<EOF

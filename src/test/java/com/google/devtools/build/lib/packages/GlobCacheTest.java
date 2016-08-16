@@ -56,9 +56,9 @@ public class GlobCacheTest {
 
   @Before
   public final void createFiles() throws Exception  {
-    buildFile = scratch.file("isolated/BUILD",
+    buildFile = scratch.file("isolated/UCBUILD",
         "# contents don't matter in this test");
-    scratch.file("isolated/sub/BUILD",
+    scratch.file("isolated/sub/UCBUILD",
         "# contents don't matter in this test");
 
     packageDirectory = buildFile.getParentDirectory();
@@ -98,9 +98,9 @@ public class GlobCacheTest {
       public Path getBuildFileForPackage(PackageIdentifier packageId) {
         String packageName = packageId.getPackageFragment().getPathString();
         if (packageName.equals("isolated")) {
-          return scratch.resolve("isolated/BUILD");
+          return scratch.resolve("isolated/UCBUILD");
         } else if (packageName.equals("isolated/sub")) {
-          return scratch.resolve("isolated/sub/BUILD");
+          return scratch.resolve("isolated/sub/UCBUILD");
         } else {
           return null;
         }
@@ -240,13 +240,13 @@ public class GlobCacheTest {
   @Test
   public void testSingleFileExclude_Star() throws Exception {
     assertThat(cache.glob(list("*"), list("first.txt"), false)).containsExactly(
-        "BUILD", "bar", "first.js", "foo", "second.js", "second.txt").inOrder();
+        "UCBUILD", "bar", "first.js", "foo", "second.js", "second.txt").inOrder();
   }
 
   @Test
   public void testSingleFileExclude_StarStar() throws Exception {
     assertThat(cache.glob(list("**"), list("first.txt"), false)).containsExactly(
-        "BUILD", "bar", "bar/first.js", "bar/second.js", "first.js", "foo", "foo/first.js",
+        "UCBUILD", "bar", "bar/first.js", "bar/second.js", "first.js", "foo", "foo/first.js",
         "foo/second.js", "second.js", "second.txt").inOrder();
   }
 

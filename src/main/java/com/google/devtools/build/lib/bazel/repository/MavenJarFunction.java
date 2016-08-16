@@ -138,7 +138,7 @@ public class MavenJarFunction extends HttpArchiveFunction {
       throw new RepositoryFunctionException(e, Transience.TRANSIENT);
     }
 
-    // Add a WORKSPACE file & BUILD file to the Maven jar.
+    // Add a WORKSPACE file & UCBUILD file to the Maven jar.
     Path result = DecompressorValue.decompress(DecompressorDescriptor.builder()
         .setDecompressor(JarDecompressor.INSTANCE)
         .setTargetKind(MavenJarRule.NAME)

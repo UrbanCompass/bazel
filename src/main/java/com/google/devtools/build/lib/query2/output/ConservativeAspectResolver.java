@@ -56,7 +56,7 @@ public class ConservativeAspectResolver implements AspectResolver {
   @Override
   public Set<Label> computeBuildFileDependencies(com.google.devtools.build.lib.packages.Package pkg,
       BuildFileDependencyMode mode) throws InterruptedException {
-    // We do a conservative estimate precisely so that we don't depend on any other BUILD files.
+    // We do a conservative estimate precisely so that we don't depend on any other UCBUILD files.
     return ImmutableSet.copyOf(mode.getDependencies(pkg));
   }
 }

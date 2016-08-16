@@ -43,7 +43,7 @@ import com.google.devtools.build.lib.util.Clock;
  * <p>
  * To address this, we record the current time at the start of executing
  * a Blaze command, and whenever we check the timestamp of a source file
- * or BUILD file, we check if the timestamp of that source file matches
+ * or UCBUILD file, we check if the timestamp of that source file matches
  * the current time.  If so, we set a flag.  At the end of the command,
  * if the flag was set, then we wait until the clock has advanced, so
  * that any file modifications performed after the command exits will
@@ -86,14 +86,14 @@ public class TimestampGranularityMonitor {
   private long commandStartTimeMillisRounded;
 
   /**
-   * True iff we detected a source file or BUILD file whose (unrounded)
+   * True iff we detected a source file or UCBUILD file whose (unrounded)
    * timestamp matched the time at the start of the current Blaze command
    * rounded to the nearest second.
    */
   private volatile boolean waitASecond;
 
   /**
-   * True iff we detected a source file or BUILD file whose timestamp
+   * True iff we detected a source file or UCBUILD file whose timestamp
    * exactly matched the time at the start of the current Blaze command
    * (measuring both in integral numbers of milliseconds).
    */
@@ -137,13 +137,13 @@ public class TimestampGranularityMonitor {
    * current Blaze command started.  Otherwise a sequence of commands
    * such as
    * <pre>
-   *     echo ... &gt; foo/BUILD
+   *     echo ... &gt; foo/UCBUILD
    *     blaze query ...
-   *     echo ... &gt; foo/BUILD
+   *     echo ... &gt; foo/UCBUILD
    *     blaze query ...
    * </pre>
    * could return wrong results, due to the contents of package foo
-   * being cached even though foo/BUILD changed.
+   * being cached even though foo/UCBUILD changed.
    */
   public void waitForTimestampGranularity(OutErr outErr) {
     if (this.waitASecond || this.waitAMillisecond) {

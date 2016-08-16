@@ -11,13 +11,13 @@ filegroup(
     name = "test-srcs",
     srcs = select({
         "//tools/jdk:jdk7": [
-            "BUILD",
+            "UCBUILD",
             "LICENSE",
             "javac7.jar",
             "javac7.srcjar",
         ],
         "//conditions:default": [
-            "BUILD",
+            "UCBUILD",
             "LICENSE",
             "javac.jar",
             "javac.srcjar",

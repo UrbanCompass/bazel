@@ -32,12 +32,12 @@ import java.util.Objects;
 import java.util.Stack;
 
 /**
- * A tokenizer for the BUILD language.
+ * A tokenizer for the UCBUILD language.
  * <p>
  * See: <a href="https://docs.python.org/2/reference/lexical_analysis.html"/>
  * for some details.
  * <p>
- * Since BUILD files are small, we just tokenize the entire file a-priori
+ * Since UCBUILD files are small, we just tokenize the entire file a-priori
  * instead of interleaving scanning with parsing.
  */
 public final class Lexer {

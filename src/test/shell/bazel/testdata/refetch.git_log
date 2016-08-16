@@ -4,10 +4,10 @@ Date:   Wed Nov 25 13:20:07 2015 +0100
 
     Change 1 to 2
 
-diff --git a/BUILD b/BUILD
+diff --git a/UCBUILD b/UCBUILD
 index 335b1cf..07034a3 100644
---- a/BUILD
-+++ b/BUILD
+--- a/UCBUILD
++++ b/UCBUILD
 @@ -1 +1 @@
 -genrule(name="g", srcs=[], outs=["go"], cmd="echo GIT 1 > $@")
 +genrule(name="g", srcs=[], outs=["go"], cmd="echo GIT 2 > $@")
@@ -18,11 +18,11 @@ Date:   Wed Nov 25 13:19:52 2015 +0100
 
     Initial checkin.
 
-diff --git a/BUILD b/BUILD
+diff --git a/UCBUILD b/UCBUILD
 new file mode 100644
 index 0000000..335b1cf
 --- /dev/null
-+++ b/BUILD
++++ b/UCBUILD
 @@ -0,0 +1 @@
 +genrule(name="g", srcs=[], outs=["go"], cmd="echo GIT 1 > $@")
 diff --git a/WORKSPACE b/WORKSPACE

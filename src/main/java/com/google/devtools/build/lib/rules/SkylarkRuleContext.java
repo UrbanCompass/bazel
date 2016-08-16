@@ -678,7 +678,7 @@ public final class SkylarkRuleContext {
   }
 
   @SkylarkCallable(name = "build_file_path", structField = true, documented = true,
-      doc = "Returns path to the BUILD file for this rule, relative to the source root"
+      doc = "Returns path to the UCBUILD file for this rule, relative to the source root"
   )
   public String getBuildFileRelativePath() {
     Package pkg = ruleContext.getRule().getPackage();

@@ -111,7 +111,7 @@ individual classes, but Java packages instead. Of course, this still results in
 dexing many shards if a new package is added or removed, but that is much less
 frequent than adding or removing a single class.
 
-The number of shards is controlled by the BUILD file (using the
+The number of shards is controlled by the UCBUILD file (using the
 `android_binary.dex_shards` attribute). In an ideal world, Bazel would
 automatically determine how many shards are best, but Bazel currently must know
 the set of actions (i.e. commands to be executed during the build) before

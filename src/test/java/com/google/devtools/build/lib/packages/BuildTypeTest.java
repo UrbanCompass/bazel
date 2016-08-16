@@ -392,7 +392,7 @@ public class BuildTypeTest {
     assertThat(
         Printer.repr(
             new FilesetEntry(
-                /* srcLabel */ Label.parseAbsolute("//foo:BUILD"),
+                /* srcLabel */ Label.parseAbsolute("//foo:UCBUILD"),
                 /* files */ ImmutableList.of(Label.parseAbsolute("//foo:bar")),
                 /* excludes */ ImmutableSet.of("baz"),
                 /* destDir */ "qux",
@@ -401,7 +401,7 @@ public class BuildTypeTest {
         .isEqualTo(
             Joiner.on(" ").join(
                 ImmutableList.of(
-                    "FilesetEntry(srcdir = \"//foo:BUILD\",",
+                    "FilesetEntry(srcdir = \"//foo:UCBUILD\",",
                     "files = [\"//foo:bar\"],",
                     "excludes = [\"baz\"],",
                     "destdir = \"qux\",",

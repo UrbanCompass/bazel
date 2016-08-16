@@ -64,12 +64,12 @@ public class EvaluationTestCase {
   }
 
   /**
-   * Creates a standard Environment for tests in the BUILD language.
+   * Creates a standard Environment for tests in the UCBUILD language.
    * No PythonPreprocessing, mostly empty mutable Environment.
    */
   public Environment newBuildEnvironment() {
     return Environment.builder(mutability)
-        .setGlobals(Environment.BUILD)
+        .setGlobals(Environment.UCBUILD)
         .setEventHandler(getEventHandler())
         .setToolsRepository(TestConstants.TOOLS_REPOSITORY)
         .setPhase(Phase.LOADING)
@@ -119,7 +119,7 @@ public class EvaluationTestCase {
   }
 
   protected void enableBuildMode() throws Exception {
-    setMode(TestMode.BUILD);
+    setMode(TestMode.UCBUILD);
   }
 
   protected EventHandler getEventHandler() {

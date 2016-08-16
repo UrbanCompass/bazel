@@ -49,17 +49,17 @@ public class NewHttpArchiveRule implements RuleDefinition {
          <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("sha256", STRING))
         /* <!-- #BLAZE_RULE(new_http_archive).ATTRIBUTE(build_file) -->
-         The file to use as the BUILD file for this repository.
+         The file to use as the UCBUILD file for this repository.
 
          <p>Either build_file or build_file_content must be specified.</p>
 
          <p>This attribute is a label relative to the main workspace. The file does not need to be
-        named BUILD, but can be (something like BUILD.new-repo-name may work well for
-        distinguishing it from the repository's actual BUILD files.</p>
+        named UCBUILD, but can be (something like UCBUILD.new-repo-name may work well for
+        distinguishing it from the repository's actual UCBUILD files.</p>
          <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("build_file", STRING))
         /* <!-- #BLAZE_RULE(new_http_archive).ATTRIBUTE(build_file_content) -->
-        The content for the BUILD file for this repository.
+        The content for the UCBUILD file for this repository.
 
         <p>Either build_file or build_file_content must be specified.</p>
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
@@ -110,7 +110,7 @@ public class NewHttpArchiveRule implements RuleDefinition {
 /*<!-- #BLAZE_RULE (NAME = new_http_archive, TYPE = OTHER, FAMILY = Workspace)[GENERIC_RULE] -->
 
 <p>Downloads a compressed archive file, decompresses it, and creates a Bazel repository by
-combining the archive with the provided BUILD file.</p>
+combining the archive with the provided UCBUILD file.</p>
 
 <p>It supports Zip-formatted archives (with the .zip extension) and
 tarballs (.tar.gz and .tgz extensions).</p>
@@ -128,7 +128,7 @@ src/
   openssl.h
 </pre>
 
-<p>In the local repository, the user creates a <i>BUILD.ssl</i> file which contains the following
+<p>In the local repository, the user creates a <i>UCBUILD.ssl</i> file which contains the following
 target definition:</p>
 
 <pre class="code">
@@ -147,7 +147,7 @@ new_http_archive(
     name = "my-ssl",
     url = "http://example.com/openssl.zip",
     sha256 = "03a58ac630e59778f328af4bcc4acb4f80208ed4",
-    build_file = "BUILD.ssl",
+    build_file = "UCBUILD.ssl",
 )
 </pre>
 

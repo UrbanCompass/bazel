@@ -67,7 +67,7 @@ public class SkylarkRuleClassFunctionsTest extends SkylarkTestCase {
   @Before
   public final void createBuildFile() throws Exception  {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "genrule(name = 'foo',",
         "  cmd = 'dummy_cmd',",
         "  srcs = ['a.txt', 'b.img'],",
@@ -738,7 +738,7 @@ public class SkylarkRuleClassFunctionsTest extends SkylarkTestCase {
 
   @Test
   public void testLicenseAttributesNonconfigurable() throws Exception {
-    scratch.file("test/BUILD");
+    scratch.file("test/UCBUILD");
     scratch.file("test/rule.bzl",
         "def _impl(ctx):",
         "  return",
@@ -748,7 +748,7 @@ public class SkylarkRuleClassFunctionsTest extends SkylarkTestCase {
         "    'licenses': attr.license()",
         "  }",
         ")");
-    scratch.file("third_party/foo/BUILD",
+    scratch.file("third_party/foo/UCBUILD",
         "load('/test/rule', 'some_rule')",
         "some_rule(",
         "    name='r',",

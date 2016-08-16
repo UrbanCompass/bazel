@@ -59,13 +59,13 @@ function setup_android_support() {
   mkdir -p $ANDROID_SDK
 
   for i in $NDK_SRCDIR/*; do
-    if [[ "$(basename $i)" != "BUILD" ]]; then
+    if [[ "$(basename $i)" != "UCBUILD" ]]; then
       ln -s "$i" "$ANDROID_NDK/$(basename $i)"
     fi
   done
 
   for i in $SDK_SRCDIR/*; do
-    if [[ "$(basename $i)" != "BUILD" ]]; then
+    if [[ "$(basename $i)" != "UCBUILD" ]]; then
       ln -s "$i" "$ANDROID_SDK/$(basename $i)"
     fi
   done
@@ -93,8 +93,8 @@ EOF
 function setup_javatest_common() {
   # TODO(bazel-team): we should use remote repositories.
   mkdir -p third_party
-  if [ ! -f third_party/BUILD ]; then
-    cat <<EOF >third_party/BUILD
+  if [ ! -f third_party/UCBUILD ]; then
+    cat <<EOF >third_party/UCBUILD
 package(default_visibility = ["//visibility:public"])
 EOF
   fi
@@ -106,7 +106,7 @@ EOF
 
 function setup_javatest_support() {
   setup_javatest_common
-  cat <<EOF >>third_party/BUILD
+  cat <<EOF >>third_party/UCBUILD
 java_import(
     name = "junit4",
     jars = [
@@ -119,7 +119,7 @@ EOF
 
 function setup_skylark_javatest_support() {
   setup_javatest_common
-  cat <<EOF >>third_party/BUILD
+  cat <<EOF >>third_party/UCBUILD
 filegroup(
     name = "junit4-jars",
     srcs = [
@@ -134,7 +134,7 @@ function setup_iossim() {
   mkdir -p third_party/iossim
   ln -sv ${iossim_path} third_party/iossim/iossim
 
-  cat <<EOF >>third_party/iossim/BUILD
+  cat <<EOF >>third_party/iossim/UCBUILD
 licenses(["unencumbered"])
 package(default_visibility = ["//visibility:public"])
 

@@ -13,7 +13,7 @@ Here, you'll do the following:
 
 *   Review the source files for the app
 *   Update the `WORKSPACE` file
-*   Create a `BUILD` file
+*   Create a `UCBUILD` file
 *   Run the build
 *   Find the build outputs
 *   Run the app
@@ -98,21 +98,21 @@ the API levels to the same value for the SDK and NDK.
 [This web page](https://developer.android.com/ndk/guides/stable_apis.html)
 contains a map from Android releases to NDK-supported API levels.
 
-## Create a BUILD file
+## Create a UCBUILD file
 
-A [`BUILD` file](/docs/build-ref.html#BUILD_files) is a text file that describes
+A [`UCBUILD` file](/docs/build-ref.html#BUILD_files) is a text file that describes
 the relationship between a set of build outputs -- for example, compiled
 software libraries or executables -- and their dependencies. These dependencies
-may be source files in your workspace or other build outputs. `BUILD` files are
+may be source files in your workspace or other build outputs. `UCBUILD` files are
 written in the Bazel *build language*.
 
-`BUILD` files are part of concept in Bazel known as the *package hierarchy*.
+`UCBUILD` files are part of concept in Bazel known as the *package hierarchy*.
 The package hierarchy is a logical structure that overlays the directory
 structure in your workspace. Each [package](/docs/build-ref.html#packages) is a
 directory (and its subdirectories) that contains a related set of source files
-and a `BUILD` file. The package also includes any subdirectories, excluding
-those that contain their own `BUILD` file. The *package name* is the name of the
-directory where the `BUILD` file is located.
+and a `UCBUILD` file. The package also includes any subdirectories, excluding
+those that contain their own `UCBUILD` file. The *package name* is the name of the
+directory where the `UCBUILD` file is located.
 
 Note that this package hierarchy is distinct from, but coexists with, the Java
 package hierarchy for your Android app.
@@ -121,15 +121,15 @@ For the simple Android app in this tutorial, we'll consider all the source files
 in `$WORKSPACE/android/` to comprise a single Bazel package. A more complex
 project may have many nested packages.
 
-At a command-line prompt, open your new `BUILD` file for editing:
+At a command-line prompt, open your new `UCBUILD` file for editing:
 
 ```bash
-$ vi $WORKSPACE/android/BUILD
+$ vi $WORKSPACE/android/UCBUILD
 ```
 
 ### Add an android_library rule
 
-A `BUILD` file contains several different types of instructions for Bazel. The
+A `UCBUILD` file contains several different types of instructions for Bazel. The
 most important type is the [build rule](/docs/build-ref.html#funcs), which tells
 Bazel how to build an intermediate or final software output from a set of source
 files or other dependencies.
@@ -142,7 +142,7 @@ Bazel how to build an
 from the app source code and resource files. Then you'll use the
 `android_binary` rule to tell it how to build the Android application package.
 
-Add the following to your `BUILD` file:
+Add the following to your `UCBUILD` file:
 
 ```python
 android_library(
@@ -177,13 +177,13 @@ android_binary(
 ```
 
 Here, the `deps` attribute references the output of the `activities` rule you
-added to the `BUILD` file above. This means that, when Bazel builds the output
+added to the `UCBUILD` file above. This means that, when Bazel builds the output
 of this rule, it checks first to see if the output of the `activities` library
 rule has been built and is up-to-date. If not, it builds it and then uses that
 output to build the application package file.
 
-Now, save and close the file. You can compare your `BUILD` file to the
-[completed example](https://github.com/bazelbuild/examples/blob/master/tutorial/android/BUILD)
+Now, save and close the file. You can compare your `UCBUILD` file to the
+[completed example](https://github.com/bazelbuild/examples/blob/master/tutorial/android/UCBUILD)
 in the `master` branch of the GitHub repo.
 
 ## Run the build
@@ -210,7 +210,7 @@ $ bazel build //android:android
 
 The [`build`](/docs/bazel-user-manual.html#build) subcommand instructs Bazel to
 build the target that follows. The target is specified as the name of a build
-rule inside a `BUILD` file, with along with the package path relative to
+rule inside a `UCBUILD` file, with along with the package path relative to
 your workspace directory. Note that you can sometimes omit the package path
 or target name, depending on your current working directory at the command
 line and the name of the target. See [Labels](/docs/build-ref.html#labels) in

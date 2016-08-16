@@ -36,7 +36,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * FilesetEntry is a value object used to represent a "FilesetEntry" inside a "Fileset" BUILD rule.
+ * FilesetEntry is a value object used to represent a "FilesetEntry" inside a "Fileset" UCBUILD rule.
  */
 @SkylarkModule(
     name = "FilesetEntry",
@@ -186,7 +186,7 @@ public final class FilesetEntry implements SkylarkValue {
    * @return true if this Fileset should get files from the source directory.
    */
   public boolean isSourceFileset() {
-    return "BUILD".equals(srcLabel.getName());
+    return "UCBUILD".equals(srcLabel.getName());
   }
 
   /**

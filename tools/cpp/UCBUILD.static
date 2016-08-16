@@ -15,7 +15,7 @@ filegroup(
 
 # This is the entry point for --crosstool_top.  Toolchains are found
 # by lopping off the name of --crosstool_top and searching for
-# "cc-compiler-${CPU}" in this BUILD file, where CPU is the target CPU
+# "cc-compiler-${CPU}" in this UCBUILD file, where CPU is the target CPU
 # specified in --cpu.
 #
 # This file group should include
@@ -23,37 +23,17 @@ filegroup(
 #   * all file groups that said cc_toolchain might refer to,
 # including the default_grte_top setting in the CROSSTOOL
 # protobuf.
-filegroup(
-    name = "toolchain",
-    srcs = ["//external:cc_toolchain"],
-)
 
 # Hardcoded toolchain, legacy behaviour.
 filegroup(
-    name = "default-toolchain",
+    name = "toolchain",
     srcs = [
         ":cc-compiler-armeabi-v7a",
-        ":cc-compiler-darwin",
         ":cc-compiler-freebsd",
-        ":cc-compiler-local",
         ":cc-compiler-x64_windows",
         ":cc-compiler-x64_windows_msvc",
         ":empty",
     ],
-)
-
-cc_toolchain(
-    name = "cc-compiler-local",
-    all_files = ":empty",
-    compiler_files = ":empty",
-    cpu = "local",
-    dwp_files = ":empty",
-    dynamic_runtime_libs = [":empty"],
-    linker_files = ":empty",
-    objcopy_files = ":empty",
-    static_runtime_libs = [":empty"],
-    strip_files = ":empty",
-    supports_param_files = 1,
 )
 
 cc_toolchain(
@@ -68,34 +48,6 @@ cc_toolchain(
     static_runtime_libs = [":empty"],
     strip_files = ":empty",
     supports_param_files = 1,
-)
-
-cc_toolchain(
-    name = "cc-compiler-k8",
-    all_files = ":empty",
-    compiler_files = ":empty",
-    cpu = "local",
-    dwp_files = ":empty",
-    dynamic_runtime_libs = [":empty"],
-    linker_files = ":empty",
-    objcopy_files = ":empty",
-    static_runtime_libs = [":empty"],
-    strip_files = ":empty",
-    supports_param_files = 1,
-)
-
-cc_toolchain(
-    name = "cc-compiler-darwin",
-    all_files = ":empty",
-    compiler_files = ":empty",
-    cpu = "darwin",
-    dwp_files = ":empty",
-    dynamic_runtime_libs = [":empty"],
-    linker_files = ":empty",
-    objcopy_files = ":empty",
-    static_runtime_libs = [":empty"],
-    strip_files = ":empty",
-    supports_param_files = 0,
 )
 
 cc_toolchain(
@@ -123,7 +75,7 @@ cc_toolchain(
     objcopy_files = ":empty",
     static_runtime_libs = [":empty"],
     strip_files = ":empty",
-    supports_param_files = 0,
+    supports_param_files = 1,
 )
 
 cc_toolchain(
@@ -153,9 +105,4 @@ filegroup(
         "wrapper/bin/msvc_*",
         "wrapper/bin/pydir/msvc*",
     ]),
-)
-
-filegroup(
-    name = "srcs",
-    srcs = glob(["**"]) + ["//tools/cpp/test:srcs"],
 )

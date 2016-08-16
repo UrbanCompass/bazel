@@ -82,7 +82,7 @@ public final class BazelAnalysisMock extends AnalysisMock {
     config.overwrite("WORKSPACE", workspaceContents.toArray(new String[workspaceContents.size()]));
     config.create("/bazel_tools_workspace/WORKSPACE", "workspace(name = 'bazel_tools')");
     config.create(
-        "/bazel_tools_workspace/tools/jdk/BUILD",
+        "/bazel_tools_workspace/tools/jdk/UCBUILD",
         "package(default_visibility=['//visibility:public'])",
         "java_toolchain(",
         "  name = 'toolchain',",
@@ -113,13 +113,13 @@ public final class BazelAnalysisMock extends AnalysisMock {
 
     ImmutableList<String> androidBuildContents = createAndroidBuildContents();
     config.create(
-        "/bazel_tools_workspace/tools/android/BUILD",
+        "/bazel_tools_workspace/tools/android/UCBUILD",
         androidBuildContents.toArray(new String[androidBuildContents.size()]));
 
     config.create(
-        "/bazel_tools_workspace/tools/genrule/BUILD", "exports_files(['genrule-setup.sh'])");
+        "/bazel_tools_workspace/tools/genrule/UCBUILD", "exports_files(['genrule-setup.sh'])");
     config.create(
-        "/bazel_tools_workspace/third_party/java/jarjar/BUILD",
+        "/bazel_tools_workspace/third_party/java/jarjar/UCBUILD",
         "package(default_visibility=['//visibility:public'])",
         "licenses(['notice'])",
         "java_binary(name = 'jarjar_bin',",
@@ -128,19 +128,19 @@ public final class BazelAnalysisMock extends AnalysisMock {
         "java_import(name = 'jarjar_import',",
         "            jars = [ 'jarjar.jar' ])");
 
-    config.create("/bazel_tools_workspace/tools/test/BUILD",
+    config.create("/bazel_tools_workspace/tools/test/UCBUILD",
         "filegroup(name = 'runtime')",
         "filegroup(name = 'coverage_support')",
         "filegroup(name = 'coverage_report_generator', srcs = ['coverage_report_generator.sh'])");
 
     config.create(
-        "/bazel_tools_workspace/tools/python/BUILD",
+        "/bazel_tools_workspace/tools/python/UCBUILD",
         "package(default_visibility=['//visibility:public'])",
         "exports_files(['precompile.py'])",
         "sh_binary(name='2to3', srcs=['2to3.sh'])");
 
     config.create(
-        "/bazel_tools_workspace/tools/zip/BUILD",
+        "/bazel_tools_workspace/tools/zip/UCBUILD",
         "package(default_visibility=['//visibility:public'])",
         "exports_files(['precompile.py'])",
         "cc_binary(name='zipper', srcs=['zip_main.cc'])");

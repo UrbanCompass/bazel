@@ -36,9 +36,9 @@ import java.io.Serializable;
 import javax.annotation.Nullable;
 
 /**
- * A class to identify a BUILD target. All targets belong to exactly one package. The name of a
+ * A class to identify a UCBUILD target. All targets belong to exactly one package. The name of a
  * target is called its label. A typical label looks like this: //dir1/dir2:target_name where
- * 'dir1/dir2' identifies the package containing a BUILD file, and 'target_name' identifies the
+ * 'dir1/dir2' identifies the package containing a UCBUILD file, and 'target_name' identifies the
  * target within the package.
  *
  * <p>Parsing is robust against bad input, for example, from the command line.
@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 @SkylarkModule(
   name = "Label",
   category = SkylarkModuleCategory.BUILTIN,
-  doc = "A BUILD target identifier."
+  doc = "A UCBUILD target identifier."
 )
 @Immutable
 @ThreadSafe

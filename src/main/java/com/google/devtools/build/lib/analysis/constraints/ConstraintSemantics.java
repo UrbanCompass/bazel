@@ -54,7 +54,7 @@ import javax.annotation.Nullable;
  *
  * <p>All build rules can declare which "static environments" they can be built for, where a
  * "static environment" is a label instance of an {@link EnvironmentRule} rule declared in a
- * BUILD file. There are various ways to do this:
+ * UCBUILD file. There are various ways to do this:
  *
  * <ul>
  *   <li>Through a "restricted to" attribute setting
@@ -152,7 +152,7 @@ public class ConstraintSemantics {
   }
 
   /**
-   * Provides a group's defaults as specified in the environment group's BUILD declaration.
+   * Provides a group's defaults as specified in the environment group's UCBUILD declaration.
    */
   private static class GroupDefaultsProvider implements DefaultsProvider {
     @Override

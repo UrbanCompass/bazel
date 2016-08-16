@@ -22,12 +22,12 @@ import com.google.devtools.build.lib.syntax.Mutability;
  * appropriate {@code Environment} has to be created
  */
 public abstract class TestMode {
-  public static final TestMode BUILD =
+  public static final TestMode UCBUILD =
       new TestMode() {
         @Override
         public Environment createEnvironment(EventHandler eventHandler, Environment environment) {
           return Environment.builder(Mutability.create("build test"))
-              .setGlobals(environment == null ? Environment.BUILD : environment.getGlobals())
+              .setGlobals(environment == null ? Environment.UCBUILD : environment.getGlobals())
               .setEventHandler(eventHandler)
               .build();
         }

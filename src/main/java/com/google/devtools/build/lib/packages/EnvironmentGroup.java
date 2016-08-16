@@ -104,7 +104,7 @@ public class EnvironmentGroup implements Target {
    * @param pkg the package this group belongs to
    * @param environments the set of environments that belong to this group
    * @param defaults the environments a rule implicitly supports unless otherwise specified
-   * @param location location in the BUILD file of this group
+   * @param location location in the UCBUILD file of this group
    */
   EnvironmentGroup(Label label, Package pkg, final List<Label> environments, List<Label> defaults,
       Location location) {

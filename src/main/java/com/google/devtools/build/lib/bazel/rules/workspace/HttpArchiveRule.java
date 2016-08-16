@@ -99,7 +99,7 @@ public class HttpArchiveRule implements RuleDefinition {
 
 <p>Downloads a Bazel repository as a compressed archive file,
   decompresses it, and makes its targets available for binding. The
-  repository should already contain a BUILD file. If it does not, use
+  repository should already contain a UCBUILD file. If it does not, use
   <a href="${link new_http_archive}">new_http_archive</a> instead.</p>
 
 <p>It supports Zip-formatted archives (with the .zip extension) and
@@ -115,12 +115,12 @@ tarballs (.tar.gz and .tgz extensions).</p>
 <pre class="code">
 WORKSPACE
 src/
-  BUILD
+  UCBUILD
   openssl.cc
   openssl.h
 </pre>
 
-<p><i>src/BUILD</i> contains the following target definition:</p>
+<p><i>src/UCBUILD</i> contains the following target definition:</p>
 
 <pre class="code">
 cc_library(

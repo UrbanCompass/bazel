@@ -27,7 +27,7 @@ import java.nio.file.Path;
 public class SourceFile extends Value<SourceFile> {
   /** Indicates how a source file is built or not built. */
   public enum BuildType {
-    NO_BUILD, BUILD, NON_ARC_BUILD;
+    NO_BUILD, UCBUILD, NON_ARC_BUILD;
   }
 
   private final BuildType buildType;
@@ -52,14 +52,14 @@ public class SourceFile extends Value<SourceFile> {
    * <ul>
    *   <li>arc-compiled source files
    *   <li>non-arc-compiled source files
-   *   <li>support files, such as BUILD and header files
+   *   <li>support files, such as UCBUILD and header files
    *   <li>Info.plist file
    * </ul>
    */
   public static Iterable<SourceFile> allSourceFiles(FileSystem fileSystem, TargetControl control) {
     ImmutableList.Builder<SourceFile> result = new ImmutableList.Builder<>();
     for (Path plainSource : RelativePaths.fromStrings(fileSystem, control.getSourceFileList())) {
-      result.add(new SourceFile(BuildType.BUILD, plainSource));
+      result.add(new SourceFile(BuildType.UCBUILD, plainSource));
     }
     for (Path nonArcSource
         : RelativePaths.fromStrings(fileSystem, control.getNonArcSourceFileList())) {

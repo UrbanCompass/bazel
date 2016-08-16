@@ -54,7 +54,7 @@ public class JarDecompressorTest {
     Path outputDir = DecompressorValue.decompress(descriptorBuilder.build());
     assertThat(outputDir.exists()).isTrue();
     String buildContent =
-        new String(FileSystemUtils.readContentAsLatin1(outputDir.getRelative("jar/BUILD")));
+        new String(FileSystemUtils.readContentAsLatin1(outputDir.getRelative("jar/UCBUILD")));
     assertThat(buildContent).contains("java_import");
     assertThat(buildContent).contains("filegroup");
   }

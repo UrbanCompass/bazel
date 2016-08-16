@@ -13,7 +13,7 @@ the specific issues that we believe to be the main contributors.
 
 * Assumption: Aim for Correctness, Throughput, Ease of Use & Latency
 * Assumption: Large Scale Repositories
-* Assumption: BUILD-like Description Language
+* Assumption: UCBUILD-like Description Language
 * Intrinsic: Remote Execution and Caching are Hard
 * Historic: Hard Separation between Loading, Analysis, and Execution is
   Outdated, but still affects the API
@@ -47,7 +47,7 @@ easier to use.
 
 For the purpose of this document, latency denotes the time it takes from
 starting a build to getting the intended result, whether that is a test log from
-a passing or failing test, or an error message that a BUILD file has a
+a passing or failing test, or an error message that a UCBUILD file has a
 typo.
 
 Note that these goals often overlap; latency is as much a function of throughput
@@ -59,18 +59,18 @@ of the remote execution service as is correctness relevant for ease of use.
 The build system needs to operate at the scale of large repositories where large
 scale means that it does not fit on a single hard drive, so it is impossible to
 do a full checkout on virtually all developer machines. A medium-sized build
-will need to read and parse tens of thousands of BUILD files, and evaluate
+will need to read and parse tens of thousands of UCBUILD files, and evaluate
 hundreds of thousands of globs. While it is theoretically possible to read all
-BUILD files on a single machine, we have not yet been able to do so within a
-reasonable amount of time and memory. As such, it is critical that BUILD files
+UCBUILD files on a single machine, we have not yet been able to do so within a
+reasonable amount of time and memory. As such, it is critical that UCBUILD files
 can be loaded and parsed independently.
 
 
-## Assumption: BUILD-like Description Language
+## Assumption: UCBUILD-like Description Language
 
 For the purpose of this document, we assume a configuration language that is
-roughly similar to BUILD files, i.e., declaration of library and binary rules
-and their interdependencies. BUILD files can be read and parsed independently,
+roughly similar to UCBUILD files, i.e., declaration of library and binary rules
+and their interdependencies. UCBUILD files can be read and parsed independently,
 and we avoid even looking at source files whenever we can (except for
 existence).
 

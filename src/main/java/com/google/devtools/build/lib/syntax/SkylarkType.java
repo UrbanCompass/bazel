@@ -173,7 +173,7 @@ public abstract class SkylarkType implements Serializable {
   public static final Simple DICT = Simple.of(SkylarkDict.class);
 
   /** The SEQUENCE type, that contains lists and tuples */
-  // TODO(bazel-team): this was added for backward compatibility with the BUILD language,
+  // TODO(bazel-team): this was added for backward compatibility with the UCBUILD language,
   // that doesn't make a difference between list and tuple, so that functions can be declared
   // that keep not making the difference. Going forward, though, we should investigate whether
   // we ever want to use this type, and if not, make sure no existing client code uses it.

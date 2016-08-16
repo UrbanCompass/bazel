@@ -30,7 +30,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-/** A Preprocessor is an interface to implement generic text-based preprocessing of BUILD files. */
+/** A Preprocessor is an interface to implement generic text-based preprocessing of UCBUILD files. */
 public interface Preprocessor {
   /** Factory for {@link Preprocessor} instances. */
   interface Factory {
@@ -39,7 +39,7 @@ public interface Preprocessor {
       /**
        * Returns a Preprocessor factory to use for getting Preprocessor instances.
        *
-       * @param loc a package locator for preprocessors to look up other BUILD files
+       * @param loc a package locator for preprocessors to look up other UCBUILD files
        * @param outputBase allows non-hermetic access to the file system and output base; use with
        *        extreme caution
        */
@@ -70,14 +70,14 @@ public interface Preprocessor {
     /**
      * Returns whether all globs encountered during {@link Preprocessor#preprocess} will be passed
      * along to the {@link Globber} given there (which then executes them asynchronously). If this
-     * is not the case, then e.g. prefetching globs during normal BUILD file evaluation may be
+     * is not the case, then e.g. prefetching globs during normal UCBUILD file evaluation may be
      * profitable.
      */
     boolean considersGlobs();
 
     /**
-     * Returns a Preprocessor instance capable of preprocessing a BUILD file independently (e.g. it
-     * ought to be fine to call {@link #getPreprocessor} for each BUILD file).
+     * Returns a Preprocessor instance capable of preprocessing a UCBUILD file independently (e.g. it
+     * ought to be fine to call {@link #getPreprocessor} for each UCBUILD file).
      */
     @Nullable
     Preprocessor getPreprocessor();
@@ -134,7 +134,7 @@ public interface Preprocessor {
           FileSystemUtils.convertFromLatin1(buildFileBytes), buildFilePathFragment));
     }
 
-    /** Convenience factory for a {@link Result} wrapping non-preprocessed BUILD file contents. */
+    /** Convenience factory for a {@link Result} wrapping non-preprocessed UCBUILD file contents. */
     public static Result noPreprocessing(ParserInputSource buildFileSource) {
       return new Result(
           buildFileSource,
@@ -144,7 +144,7 @@ public interface Preprocessor {
     }
 
     /**
-     * Factory for a successful preprocessing result, meaning that the BUILD file was able to be
+     * Factory for a successful preprocessing result, meaning that the UCBUILD file was able to be
      * read and has valid syntax and was preprocessed. But note that there may have been be errors
      * during preprocessing.
      */
@@ -169,9 +169,9 @@ public interface Preprocessor {
    * preprocessing actually begins, any I/O problems encountered will be reflected in the return
    * value, not manifested as exceptions.
    *
-   * @param buildFilePath the BUILD file to be preprocessed.
-   * @param buildFileBytes the raw contents of the BUILD file to be preprocessed.
-   * @param packageName the BUILD file's package.
+   * @param buildFilePath the UCBUILD file to be preprocessed.
+   * @param buildFileBytes the raw contents of the UCBUILD file to be preprocessed.
+   * @param packageName the UCBUILD file's package.
    * @param globber a globber for evaluating globs.
    * @param globals the global bindings for the Python environment.
    * @param ruleNames the set of names of all rules in the build language.
@@ -187,7 +187,7 @@ public interface Preprocessor {
       Set<String> ruleNames)
     throws IOException, InterruptedException;
 
-  /** The result of parsing a preprocessed BUILD file. */
+  /** The result of parsing a preprocessed UCBUILD file. */
   static class AstAfterPreprocessing {
     public final boolean preprocessed;
     public final boolean containsPreprocessingErrors;

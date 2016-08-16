@@ -102,7 +102,7 @@ public class LineNumberTableTest {
     // Note: newlines ignored; "srcs" is still (intentionally) considered to be
     // on L67.  Consider the alternative, and assume that rule 'a' is 50 lines
     // when pretty-printed: the last line of 'a' would be reported as line 67 +
-    // 50, which may be in a part of the original BUILD file that has nothing
+    // 50, which may be in a part of the original UCBUILD file that has nothing
     // to do with this rule.  In other words, the size of rules before and
     // after pretty printing are essentially unrelated.
     assertEquals(new LineAndColumn(67, 1), table.getLineAndColumn(data.indexOf("srcs")));

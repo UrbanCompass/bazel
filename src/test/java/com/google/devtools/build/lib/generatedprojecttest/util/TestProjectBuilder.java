@@ -23,7 +23,7 @@ import java.io.IOException;
  * A builder that generates whole test projects in a scratch file system.
  */
 
-// TODO(blaze-team): (2012) generate valid parameterized BUILD rules.
+// TODO(blaze-team): (2012) generate valid parameterized UCBUILD rules.
 // TODO(blaze-team): (2012) generate any required src or data or other files.
 
 public final class TestProjectBuilder {

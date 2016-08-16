@@ -184,7 +184,7 @@ _get_build_packages() {
   fi
   paths=(${^package_roots}/${pfx}*(/))
   for p in ${paths[*]}; do
-    if [[ -f ${p}/BUILD ]]; then
+    if [[ -f ${p}/UCBUILD ]]; then
       final_paths+=(${p##*/}:)
     fi
     final_paths+=(${p##*/}/)
@@ -198,26 +198,26 @@ _package_remove_slash() {
   fi
 }
 
-# Completion function for BUILD targets, called by the completion system.
+# Completion function for UCBUILD targets, called by the completion system.
 _bazel_complete_target() {
   local expl
   typeset -a packages targets
   if [[ "${(e)PREFIX}" != *:* ]]; then
     # There is no : in the prefix, completion can be either
     # a package or a target, if the cwd is a package itself.
-    if [[ -f $PWD/BUILD ]]; then
+    if [[ -f $PWD/UCBUILD ]]; then
       targets=($(_get_build_targets ""))
-      _description build_target expl "BUILD target"
+      _description build_target expl "UCBUILD target"
       compadd "${expl[@]}" -a targets
     fi
     packages=($(_get_build_packages))
-    _description build_package expl "BUILD package"
+    _description build_package expl "UCBUILD package"
     # Chop of the leading path segments from the prefix for display.
     compset -P '*/'
     compadd -R _package_remove_slash -S '' "${expl[@]}" -a packages
   else
     targets=($(_get_build_targets "${${(e)PREFIX}%:*}"))
-    _description build_target expl "BUILD target"
+    _description build_target expl "UCBUILD target"
     # Ignore the current prefix for the upcoming completion, since we only list
     # the names of the targets, not the full path.
     compset -P '*:'

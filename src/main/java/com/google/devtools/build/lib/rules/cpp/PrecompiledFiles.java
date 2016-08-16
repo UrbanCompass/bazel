@@ -71,7 +71,7 @@ public final class PrecompiledFiles {
         public boolean apply(Artifact artifact) {
           String filename = artifact.getExecPathString();
 
-          // For compatibility with existing BUILD files, any ".o" files listed
+          // For compatibility with existing UCBUILD files, any ".o" files listed
           // in srcs are assumed to be position-independent code, or
           // at least suitable for inclusion in shared libraries, unless they
           // end with ".nopic.o". (The ".nopic.o" extension is an undocumented

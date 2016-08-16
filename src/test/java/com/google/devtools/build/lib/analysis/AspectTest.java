@@ -56,7 +56,7 @@ import org.junit.runners.JUnit4;
 public class AspectTest extends AnalysisTestCase {
 
   private void pkg(String name, String... contents) throws Exception {
-    scratch.file("" + name + "/BUILD", contents);
+    scratch.file("" + name + "/UCBUILD", contents);
   }
 
   @Test
@@ -330,7 +330,7 @@ public class AspectTest extends AnalysisTestCase {
         new ExtraActionsAreEmitted.TestRule());
     useConfiguration("--experimental_action_listener=//extra_actions:listener");
     scratch.file(
-        "extra_actions/BUILD",
+        "extra_actions/UCBUILD",
         "extra_action(name='xa', cmd='echo dont-care')",
         "action_listener(name='listener', mnemonics=['Null'], extra_actions=[':xa'])");
     pkg("a",

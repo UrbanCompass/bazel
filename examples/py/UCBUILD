@@ -15,5 +15,5 @@ py_binary(
 
 filegroup(
     name = "srcs",
-    srcs = ["BUILD"] + glob(["**/*.py"]),
+    srcs = ["UCBUILD"] + glob(["**/*.py"]),
 )

@@ -21,7 +21,7 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../test-setup.sh \
 
 function create_android_binary() {
   mkdir -p java/bazel
-  cat > java/bazel/BUILD <<EOF
+  cat > java/bazel/UCBUILD <<EOF
 android_library(
     name = "lib",
     srcs = ["Lib.java"],
@@ -181,7 +181,7 @@ function test_sdk_library_deps() {
   setup_android_support
 
   mkdir -p java/a
-  cat > java/a/BUILD<<EOF
+  cat > java/a/UCBUILD<<EOF
 android_library(
     name = "a",
     deps = ["//external:android/mediarouter_v7"],

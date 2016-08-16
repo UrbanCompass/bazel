@@ -1,7 +1,7 @@
 filegroup(
     name = "embedded_tools",
     srcs = [
-        "BUILD.tools",
+        "UCBUILD.tools",
         "classes_deploy.jar",
     ],
     visibility = ["//src:__pkg__"],

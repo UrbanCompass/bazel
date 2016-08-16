@@ -90,9 +90,9 @@ public class RecursivePkgFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testStartingAtBuildFile() throws Exception {
-    scratch.file("a/b/c/BUILD");
+    scratch.file("a/b/c/UCBUILD");
     RecursivePkgValue value =
-        buildRecursivePkgValue(rootDirectory, new PathFragment("a/b/c/BUILD"));
+        buildRecursivePkgValue(rootDirectory, new PathFragment("a/b/c/UCBUILD"));
     assertTrue(value.getPackages().isEmpty());
   }
 
@@ -102,8 +102,8 @@ public class RecursivePkgFunctionTest extends BuildViewTestCase {
     Path root2 = rootDirectory.getRelative("root2");
     scratch.file(root1 + "/WORKSPACE");
     scratch.file(root2 + "/WORKSPACE");
-    scratch.file(root1 + "/a/BUILD");
-    scratch.file(root2 + "/a/b/BUILD");
+    scratch.file(root1 + "/a/UCBUILD");
+    scratch.file(root2 + "/a/b/UCBUILD");
     setPackageCacheOptions("--package_path=" + "root1" + ":" + "root2");
 
     RecursivePkgValue valueForRoot1 = buildRecursivePkgValue(root1, new PathFragment("a"));
@@ -118,9 +118,9 @@ public class RecursivePkgFunctionTest extends BuildViewTestCase {
   @Test
   public void testSubdirectoryExclusion() throws Exception {
     // Given a package "a" with two packages below it, "a/b" and "a/c",
-    scratch.file("a/BUILD");
-    scratch.file("a/b/BUILD");
-    scratch.file("a/c/BUILD");
+    scratch.file("a/UCBUILD");
+    scratch.file("a/b/UCBUILD");
+    scratch.file("a/c/UCBUILD");
 
     // When the top package is evaluated for recursive package values, and "a/b" is excluded,
     PathFragment excludedPathFragment = new PathFragment("a/b");
@@ -155,9 +155,9 @@ public class RecursivePkgFunctionTest extends BuildViewTestCase {
   @Test
   public void testExcludedSubdirectoryGettingPassedDown() throws Exception {
     // Given a package "a" with two packages below a directory below it, "a/b/c" and "a/b/d",
-    scratch.file("a/BUILD");
-    scratch.file("a/b/c/BUILD");
-    scratch.file("a/b/d/BUILD");
+    scratch.file("a/UCBUILD");
+    scratch.file("a/b/c/UCBUILD");
+    scratch.file("a/b/d/UCBUILD");
 
     // When the top package is evaluated for recursive package values, and "a/b/c" is excluded,
     ImmutableSet<PathFragment> excludedPaths = ImmutableSet.of(new PathFragment("a/b/c"));

@@ -56,7 +56,7 @@ public final class GlobFunction implements SkyFunction {
       throws GlobFunctionException, InterruptedException {
     GlobDescriptor glob = (GlobDescriptor) skyKey.argument();
 
-    // Note that the glob's package is assumed to exist which implies that the package's BUILD file
+    // Note that the glob's package is assumed to exist which implies that the package's UCBUILD file
     // exists which implies that the package's directory exists.
     PathFragment globSubdir = glob.getSubdir();
     if (!globSubdir.equals(PathFragment.EMPTY_FRAGMENT)) {
@@ -71,7 +71,7 @@ public final class GlobFunction implements SkyFunction {
         return null;
       }
       if (globSubdirPkgLookupValue.packageExists()) {
-        // We crossed the package boundary, that is, pkg/subdir contains a BUILD file and thus
+        // We crossed the package boundary, that is, pkg/subdir contains a UCBUILD file and thus
         // defines another package, so glob expansion should not descend into that subdir.
         return GlobValue.EMPTY;
       }

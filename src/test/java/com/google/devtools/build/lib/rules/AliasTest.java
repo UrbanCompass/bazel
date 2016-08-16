@@ -37,7 +37,7 @@ import java.util.Set;
 public class AliasTest extends BuildViewTestCase {
   @Test
   public void smoke() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "cc_library(name='a', srcs=['a.cc'])",
         "alias(name='b', actual='a')");
 
@@ -47,7 +47,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void aliasToInputFile() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "exports_files(['a'])",
         "alias(name='b', actual='a')");
 
@@ -57,11 +57,11 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void visibilityIsOverriddenAndIsOkay() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a', visibility=['//b:__pkg__'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "alias(name='b', actual='//a:a', visibility=['//visibility:public'])");
-    scratch.file("c/BUILD",
+    scratch.file("c/UCBUILD",
         "filegroup(name='c', srcs=['//b:b'])");
 
     getConfiguredTarget("//c:c");
@@ -69,11 +69,11 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void visibilityIsOverriddenAndIsError() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a', visibility=['//visibility:public'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "alias(name='b', actual='//a:a', visibility=['//visibility:private'])");
-    scratch.file("c/BUILD",
+    scratch.file("c/UCBUILD",
         "filegroup(name='c', srcs=['//b:b'])");
 
     reporter.removeHandler(failFastHandler);
@@ -84,13 +84,13 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void visibilityIsOverriddenAndIsErrorAfterMultipleAliases() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a', visibility=['//visibility:public'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "alias(name='b', actual='//a:a', visibility=['//visibility:public'])");
-    scratch.file("c/BUILD",
+    scratch.file("c/UCBUILD",
         "alias(name='c', actual='//b:b', visibility=['//visibility:private'])");
-    scratch.file("d/BUILD",
+    scratch.file("d/UCBUILD",
         "filegroup(name='d', srcs=['//c:c'])");
 
     reporter.removeHandler(failFastHandler);
@@ -101,7 +101,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void testAliasCycle() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "alias(name='a', actual=':b')",
         "alias(name='b', actual=':c')",
         "alias(name='c', actual=':a')",
@@ -114,7 +114,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void testAliasedInvalidDependency() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "cc_library(name='a', deps=[':b'])",
         "alias(name='b', actual=':c')",
         "filegroup(name='c')");
@@ -126,7 +126,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void licensesAreCollected() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a', licenses=['restricted'], output_licenses=['unencumbered'])",
         "alias(name='b', actual=':a')",
         "filegroup(name='c', srcs=[':b'])",
@@ -143,7 +143,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void assertNoLicensesAttribute() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a')",
         "alias(name='b', actual=':a', licenses=['unencumbered'])");
 
@@ -168,7 +168,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void passesTargetTypeCheck() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "cc_library(name='a', srcs=['a.cc'], deps=[':b'])",
         "alias(name='b', actual=':c')",
         "cc_library(name='c', srcs=['c.cc'])");
@@ -178,7 +178,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void packageGroupInAlias() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "package_group(name='a', packages=['//a'])",
         "alias(name='b', actual=':a')",
         "filegroup(name='c', srcs=[':b'])");
@@ -191,7 +191,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void aliasedFile() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "exports_files(['a'])",
         "alias(name='b', actual='a')",
         "filegroup(name='c', srcs=[':b'])");
@@ -204,7 +204,7 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void aliasedConfigSetting() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "filegroup(name='a', srcs=select({':b': ['f1'], '//conditions:default': ['f2']}))",
         "alias(name='b', actual=':c')",
         "config_setting(name='c', values={'define': 'foo=bar'})");
@@ -215,9 +215,9 @@ public class AliasTest extends BuildViewTestCase {
 
   @Test
   public void aliasedTestSuiteDep() throws Exception {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "sh_test(name='a', srcs=['a.sh'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "alias(name='b', actual='//a:a', testonly=1)",
         "test_suite(name='c', tests=[':b'])");
 
@@ -230,7 +230,7 @@ public class AliasTest extends BuildViewTestCase {
   @Test
   public void testRedirectChasing() throws Exception {
     String toolsRepository = ruleClassProvider.getToolsRepository();
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "alias(name='cc', actual='" + toolsRepository + "//tools/cpp:toolchain')",
         "cc_library(name='a', srcs=['a.cc'])");
 

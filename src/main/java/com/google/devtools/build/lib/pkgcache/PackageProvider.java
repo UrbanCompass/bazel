@@ -50,7 +50,7 @@ public interface PackageProvider extends TargetProvider {
    *
    * <ol>
    * <li>{@code packageName} is a valid package name
-   * <li>there is a BUILD file for the package
+   * <li>there is a UCBUILD file for the package
    * <li>the package is not considered deleted via --deleted_packages
    * </ol>
    *

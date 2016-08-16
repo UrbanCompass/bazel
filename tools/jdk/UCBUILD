@@ -6,17 +6,17 @@ config_setting(
 )
 
 genrule(
-    name = "BUILD-jdk7",
-    srcs = [":BUILD"],
-    outs = ["BUILD.jdk7"],
+    name = "UCBUILD-jdk7",
+    srcs = [":UCBUILD"],
+    outs = ["UCBUILD.jdk7"],
     cmd = "sed -e 's/_version = \"8\"/_version = \"7\"/' -e 's/javac_supports_workers = 1/javac_supports_workers = 0/' $< > $@",
 )
 
 filegroup(
-    name = "BUILD-jdk",
+    name = "UCBUILD-jdk",
     srcs = select({
-        ":jdk7": [":BUILD-jdk7"],
-        "//conditions:default": [":BUILD"],
+        ":jdk7": [":UCBUILD-jdk7"],
+        "//conditions:default": [":UCBUILD"],
     }),
 )
 
@@ -137,7 +137,7 @@ java_toolchain(
 filegroup(
     name = "srcs",
     srcs = [
-        "BUILD-jdk",  # Tools are build from the workspace for tests.
+        "UCBUILD-jdk",  # Tools are build from the workspace for tests.
         "proguard_whitelister.py",
         "proguard_whitelister_test.py",
         "proguard_whitelister_test_input.cfg",

@@ -26,7 +26,7 @@ source $src/remote_helpers.sh \
 
 function setup_zoo() {
   mkdir -p zoo
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -202,7 +202,7 @@ maven_server(
 )
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 sh_binary(
     name = "y",
     srcs = ["y.sh"],

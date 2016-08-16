@@ -402,7 +402,7 @@ public class MethodLibraryTest extends EvaluationTestCase {
   @Test
   public void testStackTrace() throws Exception {
     // Unlike SkylarintegrationTests#testStackTraceErrorInFunction(), this test
-    // has neither a BUILD nor a bzl file.
+    // has neither a UCBUILD nor a bzl file.
     new SkylarkTest()
         .testIfExactError(
             "Traceback (most recent call last):\n"
@@ -500,7 +500,7 @@ public class MethodLibraryTest extends EvaluationTestCase {
 
   @Test
   public void testPyStringGlobalJoin() throws Exception {
-    // TODO(bazel-team): BUILD and Skylark should use the same code path (and same error message).
+    // TODO(bazel-team): UCBUILD and Skylark should use the same code path (and same error message).
     new BuildTest()
         .testIfErrorContains("name 'join' is not defined", "join(' ', [ 'a', 'b', 'c' ])");
 
@@ -948,7 +948,7 @@ public class MethodLibraryTest extends EvaluationTestCase {
         .testStatement("'{a}'.format(a = '$a')", "$a")
         .testStatement("'{a}$'.format(a = '$a')", "$a$");
 
-    // The test below is using **kwargs, which is not available in BUILD mode.
+    // The test below is using **kwargs, which is not available in UCBUILD mode.
     new SkylarkTest().testStatement("'{(}'.format(**{'(': 2})", "2");
   }
 

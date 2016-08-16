@@ -103,7 +103,7 @@ public class NewRepositoryBuildFileHandler {
    */
   public void finishBuildFile(Path outputDirectory) throws RepositoryFunctionException {
     if (buildFileValue != null) {
-      // Link x/BUILD to <build_root>/x.BUILD.
+      // Link x/UCBUILD to <build_root>/x.UCBUILD.
       symlinkBuildFile(buildFileValue, outputDirectory);
     } else if (buildFileContent != null) {
       RepositoryFunction.writeBuildFile(outputDirectory, buildFileContent);
@@ -188,15 +188,15 @@ public class NewRepositoryBuildFileHandler {
   }
 
   /**
-   * Symlinks a BUILD file from the local filesystem into the external repository's root.
-   * @param buildFileValue {@link FileValue} representing the BUILD file to be linked in
+   * Symlinks a UCBUILD file from the local filesystem into the external repository's root.
+   * @param buildFileValue {@link FileValue} representing the UCBUILD file to be linked in
    * @param outputDirectory the directory of the remote repository
-   * @throws RepositoryFunctionException if the BUILD file specified does not exist or cannot be
+   * @throws RepositoryFunctionException if the UCBUILD file specified does not exist or cannot be
    *         linked.
    */
   private void symlinkBuildFile(
       FileValue buildFileValue, Path outputDirectory) throws RepositoryFunctionException {
-    Path buildFilePath = outputDirectory.getRelative("BUILD");
+    Path buildFilePath = outputDirectory.getRelative("UCBUILD");
     RepositoryFunction.createSymbolicLink(buildFilePath, buildFileValue.realRootedPath().asPath());
   }
 }

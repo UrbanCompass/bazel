@@ -33,7 +33,7 @@ function set_up() {
 
 function write_hello_library_files() {
   mkdir -p java/main
-  cat >java/main/BUILD <<EOF
+  cat >java/main/UCBUILD <<EOF
 java_binary(name = 'main',
     deps = ['//java/hello_library'],
     srcs = ['Main.java'],
@@ -52,7 +52,7 @@ public class Main {
 EOF
 
   mkdir -p java/hello_library
-  cat >java/hello_library/BUILD <<EOF
+  cat >java/hello_library/UCBUILD <<EOF
 package(default_visibility=['//visibility:public'])
 java_library(name = 'hello_library',
              srcs = ['HelloLibrary.java']);
@@ -114,7 +114,7 @@ work = rule(
     outputs = {"out": "%{name}.out"},
 )
 EOF
-  cat >BUILD <<EOF
+  cat >UCBUILD <<EOF
 load("work", "work")
 
 java_import(
@@ -137,7 +137,7 @@ EOF
 
 function test_example_worker() {
   prepare_example_worker
-  cat >>BUILD <<EOF
+  cat >>UCBUILD <<EOF
 work(
   name = "hello_world",
   worker = ":worker",
@@ -162,7 +162,7 @@ EOF
 
 function test_workers_quit_after_build() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -184,7 +184,7 @@ EOF
 
 function test_worker_restarts_after_exit() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -221,7 +221,7 @@ EOF
 
 function test_worker_restarts_when_worker_binary_changes() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -263,7 +263,7 @@ EOF
 
 function test_worker_restarts_when_worker_runfiles_change() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -306,7 +306,7 @@ EOF
 # the action without struggling.
 function test_bazel_recovers_from_worker_returning_junk() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -330,7 +330,7 @@ EOF
 
 function test_input_digests() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -366,7 +366,7 @@ EOF
 
 function test_worker_verbose() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -383,7 +383,7 @@ EOF
 
 function test_logs_are_deleted_on_server_restart() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 [work(
   name = "hello_world_%s" % idx,
   worker = ":worker",
@@ -411,7 +411,7 @@ EOF
 
 function test_missing_execution_requirements_gives_warning() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 work(
   name = "hello_world",
   worker = ":worker",
@@ -436,7 +436,7 @@ EOF
 
 function test_environment_is_clean() {
   prepare_example_worker
-  cat >>BUILD <<'EOF'
+  cat >>UCBUILD <<'EOF'
 work(
   name = "hello_world",
   worker = ":worker",

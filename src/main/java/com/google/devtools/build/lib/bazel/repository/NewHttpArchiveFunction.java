@@ -32,7 +32,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 /**
- * Downloads an archive from a URL, decompresses it, creates a WORKSPACE file, and adds a BUILD
+ * Downloads an archive from a URL, decompresses it, creates a WORKSPACE file, and adds a UCBUILD
  * file for it.
  */
 public class NewHttpArchiveFunction extends HttpArchiveFunction {
@@ -75,7 +75,7 @@ public class NewHttpArchiveFunction extends HttpArchiveFunction {
         .setPrefix(prefix)
         .build());
 
-    // Finally, write WORKSPACE and BUILD files.
+    // Finally, write WORKSPACE and UCBUILD files.
     createWorkspaceFile(decompressed, rule.getTargetKind(), rule.getName());
     buildFileHandler.finishBuildFile(outputDirectory);
 

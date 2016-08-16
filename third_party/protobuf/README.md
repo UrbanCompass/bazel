@@ -6,7 +6,7 @@ How to update the binaries other than `protoc-linux-x86_64.exe` and `protoc-linu
 4. Download all binaries from "protoc".
 5. Strip version number from protoc files: for `i in *.exe; do mv $i $(echo $i | sed s/3.0.0-beta-2-//); done`
 6. Set executable bit: `chmod +x *.exe`
-7. Update third_party/BUILD to point to the new jar file.
+7. Update third_party/UCBUILD to point to the new jar file.
 8. Done.
 
 The 64-bit Linux version of the proto compiler is linked statically. To update it, do
@@ -26,5 +26,5 @@ How to update the `src/` directory:
 2. `git checkout <commithash>` (current is `d5fb408d` or `3.0.0-beta-2`)
 2. `mkdir -p third_party/protobuf/src/google` in the root of the Bazel tree.
 3. `cp -R <root of protobuf tree>/src/google/protobuf third_party/protobuf/src/google`
-4. Update rules in `third_party/protobuf/BUILD` with the rules in the protobuf repository.
+4. Update rules in `third_party/protobuf/UCBUILD` with the rules in the protobuf repository.
 5. Done.

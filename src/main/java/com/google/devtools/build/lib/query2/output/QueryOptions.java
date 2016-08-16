@@ -148,7 +148,7 @@ public class QueryOptions extends OptionsBase {
       category = "query",
       help = "If enabled, implicit dependencies will be included in the dependency graph over "
           + "which the query operates. An implicit dependency is one that is not explicitly "
-          + "specified in the BUILD file but added by blaze.")
+          + "specified in the UCBUILD file but added by blaze.")
   public boolean includeImplicitDeps;
 
   @Option(name = "graph:node_limit",
@@ -172,7 +172,7 @@ public class QueryOptions extends OptionsBase {
       defaultValue = "true",
       category = "query",
       help = "If true, attributes whose value is not explicitly specified "
-          + "in the BUILD file are included; otherwise they are omitted. "
+          + "in the UCBUILD file are included; otherwise they are omitted. "
           + "This option is applicable to --output=proto")
   public boolean protoIncludeDefaultValues;
 
@@ -188,7 +188,7 @@ public class QueryOptions extends OptionsBase {
       defaultValue = "false",
       category = "query",
       help = "If true, rule attributes whose value is not explicitly specified "
-          + "in the BUILD file are printed; otherwise they are omitted.")
+          + "in the UCBUILD file are printed; otherwise they are omitted.")
   public boolean xmlShowDefaultValues;
 
   @Option(name = "strict_test_suite",
@@ -210,7 +210,7 @@ public class QueryOptions extends OptionsBase {
   @Option(name = "relative_locations",
       defaultValue = "false",
       category = "query",
-      help = "If true, the location of BUILD files in xml and proto outputs will be relative. "
+      help = "If true, the location of UCBUILD files in xml and proto outputs will be relative. "
         + "By default, the location output is an absolute path and will not be consistent "
         + "across machines. You can set this option to true to have a consistent result "
         + "across machines.")

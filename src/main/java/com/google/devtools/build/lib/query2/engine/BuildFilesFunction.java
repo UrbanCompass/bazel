@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A buildfiles(x) query expression, which computes the set of BUILD files and
+ * A buildfiles(x) query expression, which computes the set of UCBUILD files and
  * subincluded files for each target in set x.  The result is unordered.  This
  * operator is typically used for determinining what files or packages to check
  * out.
@@ -59,7 +59,7 @@ class BuildFilesFunction implements QueryFunction {
             Iterables.addAll(result, partialResult);
             callback.process(
                 env.getBuildFiles(
-                    expression, result, /* BUILD */ true, /* subinclude */ true, /* load */ true));
+                    expression, result, /* UCBUILD */ true, /* subinclude */ true, /* load */ true));
           }
         });
   }

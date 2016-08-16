@@ -61,7 +61,7 @@ public final class RecursiveFilesystemTraversalFunction implements SkyFunction {
   }
 
   /**
-   * Thrown when the traversal encounters a subdirectory with a BUILD file but is not allowed to
+   * Thrown when the traversal encounters a subdirectory with a UCBUILD file but is not allowed to
    * recurse into it. See {@code PackageBoundaryMode#REPORT_ERROR}.
    */
   public static final class CannotCrossPackageBoundaryException extends
@@ -245,7 +245,7 @@ public final class RecursiveFilesystemTraversalFunction implements SkyFunction {
       return new PkgLookupResult(Type.DIRECTORY, traversal, rootInfo);
     }
 
-    /** Result for a package, i.e. a directory  with a BUILD file. */
+    /** Result for a package, i.e. a directory  with a UCBUILD file. */
     static PkgLookupResult pkg(TraversalRequest traversal, FileInfo rootInfo) {
       return new PkgLookupResult(Type.PKG, traversal, rootInfo);
     }
@@ -295,7 +295,7 @@ public final class RecursiveFilesystemTraversalFunction implements SkyFunction {
         Path pkgRoot = pkgLookup.getRoot();
         if (!pkgRoot.equals(traversal.path.getRoot())) {
           // However the root of this package is different from what we expected. stat() the real
-          // BUILD file of that package.
+          // UCBUILD file of that package.
           traversal = traversal.forChangedRootPath(pkgRoot);
           rootInfo = lookUpFileInfo(env, traversal);
           Verify.verify(rootInfo.type.exists(), "{%s} {%s}", traversal, rootInfo);

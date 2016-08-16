@@ -824,7 +824,7 @@ public class ParserTest extends EvaluationTestCase {
   @Test
   public void testParseBuildFileWithComments() throws Exception {
     BuildFileAST result = parseFileWithComments(
-      "# Test BUILD file",
+      "# Test UCBUILD file",
       "# with multi-line comment",
       "",
       "genrule(name = 'foo',",
@@ -1012,7 +1012,7 @@ public class ParserTest extends EvaluationTestCase {
         "  x = 2",
         "x = 3;\n");
     assertThat(stmts).hasSize(2);
-    assertContainsError("This is not supported in BUILD files");
+    assertContainsError("This is not supported in UCBUILD files");
   }
 
   @Test
@@ -1134,7 +1134,7 @@ public class ParserTest extends EvaluationTestCase {
 
   @Test
   public void testValidRelativeImportPathInPackageDir() throws Exception {
-    validNonAbsoluteImportTest("file", /*containing*/ "//some/skylark:BUILD",
+    validNonAbsoluteImportTest("file", /*containing*/ "//some/skylark:UCBUILD",
         /*expected*/ "//some/skylark:file.bzl");
   }
 
@@ -1160,7 +1160,7 @@ public class ParserTest extends EvaluationTestCase {
   }
 
   private void validAbsoluteImportLabelTest(String importString) {
-    validNonAbsoluteImportTest(importString, /*irrelevant*/ "//another/path:BUILD",
+    validNonAbsoluteImportTest(importString, /*irrelevant*/ "//another/path:UCBUILD",
         /*expected*/ importString);
   }
 
@@ -1197,7 +1197,7 @@ public class ParserTest extends EvaluationTestCase {
 
   @Test
   public void testValidRelativeImportSimpleLabelInPackageDir() throws Exception {
-    validNonAbsoluteImportTest(":file.bzl", /*containing*/ "//some/skylark:BUILD",
+    validNonAbsoluteImportTest(":file.bzl", /*containing*/ "//some/skylark:UCBUILD",
         /*expected*/ "//some/skylark:file.bzl");
   }
 
@@ -1209,7 +1209,7 @@ public class ParserTest extends EvaluationTestCase {
 
   @Test
   public void testValidRelativeImportComplexLabelInPackageDir() throws Exception {
-    validNonAbsoluteImportTest(":subdir/containing/file.bzl", /*containing*/ "//some/skylark:BUILD",
+    validNonAbsoluteImportTest(":subdir/containing/file.bzl", /*containing*/ "//some/skylark:UCBUILD",
         /*expected*/ "//some/skylark:subdir/containing/file.bzl");
   }
 
@@ -1360,14 +1360,14 @@ public class ParserTest extends EvaluationTestCase {
   public void testKwargsForbidden() throws Exception {
     setFailFast(false);
     parseFile("func(**dict)");
-    assertContainsError("**kwargs arguments are not allowed in BUILD files");
+    assertContainsError("**kwargs arguments are not allowed in UCBUILD files");
   }
 
   @Test
   public void testArgsForbidden() throws Exception {
     setFailFast(false);
     parseFile("func(*array)");
-    assertContainsError("*args arguments are not allowed in BUILD files");
+    assertContainsError("*args arguments are not allowed in UCBUILD files");
   }
 
   @Test
@@ -1488,7 +1488,7 @@ public class ParserTest extends EvaluationTestCase {
   public void testDefInBuild() throws Exception {
     setFailFast(false);
     parseFile("def func(): pass");
-    assertContainsError("syntax error at 'def': This is not supported in BUILD files. "
+    assertContainsError("syntax error at 'def': This is not supported in UCBUILD files. "
         + "Move the block to a .bzl file and load it");
   }
 }

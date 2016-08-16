@@ -19,7 +19,7 @@ filegroup(
     srcs = glob(
         ["**/*"],
         exclude = [
-            "BUILD",
+            "UCBUILD",
             "jekyll-tree.sh",
             "*.swp",
             "command-line-reference-prefix.html",

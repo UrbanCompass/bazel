@@ -169,7 +169,7 @@ public class CompilationHelperTest extends BuildViewTestCase {
 
   private void setupJavaPythonCcConfigurationFiles() throws IOException {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "cc_binary(name = 'a',",
         "    srcs = ['a.cc'])",
         "cc_binary(name = 'b',",

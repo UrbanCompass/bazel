@@ -160,7 +160,7 @@ public class PackageCacheTest extends FoundationTestCase {
   }
 
   private void createPkg1() throws IOException {
-    scratch.file("pkg1/BUILD", "cc_library(name = 'foo') # a BUILD file");
+    scratch.file("pkg1/UCBUILD", "cc_library(name = 'foo') # a UCBUILD file");
   }
 
   // Check that a substring is present in an error message.
@@ -178,7 +178,7 @@ public class PackageCacheTest extends FoundationTestCase {
     createPkg1();
     Package pkg1 = getPackage("pkg1");
     assertEquals("pkg1", pkg1.getName());
-    assertEquals("/workspace/pkg1/BUILD",
+    assertEquals("/workspace/pkg1/UCBUILD",
                  pkg1.getFilename().toString());
     assertSame(pkg1, getPackageManager().getPackage(reporter,
         PackageIdentifier.createInMainRepo("pkg1")));
@@ -195,12 +195,12 @@ public class PackageCacheTest extends FoundationTestCase {
   public void testGetNonexistentPackage() throws Exception {
     checkGetPackageFails("not-there",
                          "no such package 'not-there': "
-                         + "BUILD file not found on package path");
+                         + "UCBUILD file not found on package path");
   }
 
   @Test
   public void testGetPackageWithInvalidName() throws Exception {
-    scratch.file("invalidpackagename&42/BUILD", "cc_library(name = 'foo') # a BUILD file");
+    scratch.file("invalidpackagename&42/UCBUILD", "cc_library(name = 'foo') # a UCBUILD file");
     checkGetPackageFails(
         "invalidpackagename&42",
         "no such package 'invalidpackagename&42': Invalid package name 'invalidpackagename&42'");
@@ -222,33 +222,33 @@ public class PackageCacheTest extends FoundationTestCase {
       fail();
     } catch (NoSuchTargetException e) {
       assertThat(e).hasMessage("no such target '//pkg1:not-there': target 'not-there' "
-          + "not declared in package 'pkg1' defined by /workspace/pkg1/BUILD");
+          + "not declared in package 'pkg1' defined by /workspace/pkg1/UCBUILD");
     }
   }
 
   /**
-   * A missing package is one for which no BUILD file can be found.  The
+   * A missing package is one for which no UCBUILD file can be found.  The
    * PackageCache caches failures of this kind until the next sync.
    */
   @Test
   public void testRepeatedAttemptsToParseMissingPackage() throws Exception {
     checkGetPackageFails("missing",
                          "no such package 'missing': "
-                         + "BUILD file not found on package path");
+                         + "UCBUILD file not found on package path");
 
     // Still missing:
     checkGetPackageFails("missing",
                          "no such package 'missing': "
-                         + "BUILD file not found on package path");
+                         + "UCBUILD file not found on package path");
 
-    // Update the BUILD file on disk so "missing" is no longer missing:
-    scratch.file("missing/BUILD",
+    // Update the UCBUILD file on disk so "missing" is no longer missing:
+    scratch.file("missing/UCBUILD",
                  "# an ok build file");
 
     // Still missing:
     checkGetPackageFails("missing",
                          "no such package 'missing': "
-                         + "BUILD file not found on package path");
+                         + "UCBUILD file not found on package path");
 
     invalidatePackages();
 
@@ -268,26 +268,26 @@ public class PackageCacheTest extends FoundationTestCase {
    *
    * <p>Note: since the PackageCache.setStrictPackageCreation method was deleted (since it wasn't
    * used by any significant clients) creating a "broken" build file got trickier--syntax errors are
-   * not enough.  For now, we create an unreadable BUILD file, which will cause an IOException to be
+   * not enough.  For now, we create an unreadable UCBUILD file, which will cause an IOException to be
    * thrown. This test seems less valuable than it once did.
    */
   @Test
   public void testParseBrokenPackage() throws Exception {
     reporter.removeHandler(failFastHandler);
 
-    Path brokenBuildFile = scratch.file("broken/BUILD");
+    Path brokenBuildFile = scratch.file("broken/UCBUILD");
     brokenBuildFile.setReadable(false);
 
     try {
       getPackage("broken");
       fail();
     } catch (BuildFileContainsErrorsException e) {
-      assertThat(e.getMessage()).contains("/workspace/broken/BUILD (Permission denied)");
+      assertThat(e.getMessage()).contains("/workspace/broken/UCBUILD (Permission denied)");
     }
     eventCollector.clear();
 
-    // Update the BUILD file on disk so "broken" is no longer broken:
-    scratch.overwriteFile("broken/BUILD",
+    // Update the UCBUILD file on disk so "broken" is no longer broken:
+    scratch.overwriteFile("broken/UCBUILD",
                  "# an ok build file");
 
     invalidatePackages(); //  resets cache of failures
@@ -300,7 +300,7 @@ public class PackageCacheTest extends FoundationTestCase {
   @Test
   public void testPackageInErrorReloadedWhenFixed() throws Exception {
     reporter.removeHandler(failFastHandler);
-    Path build = scratch.file("a/BUILD", "cc_library(name='a', feet='stinky')");
+    Path build = scratch.file("a/UCBUILD", "cc_library(name='a', feet='stinky')");
     build.setLastModifiedTime(1);
     Package a1 = getPackage("a");
     assertTrue(a1.containsErrors());
@@ -308,7 +308,7 @@ public class PackageCacheTest extends FoundationTestCase {
 
     eventCollector.clear();
     build.delete();
-    build = scratch.file("a/BUILD", "cc_library(name='a', srcs=['a.cc'])");
+    build = scratch.file("a/UCBUILD", "cc_library(name='a', srcs=['a.cc'])");
     build.setLastModifiedTime(2);
     invalidatePackages();
     Package a2 = getPackage("a");
@@ -319,14 +319,14 @@ public class PackageCacheTest extends FoundationTestCase {
 
   @Test
   public void testModifiedBuildFileCausesReloadAfterSync() throws Exception {
-    Path path = scratch.file("pkg/BUILD",
+    Path path = scratch.file("pkg/UCBUILD",
                              "cc_library(name = 'foo')");
     path.setLastModifiedTime(1000);
 
     Package oldPkg = getPackage("pkg");
-    // modify BUILD file (and change its timestamp)
+    // modify UCBUILD file (and change its timestamp)
     path.delete();
-    scratch.file("pkg/BUILD", "cc_library(name = 'bar')");
+    scratch.file("pkg/UCBUILD", "cc_library(name = 'bar')");
     path.setLastModifiedTime(999); // earlier; mtime doesn't have to advance
     assertSame(oldPkg, getPackage("pkg")); // change not yet visible
 
@@ -339,7 +339,7 @@ public class PackageCacheTest extends FoundationTestCase {
 
   @Test
   public void testTouchedBuildFileCausesReloadAfterSync() throws Exception {
-    Path path = scratch.file("pkg/BUILD",
+    Path path = scratch.file("pkg/UCBUILD",
                              "cc_library(name = 'foo')");
     path.setLastModifiedTime(1000);
 
@@ -355,9 +355,9 @@ public class PackageCacheTest extends FoundationTestCase {
 
   @Test
   public void testMovedBuildFileCausesReloadAfterSync() throws Exception {
-    Path buildFile1 = scratch.file("pkg/BUILD",
+    Path buildFile1 = scratch.file("pkg/UCBUILD",
                                   "cc_library(name = 'foo')");
-    Path buildFile2 = scratch.file("/otherroot/pkg/BUILD",
+    Path buildFile2 = scratch.file("/otherroot/pkg/UCBUILD",
                                   "cc_library(name = 'bar')");
     setOptions("--package_path=/workspace:/otherroot");
 
@@ -374,7 +374,7 @@ public class PackageCacheTest extends FoundationTestCase {
     assertEquals(buildFile2, newPkg.getFilename());
     assertEquals(scratch.dir("/otherroot"), newPkg.getSourceRoot());
 
-    // TODO(bazel-team): (2009) test BUILD file moves in the other direction too.
+    // TODO(bazel-team): (2009) test UCBUILD file moves in the other direction too.
   }
 
   private Path rootDir1;
@@ -382,18 +382,18 @@ public class PackageCacheTest extends FoundationTestCase {
 
   private void setUpCacheWithTwoRootLocator() throws Exception {
     // Root 1:
-    //   /a/BUILD
-    //   /b/BUILD
+    //   /a/UCBUILD
+    //   /b/UCBUILD
     //   /c/d
     //   /c/e
     //
     // Root 2:
-    //   /b/BUILD
-    //   /c/BUILD
-    //   /c/d/BUILD
-    //   /f/BUILD
+    //   /b/UCBUILD
+    //   /c/UCBUILD
+    //   /c/d/UCBUILD
+    //   /f/UCBUILD
     //   /f/g
-    //   /f/g/h/BUILD
+    //   /f/g/h/UCBUILD
 
     rootDir1 = scratch.dir("/workspace");
     rootDir2 = scratch.dir("/otherroot");
@@ -421,7 +421,7 @@ public class PackageCacheTest extends FoundationTestCase {
       lines[i] = "sh_library(name='" + targets[i] + "')";
     }
 
-    return scratch.file(workspace + "/" + packageName + "/BUILD", lines);
+    return scratch.file(workspace + "/" + packageName + "/UCBUILD", lines);
   }
 
   private void assertLabelValidity(boolean expected, String labelString)
@@ -451,8 +451,8 @@ public class PackageCacheTest extends FoundationTestCase {
 
   @Test
   public void testLocationForLabelCrossingSubpackage() throws Exception {
-    scratch.file("e/f/BUILD");
-    scratch.file("e/BUILD",
+    scratch.file("e/f/UCBUILD");
+    scratch.file("e/UCBUILD",
         "# Whatever",
         "filegroup(name='fg', srcs=['f/g'])");
     reporter.removeHandler(failFastHandler);
@@ -503,14 +503,14 @@ public class PackageCacheTest extends FoundationTestCase {
   @Test
   public void testAddedBuildFileCausesLabelToBecomeInvalid() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("pkg/BUILD",
+    scratch.file("pkg/UCBUILD",
                  "           cc_library(name = 'foo', ",
                  "           srcs = ['x/y.cc'])");
 
     assertLabelValidity(true, "//pkg:x/y.cc");
 
     // The existence of this file makes 'x/y.cc' an invalid reference.
-    scratch.file("pkg/x/BUILD");
+    scratch.file("pkg/x/UCBUILD");
 
     // but not yet...
     assertLabelValidity(true, "//pkg:x/y.cc");
@@ -532,7 +532,7 @@ public class PackageCacheTest extends FoundationTestCase {
     // root.  It's as if we've merged c and c/d in the first root.
 
     // c/d is still a subpackage--found in the second root:
-    assertEquals(rootDir2.getRelative("c/d/BUILD"),
+    assertEquals(rootDir2.getRelative("c/d/UCBUILD"),
                  getPackage("c/d").getFilename());
 
     // Subpackage labels are still valid...
@@ -540,7 +540,7 @@ public class PackageCacheTest extends FoundationTestCase {
     // ...and this crosses package boundaries:
     assertLabelValidity(false, "//c:d/x");
     assertPackageLoadingFails("c",
-        "Label '//c:d/x' crosses boundary of subpackage 'c/d' (have you deleted c/d/BUILD? "
+        "Label '//c:d/x' crosses boundary of subpackage 'c/d' (have you deleted c/d/UCBUILD? "
         + "If so, use the --deleted_packages=c/d option)");
 
     assertTrue(getPackageManager().isPackage(
@@ -552,7 +552,7 @@ public class PackageCacheTest extends FoundationTestCase {
     assertFalse(getPackageManager().isPackage(
         reporter, PackageIdentifier.createInMainRepo("c/d")));
 
-    // c/d is no longer a subpackage--even though there's a BUILD file in the
+    // c/d is no longer a subpackage--even though there's a UCBUILD file in the
     // second root:
     try {
       getPackage("c/d");
@@ -570,7 +570,7 @@ public class PackageCacheTest extends FoundationTestCase {
 
   @Test
   public void testPackageFeatures() throws Exception {
-    scratch.file("peach/BUILD",
+    scratch.file("peach/UCBUILD",
         "package(features = ['crosstool_default_false'])",
         "cc_library(name = 'cc', srcs = ['cc.cc'])");
     Rule cc = (Rule) getTarget("//peach:cc");
@@ -591,14 +591,14 @@ public class PackageCacheTest extends FoundationTestCase {
     reporter.removeHandler(failFastHandler);
     AnalysisMock.get().setupMockClient(new MockToolsConfig(rootDirectory));
 
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(name='x',",
         "        srcs = ['file.txt'],",
         "        outs = ['foo'],",
         "        cmd = 'echo')",
         "@");  // syntax error
 
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "genrule(name= 'cc',",
         "        tools = ['//a:x'],",
         "        outs = ['bar'],",
@@ -616,8 +616,8 @@ public class PackageCacheTest extends FoundationTestCase {
   public void testBrokenPackageOnMultiplePackagePathEntries() throws Exception {
     reporter.removeHandler(failFastHandler);
     setOptions("--package_path=.:.");
-    scratch.file("x/y/BUILD");
-    scratch.file("x/BUILD",
+    scratch.file("x/y/UCBUILD");
+    scratch.file("x/UCBUILD",
         "genrule(name = 'x',",
         "srcs = [],",
         "outs = ['y/z.h'],",

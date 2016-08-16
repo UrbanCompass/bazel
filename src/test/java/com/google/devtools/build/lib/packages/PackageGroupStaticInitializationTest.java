@@ -41,7 +41,7 @@ public class PackageGroupStaticInitializationTest {
 
   @Test
   public void testNoDeadlockOnPackageGroupCreation() throws Exception {
-    scratch.file("fruits/BUILD", "package_group(name = 'mango', packages = ['//...'])");
+    scratch.file("fruits/UCBUILD", "package_group(name = 'mango', packages = ['//...'])");
 
     final SynchronousQueue<PackageSpecification> groupQueue = new SynchronousQueue<>();
     Thread producingThread =
@@ -88,7 +88,7 @@ public class PackageGroupStaticInitializationTest {
   }
 
   private Package getPackage(String packageName) throws Exception {
-    PathFragment buildFileFragment = new PathFragment(packageName).getRelative("BUILD");
+    PathFragment buildFileFragment = new PathFragment(packageName).getRelative("UCBUILD");
     Path buildFile = scratch.resolve(buildFileFragment.getPathString());
     return packages.createPackage(packageName, buildFile);
   }

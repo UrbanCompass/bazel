@@ -334,7 +334,7 @@ public class SkyQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
         // This case represents loading-phase errors reported during evaluation
         // of target patterns that don't cause evaluation to fail per se.
         throw new QueryException(
-            "Evaluation of query \"" + expr + "\" failed due to BUILD file errors");
+            "Evaluation of query \"" + expr + "\" failed due to UCBUILD file errors");
       } else {
         eventHandler.handle(
             Event.warn("--keep_going specified, ignoring errors.  " + "Results may be inaccurate"));
@@ -545,7 +545,7 @@ public class SkyQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
     // real target.
     Set<Label> seenLabels = new HashSet<>();
 
-    // Adds all the package definition files (BUILD files and build
+    // Adds all the package definition files (UCBUILD files and build
     // extensions) for package "pkg", to "buildfiles".
     for (Target x : nodes) {
       Package pkg = x.getPackage();
@@ -566,15 +566,15 @@ public class SkyQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
           addIfUniqueLabel(getSubincludeTarget(subinclude, pkg), seenLabels, dependentFiles);
 
           if (buildFiles) {
-            // Also add the BUILD file of the subinclude.
+            // Also add the UCBUILD file of the subinclude.
             try {
               addIfUniqueLabel(
-                  getSubincludeTarget(subinclude.getLocalTargetLabel("BUILD"), pkg),
+                  getSubincludeTarget(subinclude.getLocalTargetLabel("UCBUILD"), pkg),
                   seenLabels,
                   dependentFiles);
 
             } catch (LabelSyntaxException e) {
-              throw new AssertionError("BUILD should always parse as a target name", e);
+              throw new AssertionError("UCBUILD should always parse as a target name", e);
             }
           }
         }
@@ -863,7 +863,7 @@ public class SkyQueryEnvironment extends AbstractBlazeQueryEnvironment<Target>
 
   /**
    * Calculates the set of {@link Package} objects, represented as source file targets, that depend
-   * on the given list of BUILD files and subincludes (other files are filtered out).
+   * on the given list of UCBUILD files and subincludes (other files are filtered out).
    */
   void getRBuildFiles(Collection<PathFragment> fileIdentifiers, Callback<Target> callback)
       throws QueryException, InterruptedException {

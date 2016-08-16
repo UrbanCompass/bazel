@@ -96,7 +96,7 @@ public class DependencyResolverTest extends AnalysisTestCase {
   }
 
   private void pkg(String name, String... contents) throws Exception {
-    scratch.file("" + name + "/BUILD", contents);
+    scratch.file("" + name + "/UCBUILD", contents);
   }
 
   private OrderedSetMultimap<Attribute, Dependency> dependentNodeMap(

@@ -73,8 +73,8 @@ public interface AttributeMap {
   @Nullable Attribute getAttributeDefinition(String attrName);
 
   /**
-   * Returns true iff the value of the specified attribute is explicitly set in the BUILD file (as
-   * opposed to its default value). This also returns true if the value from the BUILD file is the
+   * Returns true iff the value of the specified attribute is explicitly set in the UCBUILD file (as
+   * opposed to its default value). This also returns true if the value from the UCBUILD file is the
    * same as the default value.
    *
    * <p>It is probably a good idea to avoid this method in default value and implicit outputs

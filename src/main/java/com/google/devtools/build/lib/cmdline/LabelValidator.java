@@ -130,7 +130,7 @@ public final class LabelValidator {
     // data directories.
 
     // TODO(bazel-team): (2011) Get rid of this code once we have reached critical mass and can
-    // pressure developers to clean up their BUILD files.
+    // pressure developers to clean up their UCBUILD files.
 
     // Code optimized for the common case: success.
     int len = targetName.length();

@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Write a set of rules to a WORKSPACE and BUILD file.
+ * Write a set of rules to a WORKSPACE and UCBUILD file.
  */
 public class ResultWriter {
   private final List<String> sources;

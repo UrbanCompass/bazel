@@ -61,7 +61,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
 
   @Before
   public final void createFiles() throws Exception {
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
                 "cc_library(name = 'hello',",
                 "           srcs = ['hello.cc'])",
                 "cc_library(name = 'hello_static',",
@@ -410,13 +410,13 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
         .ccSupport()
         .setupCrosstool(mockToolsConfig, MockCcSupport.HEADER_MODULES_FEATURE_CONFIGURATION);
     useConfiguration();
-    scratch.file("module/BUILD",
+    scratch.file("module/UCBUILD",
         "package(features = ['header_modules'])",
         "cc_library(",
         "    name = 'module',",
         "    srcs = ['a.cc', 'a.h'],",
         ")");
-    scratch.file("nomodule/BUILD",
+    scratch.file("nomodule/UCBUILD",
         "package(features = ['-header_modules'])",
         "cc_library(",
         "    name = 'nomodule',",
@@ -480,7 +480,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
                 + "feature { name: 'module_maps' }"
                 + "feature { name: 'use_header_modules' }");
     useConfiguration();
-    scratch.file("module/BUILD",
+    scratch.file("module/UCBUILD",
         "package(features = ['header_modules'])",
         "cc_library(",
         "    name = 'a',",
@@ -513,7 +513,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
   }
 
   private void setupPackagesForModuleTests(boolean useHeaderModules) throws Exception {
-    scratch.file("module/BUILD",
+    scratch.file("module/UCBUILD",
         "package(features = ['header_modules'])",
         "cc_library(",
         "    name = 'b',",
@@ -530,7 +530,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
         "    srcs = ['j.h', 'j.cc'],",
         "    deps = ['//nomodule:c', '//nomodule:i'],",
         ")");
-    scratch.file("nomodule/BUILD",
+    scratch.file("nomodule/UCBUILD",
         "package(features = ['-header_modules'"
             + (useHeaderModules ? ", 'use_header_modules'" : "") + "])",
         "cc_library(",
@@ -760,7 +760,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
   }
 
   private void writeSimpleCcLibrary() throws Exception {
-    scratch.file("module/BUILD",
+    scratch.file("module/UCBUILD",
         "cc_library(",
         "    name = 'map',",
         "    srcs = ['a.cc', 'a.h'],",
@@ -924,7 +924,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
 
   @Test
   public void testIncludePathOrder() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_library(",
         "    name = 'bar',",
         "    includes = ['bar'],",
@@ -947,7 +947,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
 
   @Test
   public void testDefinesOrder() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_library(",
         "    name = 'bar',",
         "    defines = ['BAR'],",
@@ -1000,7 +1000,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
   private List<String> getCompilationModeFlags(String... flags) throws Exception {
     AnalysisMock.get().ccSupport().setupCrosstool(mockToolsConfig, COMPILATION_MODE_FEATURES);
     useConfiguration(flags);
-    scratch.overwriteFile("mode/BUILD", "cc_library(name = 'a', srcs = ['a.cc'])");
+    scratch.overwriteFile("mode/UCBUILD", "cc_library(name = 'a', srcs = ['a.cc'])");
     getConfiguredTarget("//mode:a");
     Artifact objectArtifact = getBinArtifact("_objs/a/mode/a.pic.o", "//mode:a");
     CppCompileAction action = (CppCompileAction) getGeneratingAction(objectArtifact);
@@ -1031,7 +1031,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
     AnalysisMock.get()
         .ccSupport()
         .setupCrosstool(mockToolsConfig, MockCcSupport.HOST_AND_NONHOST_CONFIGURATION);
-    scratch.overwriteFile("mode/BUILD", "cc_library(name = 'a', srcs = ['a.cc'])");
+    scratch.overwriteFile("mode/UCBUILD", "cc_library(name = 'a', srcs = ['a.cc'])");
     useConfiguration();
     ConfiguredTarget target;
     String objectPath;
@@ -1095,7 +1095,7 @@ public class CcLibraryConfiguredTargetTest extends BuildViewTestCase {
    */
   @Test
   public void testConfigurableSrcs() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "cc_library(",
         "    name = 'foo',",
         "    srcs = select({'//conditions:default': []}),",

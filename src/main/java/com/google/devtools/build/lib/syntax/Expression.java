@@ -25,7 +25,7 @@ public abstract class Expression extends ASTNode {
 
   /**
    * Returns the result of evaluating this build-language expression in the
-   * specified environment. All BUILD language datatypes are mapped onto the
+   * specified environment. All UCBUILD language datatypes are mapped onto the
    * corresponding Java types as follows:
    *
    * <pre>
@@ -39,7 +39,7 @@ public abstract class Expression extends ASTNode {
    * </pre>
    *
    * @return the result of evaluting the expression: a Java object corresponding
-   *         to a datatype in the BUILD language.
+   *         to a datatype in the UCBUILD language.
    * @throws EvalException if the expression could not be evaluated.
    * @throws InterruptedException may be thrown in a sub class.
    */

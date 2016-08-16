@@ -70,7 +70,7 @@ You also need to get the sample project for the tutorial from GitHub:
 The GitHub repo has two branches: `source-only` and `master`. The `source-only`
 branch contains the source files for the project only. You'll use the files in
 this branch in this tutorial. The `master` branch contains both the source files
-and completed Bazel `WORKSPACE` and `BUILD` files. You can use the files in this
+and completed Bazel `WORKSPACE` and `UCBUILD` files. You can use the files in this
 branch to check your work when you've completed the tutorial steps.
 
 Enter the following at the command line to get the files in the `source-only`

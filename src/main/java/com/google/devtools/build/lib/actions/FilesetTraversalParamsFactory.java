@@ -40,14 +40,14 @@ public final class FilesetTraversalParamsFactory {
    * a traversal is created when FilesetEntry.files is unspecified.
    *
    * @param ownerLabel the rule that created this object
-   * @param buildFile path of the BUILD file of the package to traverse
+   * @param buildFile path of the UCBUILD file of the package to traverse
    * @param destPath path in the Fileset's output directory that will be the root of files found
    *     in this directory
    * @param excludes optional; set of files directly under this package's directory to exclude;
    *     files in subdirectories cannot be excluded
    * @param symlinkBehaviorMode what to do with symlinks
    * @param pkgBoundaryMode what to do when the traversal hits a subdirectory that is also a
-   *     subpackage (contains a BUILD file)
+   *     subpackage (contains a UCBUILD file)
    */
   public static FilesetTraversalParams recursiveTraversalOfPackage(Label ownerLabel,
       Artifact buildFile, PathFragment destPath, @Nullable Set<String> excludes,
@@ -71,7 +71,7 @@ public final class FilesetTraversalParamsFactory {
    *     subdirectories cannot be excluded
    * @param symlinkBehaviorMode what to do with symlinks
    * @param pkgBoundaryMode what to do when the traversal hits a subdirectory that is also a
-   *     subpackage (contains a BUILD file)
+   *     subpackage (contains a UCBUILD file)
    */
   public static FilesetTraversalParams recursiveTraversalOfDirectory(Label ownerLabel,
       Artifact directoryToTraverse, PathFragment destPath, @Nullable Set<String> excludes,
@@ -94,7 +94,7 @@ public final class FilesetTraversalParamsFactory {
    *     respective symlink there, or the root of files found (in case this is a directory)
    * @param symlinkBehaviorMode what to do with symlinks
    * @param pkgBoundaryMode what to do when the traversal hits a subdirectory that is also a
-   *     subpackage (contains a BUILD file)
+   *     subpackage (contains a UCBUILD file)
    */
   public static FilesetTraversalParams fileTraversal(Label ownerLabel, Artifact fileToTraverse,
       PathFragment destPath, SymlinkBehavior symlinkBehaviorMode,

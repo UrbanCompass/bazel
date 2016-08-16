@@ -29,7 +29,7 @@ public class RelativePackageNameResolver {
   /**
    * @param offset the base package path used to resolve relative paths
    * @param discardBuild if true, discards the last package path segment if
-   *        it is called "BUILD"
+   *        it is called "UCBUILD"
    */
   public RelativePackageNameResolver(PathFragment offset, boolean discardBuild) {
     Preconditions.checkArgument(!offset.containsUplevelReferences(),
@@ -67,7 +67,7 @@ public class RelativePackageNameResolver {
 
     PathFragment relative = new PathFragment(relativePkg);
 
-    if (discardBuild && relative.getBaseName().equals("BUILD")) {
+    if (discardBuild && relative.getBaseName().equals("UCBUILD")) {
       relative = relative.getParentDirectory();
     }
 

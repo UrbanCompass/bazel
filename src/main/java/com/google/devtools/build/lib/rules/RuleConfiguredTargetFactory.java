@@ -37,7 +37,7 @@ import com.google.devtools.build.lib.packages.RuleClass;
  * {@link com.google.devtools.build.lib.skyframe.ConfiguredTargetFunction}):
  * <ol>
  *   <li>The corresponding {@link com.google.devtools.build.lib.packages.Target} is loaded, i.e.
- *       the BUILD file is parsed.</li>
+ *       the UCBUILD file is parsed.</li>
  *   <li>Its direct dependencies are analyzed, during which in turn indirect dependencies are
  *       also analyzed.</li>
  *   <li>Aspects specified by the configured target are analyzed. These can be thought of as
@@ -61,7 +61,7 @@ import com.google.devtools.build.lib.packages.RuleClass;
  * <p>During the analysis of a configured target, the following pieces of data are available:
  * <ul>
  *   <li>The corresponding target itself. This is necessary so that the analysis has access to e.g.
- *       the attributes a rule has in the BUILD file.</li>
+ *       the attributes a rule has in the UCBUILD file.</li>
  *   <li>The {@link com.google.devtools.build.lib.analysis.TransitiveInfoCollection}s of direct
  *       dependencies. They are used to gather information from the transitive closure, for example,
  *       the include path entries for C++ compilation or all the object files that need to be

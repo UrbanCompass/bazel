@@ -108,7 +108,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testSmoke() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "filegroup(name = 'hello', srcs = ['foo.txt'])");
     LoadingResult loadingResult = assertNoErrors(tester.load("//base:hello"));
     assertThat(loadingResult.getTargets()).containsExactlyElementsIn(getTargets("//base:hello"));
@@ -117,7 +117,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testSmokeWithCallback() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "filegroup(name = 'hello', srcs = ['foo.txt'])");
     final List<Target> targetsNotified = new ArrayList<>();
     tester.setCallback(new LoadingCallback() {
@@ -147,7 +147,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testNonExistentTarget() throws Exception {
-    tester.addFile("base/BUILD");
+    tester.addFile("base/UCBUILD");
     LoadingResult loadingResult = tester.loadKeepGoing("//base:missing");
     assertThat(loadingResult.hasTargetPatternError()).isTrue();
     assertThat(loadingResult.hasLoadingError()).isFalse();
@@ -159,7 +159,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testBadTargetPatternWithTest() throws Exception {
-    tester.addFile("base/BUILD");
+    tester.addFile("base/UCBUILD");
     LoadingResult loadingResult = tester.loadTestsKeepGoing("//base:missing");
     assertTrue(loadingResult.hasTargetPatternError());
     assertFalse(loadingResult.hasLoadingError());
@@ -175,20 +175,20 @@ public class LoadingPhaseRunnerTest {
       // TODO(ulfjack): Requires loading phase.
       return;
     }
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "filegroup(name = 'hello', srcs = ['//nonexistent:missing'])");
     LoadingResult loadingResult = tester.loadKeepGoing("//base:hello");
     assertFalse(loadingResult.hasTargetPatternError());
     assertTrue(loadingResult.hasLoadingError());
     assertThat(loadingResult.getTargets()).containsExactlyElementsIn(ImmutableList.<Target>of());
     assertNull(loadingResult.getTestsToRun());
-    tester.assertContainsError("no such package 'nonexistent': BUILD file not found");
+    tester.assertContainsError("no such package 'nonexistent': UCBUILD file not found");
   }
 
   @Test
   public void testManualTarget() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("cc/BUILD", "cc_library(name = 'my_lib', srcs = ['lib.cc'], tags = ['manual'])");
+    tester.addFile("cc/UCBUILD", "cc_library(name = 'my_lib', srcs = ['lib.cc'], tags = ['manual'])");
     LoadingResult loadingResult = assertNoErrors(tester.load("//cc:all"));
     assertThat(loadingResult.getTargets()).containsExactlyElementsIn(getTargets());
 
@@ -200,7 +200,7 @@ public class LoadingPhaseRunnerTest {
   @Test
   public void testConfigSettingTarget() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("config/BUILD",
+    tester.addFile("config/UCBUILD",
         "cc_library(name = 'somelib', srcs = [ 'somelib.cc' ], hdrs = [ 'somelib.h' ])",
         "config_setting(name = 'configa', values = { 'define': 'foo=a' })",
         "config_setting(name = 'configb', values = { 'define': 'foo=b' })");
@@ -216,7 +216,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testNegativeTestDoesNotShowUpAtAll() throws Exception {
-    tester.addFile("my_test/BUILD",
+    tester.addFile("my_test/UCBUILD",
         "sh_test(name = 'my_test', srcs = ['test.cc'])");
     assertNoErrors(tester.loadTests("-//my_test"));
     assertThat(tester.getFilteredTargets()).containsExactlyElementsIn(getTargets());
@@ -225,7 +225,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testNegativeTargetDoesNotShowUpAtAll() throws Exception {
-    tester.addFile("my_library/BUILD",
+    tester.addFile("my_library/UCBUILD",
         "cc_library(name = 'my_library', srcs = ['test.cc'])");
     assertNoErrors(tester.loadTests("-//my_library"));
     assertThat(tester.getFilteredTargets()).containsExactlyElementsIn(getTargets());
@@ -233,7 +233,7 @@ public class LoadingPhaseRunnerTest {
   }
 
   private void writeBuildFilesForTestFiltering() throws Exception {
-    tester.addFile("tests/BUILD",
+    tester.addFile("tests/UCBUILD",
         "sh_test(name = 't1', srcs = ['pass.sh'], size= 'small', local=1)",
         "sh_test(name = 't2', srcs = ['pass.sh'], size = 'medium')",
         "sh_test(name = 't3', srcs = ['pass.sh'], tags = ['manual', 'local'])");
@@ -303,7 +303,7 @@ public class LoadingPhaseRunnerTest {
   @Test
   public void testTestSuiteExpansion() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("cc/BUILD",
+    tester.addFile("cc/UCBUILD",
         "cc_test(name = 'my_test', srcs = ['test.cc'])",
         "test_suite(name = 'tests', tests = [':my_test'])");
     LoadingResult loadingResult = assertNoErrors(tester.loadTests("//cc:tests"));
@@ -317,7 +317,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTestSuiteExpansionFails() throws Exception {
-    tester.addFile("ts/BUILD",
+    tester.addFile("ts/UCBUILD",
         "test_suite(name = 'tests', tests = ['//nonexistent:my_test'])");
     tester.useLoadingOptions("--build_tests_only");
     LoadingResult loadingResult = tester.loadTestsKeepGoing("//ts:tests");
@@ -328,7 +328,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTestSuiteExpansionFailsForBuild() throws Exception {
-    tester.addFile("ts/BUILD",
+    tester.addFile("ts/UCBUILD",
         "test_suite(name = 'tests', tests = [':nonexistent_test'])");
     LoadingResult loadingResult = tester.loadKeepGoing("//ts:tests");
     assertFalse(loadingResult.hasTargetPatternError());
@@ -339,8 +339,8 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTestSuiteExpansionFailsMissingTarget() throws Exception {
-    tester.addFile("other/BUILD", "");
-    tester.addFile("ts/BUILD",
+    tester.addFile("other/UCBUILD", "");
+    tester.addFile("ts/UCBUILD",
         "test_suite(name = 'tests', tests = ['//other:no_such_test'])");
     LoadingResult loadingResult = tester.loadTestsKeepGoing("//ts:tests");
     assertTrue(loadingResult.hasTargetPatternError());
@@ -350,8 +350,8 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTestSuiteExpansionFailsMultipleSuites() throws Exception {
-    tester.addFile("other/BUILD", "");
-    tester.addFile("ts/BUILD",
+    tester.addFile("other/UCBUILD", "");
+    tester.addFile("ts/UCBUILD",
         "test_suite(name = 'a', tests = ['//other:no_such_test'])",
         "test_suite(name = 'b', tests = [])");
     LoadingResult loadingResult = tester.loadTestsKeepGoing("//ts:all");
@@ -362,7 +362,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTestSuiteOverridesManualWithBuildTestsOnly() throws Exception {
-    tester.addFile("foo/BUILD",
+    tester.addFile("foo/UCBUILD",
         "sh_test(name = 'foo', srcs = ['foo.sh'], tags = ['manual'])",
         "sh_test(name = 'bar', srcs = ['bar.sh'], tags = ['manual'])",
         "sh_test(name = 'baz', srcs = ['baz.sh'])",
@@ -382,7 +382,7 @@ public class LoadingPhaseRunnerTest {
   @Test
   public void testFilterNegativeTestFromTestSuite() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("cc/BUILD",
+    tester.addFile("cc/UCBUILD",
         "cc_test(name = 'my_test', srcs = ['test.cc'])",
         "cc_test(name = 'my_other_test', srcs = ['other_test.cc'])",
         "test_suite(name = 'tests', tests = [':my_test', ':my_other_test'])");
@@ -397,7 +397,7 @@ public class LoadingPhaseRunnerTest {
   @Test
   public void testNegativeTestSuiteExpanded() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("cc/BUILD",
+    tester.addFile("cc/UCBUILD",
         "cc_test(name = 'my_test', srcs = ['test.cc'])",
         "cc_test(name = 'my_other_test', srcs = ['other_test.cc'])",
         "test_suite(name = 'tests', tests = [':my_test'])",
@@ -415,7 +415,7 @@ public class LoadingPhaseRunnerTest {
   @Test
   public void testTotalNegationEmitsWarning() throws Exception {
     AnalysisMock.get().ccSupport().setup(tester.mockToolsConfig);
-    tester.addFile("cc/BUILD",
+    tester.addFile("cc/UCBUILD",
         "cc_test(name = 'my_test', srcs = ['test.cc'])",
         "test_suite(name = 'tests', tests = [':my_test'])");
     LoadingResult loadingResult = tester.loadTests("//cc:tests", "-//cc:my_test");
@@ -428,7 +428,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testRepeatedSameLoad() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "filegroup(name = 'hello', srcs = ['foo.txt'])");
     LoadingResult firstResult = assertNoErrors(tester.load("//base:hello"));
     LoadingResult secondResult = assertNoErrors(tester.load("//base:hello"));
@@ -444,7 +444,7 @@ public class LoadingPhaseRunnerTest {
    */
   @Test
   public void testGlobPicksUpNewFile() throws Exception {
-    tester.addFile("foo/BUILD", "filegroup(name='x', srcs=glob(['*.y']))");
+    tester.addFile("foo/UCBUILD", "filegroup(name='x', srcs=glob(['*.y']))");
     tester.addFile("foo/a.y");
     Target result = Iterables.getOnlyElement(assertNoErrors(tester.load("//foo:x")).getTargets());
     assertThat(
@@ -462,8 +462,8 @@ public class LoadingPhaseRunnerTest {
   /** Regression test: handle symlink cycles gracefully. */
   @Test
   public void testCycleReporting_SymlinkCycleDuringTargetParsing() throws Exception {
-    tester.addFile("hello/BUILD", "cc_library(name = 'a', srcs = glob(['*.cc']))");
-    Path buildFilePath = tester.getWorkspace().getRelative("hello/BUILD");
+    tester.addFile("hello/UCBUILD", "cc_library(name = 'a', srcs = glob(['*.cc']))");
+    Path buildFilePath = tester.getWorkspace().getRelative("hello/UCBUILD");
     Path dirPath = buildFilePath.getParentDirectory();
     Path fooFilePath = dirPath.getRelative("foo.cc");
     Path barFilePath = dirPath.getRelative("bar.cc");
@@ -479,8 +479,8 @@ public class LoadingPhaseRunnerTest {
     tester.getWorkspace().getChild("broken").createDirectory();
 
     // Create a circular symlink.
-    tester.getWorkspace().getRelative(new PathFragment("broken/BUILD"))
-        .createSymbolicLink(new PathFragment("BUILD"));
+    tester.getWorkspace().getRelative(new PathFragment("broken/UCBUILD"))
+        .createSymbolicLink(new PathFragment("UCBUILD"));
 
     assertCircularSymlinksDuringTargetParsing("//broken/...");
   }
@@ -490,17 +490,17 @@ public class LoadingPhaseRunnerTest {
     tester.getWorkspace().getChild("broken").createDirectory();
 
     // Create a circular symlink.
-    tester.getWorkspace().getRelative(new PathFragment("broken/BUILD"))
+    tester.getWorkspace().getRelative(new PathFragment("broken/UCBUILD"))
         .createSymbolicLink(new PathFragment("x"));
     tester.getWorkspace().getRelative(new PathFragment("broken/x"))
-        .createSymbolicLink(new PathFragment("BUILD"));
+        .createSymbolicLink(new PathFragment("UCBUILD"));
 
     assertCircularSymlinksDuringTargetParsing("//broken/...");
   }
 
   @Test
   public void testSuiteInSuite() throws Exception {
-    tester.addFile("suite/BUILD",
+    tester.addFile("suite/UCBUILD",
         "test_suite(name = 'a', tests = [':b'])",
         "test_suite(name = 'b', tests = [':c'])",
         "sh_test(name = 'c', srcs = ['test.cc'])");
@@ -510,7 +510,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTopLevelTargetErrorsPrintedExactlyOnce_NoKeepGoing() throws Exception {
-    tester.addFile("bad/BUILD",
+    tester.addFile("bad/UCBUILD",
         "sh_binary(name = 'bad', srcs = ['bad.sh'])",
         "undefined_symbol");
     try {
@@ -523,7 +523,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testTopLevelTargetErrorsPrintedExactlyOnce_KeepGoing() throws Exception {
-    tester.addFile("bad/BUILD",
+    tester.addFile("bad/UCBUILD",
         "sh_binary(name = 'bad', srcs = ['bad.sh'])",
         "undefined_symbol");
     LoadingResult loadingResult = tester.loadKeepGoing("//bad");
@@ -543,7 +543,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testCompileOneDependency() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "cc_library(name = 'hello', srcs = ['hello.cc'])");
     tester.useLoadingOptions("--compile_one_dependency");
     LoadingResult loadingResult = assertNoErrors(tester.load("base/hello.cc"));
@@ -552,7 +552,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testCompileOneDependencyNonExistentSource() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "cc_library(name = 'hello', srcs = ['hello.cc', '//bad:bad.cc'])");
     tester.useLoadingOptions("--compile_one_dependency");
     try {
@@ -568,7 +568,7 @@ public class LoadingPhaseRunnerTest {
 
   @Test
   public void testCompileOneDependencyNonExistentSourceKeepGoing() throws Exception {
-    tester.addFile("base/BUILD",
+    tester.addFile("base/UCBUILD",
         "cc_library(name = 'hello', srcs = ['hello.cc', '//bad:bad.cc'])");
     tester.useLoadingOptions("--compile_one_dependency");
     LoadingResult loadingResult = tester.loadKeepGoing("base/hello.cc");

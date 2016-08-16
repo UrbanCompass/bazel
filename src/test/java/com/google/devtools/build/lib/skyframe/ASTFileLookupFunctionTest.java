@@ -75,7 +75,7 @@ public class ASTFileLookupFunctionTest extends BuildViewTestCase {
   public void testPreludeASTFileIsNotMandatory() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file(
-        "foo/BUILD", "genrule(name = 'foo',", "  outs = ['out.txt'],", "  cmd = 'echo hello >@')");
+        "foo/UCBUILD", "genrule(name = 'foo',", "  outs = ['out.txt'],", "  cmd = 'echo hello >@')");
     scratch.deleteFile("tools/build_rules/prelude_blaze");
     invalidatePackages();
 
@@ -90,9 +90,9 @@ public class ASTFileLookupFunctionTest extends BuildViewTestCase {
   @Test
   public void testIOExceptionOccursDuringReading() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("/workspace/tools/build_rules/BUILD");
+    scratch.file("/workspace/tools/build_rules/UCBUILD");
     scratch.file(
-        "foo/BUILD", "genrule(name = 'foo',", "  outs = ['out.txt'],", "  cmd = 'echo hello >@')");
+        "foo/UCBUILD", "genrule(name = 'foo',", "  outs = ['out.txt'],", "  cmd = 'echo hello >@')");
     mockFS.statThrowsIoException = true;
     invalidatePackages(/*alsoConfigs=*/false); // We don't want to fail early on config creation.
 
@@ -116,14 +116,14 @@ public class ASTFileLookupFunctionTest extends BuildViewTestCase {
         "    name = 'a_remote_repo',",
         "    path = '/a_remote_repo'",
         ")");
-    scratch.file("/a_remote_repo/remote_pkg/BUILD",
+    scratch.file("/a_remote_repo/remote_pkg/UCBUILD",
         "load(':ext.bzl', 'CONST')");
     scratch.file("/a_remote_repo/remote_pkg/ext.bzl",
         "CONST = 17");
 
     invalidatePackages(/*alsoConfigs=*/false); // Repository shuffling messes with toolchains.
     SkyKey skyKey =
-        ASTFileLookupValue.key(Label.parseAbsoluteUnchecked("@a_remote_repo//remote_pkg:BUILD"));
+        ASTFileLookupValue.key(Label.parseAbsoluteUnchecked("@a_remote_repo//remote_pkg:UCBUILD"));
     EvaluationResult<ASTFileLookupValue> result =
         SkyframeExecutorTestUtils.evaluate(
             getSkyframeExecutor(), skyKey, /*keepGoing=*/ false, reporter);
@@ -140,7 +140,7 @@ public class ASTFileLookupFunctionTest extends BuildViewTestCase {
         "    name = 'a_remote_repo',",
         "    path = '/a_remote_repo'",
         ")");
-    scratch.file("/a_remote_repo/remote_pkg/BUILD");
+    scratch.file("/a_remote_repo/remote_pkg/UCBUILD");
     scratch.file("/a_remote_repo/remote_pkg/ext1.bzl",
         "load(':ext2.bzl', 'CONST')");
     scratch.file("/a_remote_repo/remote_pkg/ext2.bzl",
@@ -161,7 +161,7 @@ public class ASTFileLookupFunctionTest extends BuildViewTestCase {
   public void testLoadWithNonExistentBuildFile() throws Exception {
     invalidatePackages();
     SkyKey skyKey =
-        ASTFileLookupValue.key(Label.parseAbsoluteUnchecked("@a_remote_repo//remote_pkg:BUILD"));
+        ASTFileLookupValue.key(Label.parseAbsoluteUnchecked("@a_remote_repo//remote_pkg:UCBUILD"));
     EvaluationResult<ASTFileLookupValue> result =
         SkyframeExecutorTestUtils.evaluate(
             getSkyframeExecutor(), skyKey, /*keepGoing=*/ false, reporter);

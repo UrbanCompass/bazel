@@ -8,7 +8,7 @@ title: Test Encyclopedia
 
 <h2>Background</h2>
 
-<p>The Bazel BUILD language includes rules which can be used to define
+<p>The Bazel UCBUILD language includes rules which can be used to define
 automated test programs in many languages.</p>
 
 <p>Tests are run using <code><a href="bazel-user-manual.html#test">bazel test</a></code>.
@@ -157,7 +157,7 @@ flakiness.</p>
 <code>--test_verbose_timeout_warnings</code> command line option will show the
 tests whose specified size is too big.</p>
 
-<p>Test sizes and timeouts are specified in the BUILD file according to the specification
+<p>Test sizes and timeouts are specified in the UCBUILD file according to the specification
 <a href="be/common-definitions.html#common-attributes-tests">here</a>.
 Any test that does not specify a recognized size will default to being a medium
 test.</p>
@@ -459,7 +459,7 @@ with a run-time dependency on the rule labeled <code>//deps/server:server</code>
 
 <h4>Dependencies</h4>
 <p>The runfiles directory is declared as a compile-time dependency of the *_binary() rule.
-The runfiles directory itself depends on the set of BUILD files that affect the *_binary() rule
+The runfiles directory itself depends on the set of UCBUILD files that affect the *_binary() rule
 or any of its compile-time or run-time dependencies. Modifying source files does not affect the
 structure of the runfiles directory, and thus does not trigger any rebuilding.</p>
 

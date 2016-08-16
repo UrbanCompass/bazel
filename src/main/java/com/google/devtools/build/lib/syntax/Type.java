@@ -67,7 +67,7 @@ public abstract class Type<T> {
    * @param what a string description of what x is for; should be included in
    *    any exception thrown.  Grammatically, must describe a syntactic
    *    construct, e.g. "attribute 'srcs' of rule foo".
-   * @param context the label of the current BUILD rule; must be non-null if resolution of
+   * @param context the label of the current UCBUILD rule; must be non-null if resolution of
    *    package-relative label strings is required
    * @throws ConversionException if there was a problem performing the type conversion
    */

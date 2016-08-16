@@ -152,7 +152,7 @@ message CToolchain {
     // The feature's name. Feature names are generally defined by Bazel; it is
     // possible to introduce a feature without a change to Bazel by adding a
     // 'feature' section to the toolchain and adding the corresponding string as
-    // feature in the BUILD file.
+    // feature in the UCBUILD file.
     optional string name = 1;
 
     // If the given feature is enabled, the flag sets will be applied for the

@@ -31,7 +31,7 @@ EOF
 
   chmod +x dir/test.sh
 
-  cat <<EOF > dir/BUILD
+  cat <<EOF > dir/UCBUILD
 sh_test(
   name = "test",
   srcs = [ "test.sh" ],

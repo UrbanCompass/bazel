@@ -37,7 +37,7 @@ public class CcSkylarkApiProviderTest extends BuildViewTestCase {
   @Test
   public void testTransitiveHeaders() throws Exception {
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "cc_binary(",
         "    name = 'check',",
         "    srcs = ['bin.cc', 'bin.h'],",
@@ -56,7 +56,7 @@ public class CcSkylarkApiProviderTest extends BuildViewTestCase {
   @Test
   public void testLinkFlags() throws Exception {
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "cc_binary(",
         "    name = 'check',",
         "    srcs = ['bin.cc', 'bin.h'],",
@@ -92,7 +92,7 @@ public class CcSkylarkApiProviderTest extends BuildViewTestCase {
   @Test
   public void testLibraries() throws Exception {
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "cc_binary(",
         "    name = 'check',",
         "    srcs = ['bin.cc', 'bin.h'],",
@@ -117,7 +117,7 @@ public class CcSkylarkApiProviderTest extends BuildViewTestCase {
   @Test
   public void testCcFlags() throws Exception {
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "cc_binary(",
         "    name = 'check',",
         "    srcs = ['bin.cc', 'bin.h'],",

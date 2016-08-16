@@ -46,7 +46,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSimpleCleanAnalysis() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
     update("//java/a:A");
@@ -57,7 +57,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testTickTock() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])",
         "java_test(name = 'B',",
@@ -69,7 +69,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testFullyCached() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
     update("//java/a:A");
@@ -81,7 +81,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSubsetCached() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])",
         "java_test(name = 'B',",
@@ -95,16 +95,16 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testDependencyChanged() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'],",
         "          deps = ['//java/b'])");
-    scratch.file("java/b/BUILD",
+    scratch.file("java/b/UCBUILD",
         "java_library(name = 'b',",
         "             srcs = ['B.java'])");
     update("//java/a:A");
     ConfiguredTarget old = getConfiguredTarget("//java/a:A");
-    scratch.overwriteFile("java/b/BUILD",
+    scratch.overwriteFile("java/b/UCBUILD",
         "java_library(name = 'b',",
         "             srcs = ['C.java'])");
     update("//java/a:A");
@@ -114,16 +114,16 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testTopLevelChanged() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'],",
         "          deps = ['//java/b'])");
-    scratch.file("java/b/BUILD",
+    scratch.file("java/b/UCBUILD",
         "java_library(name = 'b',",
         "             srcs = ['B.java'])");
     update("//java/a:A");
     ConfiguredTarget old = getConfiguredTarget("//java/a:A");
-    scratch.overwriteFile("java/a/BUILD",
+    scratch.overwriteFile("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
     update("//java/a:A");
@@ -135,7 +135,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
   // "action conflict detection is incorrect if conflict is in non-top-level configured targets".
   @Test
   public void testActionConflictInDependencyImpliesTopLevelTargetFailure() throws Exception {
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])",
         "cc_binary(name='foo', deps=['x'], data=['_objs/x/conflict/foo.pic.o'])");
@@ -156,14 +156,14 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
    */
   @Test
   public void testNoActionConflictWithInvalidatedTarget() throws Exception {
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     update("//conflict:x");
     ConfiguredTarget conflict = getConfiguredTarget("//conflict:x");
     Action oldAction = getGeneratingAction(getBinArtifact("_objs/x/conflict/foo.pic.o", conflict));
     assertEquals("//conflict:x", oldAction.getOwner().getLabel().toString());
-    scratch.overwriteFile("conflict/BUILD",
+    scratch.overwriteFile("conflict/UCBUILD",
         "cc_library(name='newx', srcs=['foo.cc'])", // Rename target.
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     update(defaultFlags(), "//conflict:_objs/x/conflict/foo.pic.o");
@@ -179,7 +179,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
    */
   @Test
   public void testActionConflictCausesError() throws Exception {
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     reporter.removeHandler(failFastHandler); // expect errors
@@ -190,7 +190,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testNoActionConflictErrorAfterClearedAnalysis() throws Exception {
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
                 "cc_library(name='x', srcs=['foo.cc'])",
                 "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     reporter.removeHandler(failFastHandler); // expect errors
@@ -201,7 +201,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
     getView().clearAnalysisCache(ImmutableList.<ConfiguredTarget>of());
     assertContainsEvent("file 'conflict/_objs/x/conflict/foo.pic.o' " + CONFLICT_MSG);
     eventCollector.clear();
-    scratch.overwriteFile("conflict/BUILD",
+    scratch.overwriteFile("conflict/UCBUILD",
         "cc_library(name='x', srcs=['baz.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     update(defaultFlags().with(Flag.KEEP_GOING),
@@ -216,7 +216,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
   @Test
   public void testConflictingArtifactsErrorWithNoListDetail() throws Exception {
     scratch.file(
-        "conflict/BUILD",
+        "conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     reporter.removeHandler(failFastHandler); // expect errors
@@ -237,7 +237,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
   @Test
   public void testConflictingArtifactsWithListDetail() throws Exception {
     scratch.file(
-        "conflict/BUILD",
+        "conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo1.cc', 'foo2.cc', 'foo3.cc', 'foo4.cc', 'foo5.cc'"
             + ", 'foo6.cc'])",
         "genrule(name = 'foo', outs=['_objs/x/conflict/foo1.pic.o'], srcs=['foo1.cc', 'foo2.cc', "
@@ -267,7 +267,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
    */
   @Test
   public void testActionConflictMarksTargetInvalid() throws Exception {
-    scratch.file("conflict/BUILD",
+    scratch.file("conflict/UCBUILD",
         "cc_library(name='x', srcs=['foo.cc'])",
         "cc_binary(name='_objs/x/conflict/foo.pic.o', srcs=['bar.cc'])");
     reporter.removeHandler(failFastHandler); // expect errors
@@ -279,19 +279,19 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
   }
 
   /**
-   *  BUILD file involved in BUILD-file cycle is changed
+   *  UCBUILD file involved in UCBUILD-file cycle is changed
    */
   @Test
   public void testBuildFileInCycleChanged() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'],",
         "          deps = ['//java/b'])");
-    scratch.file("java/b/BUILD",
+    scratch.file("java/b/UCBUILD",
         "java_library(name = 'b',",
         "          srcs = ['B.java'],",
         "          deps = ['//java/c'])");
-    scratch.file("java/c/BUILD",
+    scratch.file("java/c/UCBUILD",
         "java_library(name = 'c',",
         "          srcs = ['C.java'],",
         "          deps = ['//java/b'])");
@@ -300,7 +300,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
     update(defaultFlags().with(Flag.KEEP_GOING), "//java/a:A");
     ConfiguredTarget old = getConfiguredTarget("//java/a:A");
     // drop dependency on from b to c
-    scratch.overwriteFile("java/b/BUILD",
+    scratch.overwriteFile("java/b/UCBUILD",
         "java_library(name = 'b',",
         "             srcs = ['B.java'])");
     eventCollector.clear();
@@ -317,7 +317,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSecondRunAllCacheHits() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
     update("//java/a:A");
@@ -327,7 +327,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testDependencyAllCacheHits() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_library(name = 'x', srcs = ['A.java'], deps = ['y'])",
         "java_library(name = 'y', srcs = ['B.java'])");
     update("//java/a:x");
@@ -341,7 +341,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSupersetNotAllCacheHits() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         // It's important that all targets are of the same rule class, otherwise the second update
         // call might analyze more than one extra target because of potential implicit dependencies.
         "java_library(name = 'x', srcs = ['A.java'], deps = ['y'])",
@@ -361,9 +361,9 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testExtraActions() throws Exception {
-    scratch.file("java/com/google/a/BUILD", "java_library(name='a', srcs=['A.java'])");
-    scratch.file("java/com/google/b/BUILD", "java_library(name='b', srcs=['B.java'])");
-    scratch.file("extra/BUILD",
+    scratch.file("java/com/google/a/UCBUILD", "java_library(name='a', srcs=['A.java'])");
+    scratch.file("java/com/google/b/UCBUILD", "java_library(name='b', srcs=['B.java'])");
+    scratch.file("extra/UCBUILD",
         "extra_action(name = 'extra',",
         "             out_templates = ['$(OWNER_LABEL_DIGEST)_$(ACTION_ID).tst'],",
         "             cmd = '')",
@@ -378,8 +378,8 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testExtraActionsCaching() throws Exception {
-    scratch.file("java/a/BUILD", "java_library(name='a', srcs=['A.java'])");
-    scratch.file("extra/BUILD",
+    scratch.file("java/a/UCBUILD", "java_library(name='a', srcs=['A.java'])");
+    scratch.file("extra/UCBUILD",
         "extra_action(name = 'extra',",
         "             out_templates = ['$(OWNER_LABEL_DIGEST)_$(ACTION_ID).tst'],",
         "             cmd = 'echo $(EXTRA_ACTION_FILE)')",
@@ -391,7 +391,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
     update("//java/a:a");
     getConfiguredTarget("//java/a:a");
 
-    scratch.overwriteFile("extra/BUILD",
+    scratch.overwriteFile("extra/UCBUILD",
         "extra_action(name = 'extra',",
         "             out_templates = ['$(OWNER_LABEL_DIGEST)_$(ACTION_ID).tst'],",
         "             cmd = 'echo $(BUG)')", // <-- change here
@@ -432,14 +432,14 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSkyframeCacheInvalidationBuildFileChange() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
     String aTarget = "//java/a:A";
     update(aTarget);
     ConfiguredTarget firstCT = getConfiguredTarget(aTarget);
 
-    scratch.overwriteFile("java/a/BUILD",
+    scratch.overwriteFile("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['B.java'])");
 
@@ -454,11 +454,11 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testSkyframeDifferentPackagesInvalidation() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_test(name = 'A',",
         "          srcs = ['A.java'])");
 
-    scratch.file("java/b/BUILD",
+    scratch.file("java/b/UCBUILD",
         "java_test(name = 'B',",
         "          srcs = ['B.java'])");
 
@@ -469,7 +469,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
     update(bTarget);
     ConfiguredTarget oldBConfTarget = getConfiguredTarget(bTarget);
 
-    scratch.overwriteFile("java/b/BUILD",
+    scratch.overwriteFile("java/b/UCBUILD",
         "java_test(name = 'B',",
         "          srcs = ['C.java'])");
 
@@ -496,7 +496,7 @@ public class AnalysisCachingTest extends AnalysisCachingTestBase {
 
   @Test
   public void testGetSkyframeEvaluatedTargetKeysOmitsCachedTargets() throws Exception {
-    scratch.file("java/a/BUILD",
+    scratch.file("java/a/UCBUILD",
         "java_library(name = 'x', srcs = ['A.java'], deps = ['z', 'w'])",
         "java_library(name = 'y', srcs = ['B.java'], deps = ['z', 'w'])",
         "java_library(name = 'z', srcs = ['C.java'])",

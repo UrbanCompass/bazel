@@ -14,7 +14,7 @@
 
 package com.google.devtools.build.lib.syntax;
 
-import static com.google.devtools.build.lib.syntax.Parser.ParsingMode.BUILD;
+import static com.google.devtools.build.lib.syntax.Parser.ParsingMode.UCBUILD;
 import static com.google.devtools.build.lib.syntax.Parser.ParsingMode.PYTHON;
 import static com.google.devtools.build.lib.syntax.Parser.ParsingMode.SKYLARK;
 
@@ -41,7 +41,7 @@ import java.util.Map;
 
 
 /**
- * Recursive descent parser for LL(2) BUILD language.
+ * Recursive descent parser for LL(2) UCBUILD language.
  * Loosely based on Python 2 grammar.
  * See https://docs.python.org/2/reference/grammar.html
  */
@@ -79,8 +79,8 @@ public class Parser {
    * ParsingMode is used to select which features the parser should accept.
    */
   public enum ParsingMode {
-    /** Used for parsing BUILD files */
-    BUILD,
+    /** Used for parsing UCBUILD files */
+    UCBUILD,
     /** Used for parsing .bzl files */
     SKYLARK,
     /** Used for syntax checking, ignoring all Python blocks (e.g. def, class, try) */
@@ -129,7 +129,7 @@ public class Parser {
           TokenKind.SLASH);
 
   /**
-   * Keywords that are forbidden in both Skylark and BUILD parsing modes.
+   * Keywords that are forbidden in both Skylark and UCBUILD parsing modes.
    *
    * <p>(Mapping: token -> human-readable string description)
    */
@@ -219,7 +219,7 @@ public class Parser {
   public static ParseResult parseFile(
       ParserInputSource input, EventHandler eventHandler, boolean parsePython) {
     Lexer lexer = new Lexer(input, eventHandler, parsePython);
-    ParsingMode parsingMode = parsePython ? PYTHON : BUILD;
+    ParsingMode parsingMode = parsePython ? PYTHON : UCBUILD;
     Parser parser = new Parser(lexer, eventHandler, parsingMode);
     List<Statement> statements = parser.parseFileInput();
     return new ParseResult(statements, parser.comments, locationFromStatements(lexer, statements),
@@ -229,7 +229,7 @@ public class Parser {
   /**
    * Entry-point to parser that parses a build file with comments. All errors encountered during
    * parsing are reported via "reporter". Enable Skylark extensions that are not part of the core
-   * BUILD language.
+   * UCBUILD language.
    */
   public static ParseResult parseFileForSkylark(
       ParserInputSource input, EventHandler eventHandler) {
@@ -427,7 +427,7 @@ public class Parser {
   //       | expr
   //       | *args       (only in Skylark mode)
   //       | **kwargs    (only in Skylark mode)
-  // To keep BUILD files declarative and easy to process, *args and **kwargs
+  // To keep UCBUILD files declarative and easy to process, *args and **kwargs
   // arguments are allowed only in Skylark mode.
   private Argument.Passed parseFuncallArgument() {
     final int start = token.left;
@@ -436,7 +436,7 @@ public class Parser {
       if (parsingMode != SKYLARK) {
         reportError(
             lexer.createLocation(token.left, token.right),
-            "**kwargs arguments are not allowed in BUILD files");
+            "**kwargs arguments are not allowed in UCBUILD files");
       }
       nextToken();
       Expression expr = parseNonTupleExpression();
@@ -447,7 +447,7 @@ public class Parser {
       if (parsingMode != SKYLARK) {
         reportError(
             lexer.createLocation(token.left, token.right),
-            "*args arguments are not allowed in BUILD files");
+            "*args arguments are not allowed in UCBUILD files");
       }
       nextToken();
       Expression expr = parseNonTupleExpression();
@@ -1449,7 +1449,7 @@ public class Parser {
       String msg =
           ILLEGAL_BLOCK_KEYWORDS.containsKey(blockToken.kind)
               ? String.format("%ss are not supported.", ILLEGAL_BLOCK_KEYWORDS.get(blockToken.kind))
-              : "This is not supported in BUILD files. Move the block to a .bzl file and load it";
+              : "This is not supported in UCBUILD files. Move the block to a .bzl file and load it";
       reportError(
           lexer.createLocation(start, token.right),
           String.format("syntax error at '%s': %s", blockToken, msg));

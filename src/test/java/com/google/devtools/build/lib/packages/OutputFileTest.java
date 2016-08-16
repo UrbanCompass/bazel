@@ -35,7 +35,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public final void createRule() throws Exception {
     Path buildfile =
         scratch.file(
-            "pkg/BUILD",
+            "pkg/UCBUILD",
             "genrule(name='foo', ",
             "        srcs=[], ",
             "        cmd='', ",
@@ -104,7 +104,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testDuplicateOutputFilesInDifferentRules() throws Exception {
     Path buildfile =
         scratch.file(
-            "two_outs/BUILD",
+            "two_outs/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls >$(location out)',",
             "        outs=['out'])",
@@ -128,7 +128,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testOutputFileNameConflictsWithExistingRule() throws Exception {
     Path buildfile =
         scratch.file(
-            "out_is_rule/BUILD",
+            "out_is_rule/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls >$(location out)',",
             "        outs=['out'])",
@@ -150,7 +150,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testDuplicateOutputFilesInSameRule() throws Exception {
     Path buildfile =
         scratch.file(
-            "two_outs/BUILD",
+            "two_outs/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls >$(location out)',",
             "        outs=['out', 'out'])");
@@ -170,7 +170,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testOutputFileWithIllegalName() throws Exception {
     Path buildfile =
         scratch.file(
-            "bad_out_name/BUILD",
+            "bad_out_name/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls',",
             "        outs=['!@#'])");
@@ -188,7 +188,7 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testOutputFileWithCrossPackageLabel() throws Exception {
     Path buildfile =
         scratch.file(
-            "cross_package_out/BUILD",
+            "cross_package_out/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls',",
             "        outs=['//foo:bar'])");
@@ -206,15 +206,15 @@ public class OutputFileTest extends PackageLoadingTestCase {
   public void testOutputFileNamedBUILD() throws Exception {
     Path buildfile =
         scratch.file(
-            "output_called_build/BUILD",
+            "output_called_build/UCBUILD",
             "genrule(name='a',",
             "        cmd='ls',",
-            "        outs=['BUILD'])");
+            "        outs=['UCBUILD'])");
 
     reporter.removeHandler(failFastHandler);
     packageFactory.createPackageForTesting(
         PackageIdentifier.createInMainRepo("output_called_build"), buildfile,
         getPackageManager(), reporter);
-    assertContainsEvent("generated file 'BUILD' in rule 'a' conflicts with existing source file");
+    assertContainsEvent("generated file 'UCBUILD' in rule 'a' conflicts with existing source file");
   }
 }

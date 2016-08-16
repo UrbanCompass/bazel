@@ -84,7 +84,7 @@ public final class BazelTestSuiteRule implements RuleDefinition {
         </p>
         <p>
           If the <code>tests</code> attribute is unspecified or empty, the rule will default to
-          including all test rules in the current BUILD file that are not tagged as
+          including all test rules in the current UCBUILD file that are not tagged as
           <code>manual</code> or marked as <code>obsolete</code>. These rules are still subject
           to <code>tag</code> filtering.
         </p>

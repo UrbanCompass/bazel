@@ -31,7 +31,7 @@ import com.google.protobuf.TextFormat;
 import java.io.IOException;
 
 /**
- * Creates mock BUILD files required for the C/C++ rules.
+ * Creates mock UCBUILD files required for the C/C++ rules.
  */
 public abstract class MockCcSupport {
 
@@ -402,7 +402,7 @@ public abstract class MockCcSupport {
 
   protected static void createToolsCppPackage(MockToolsConfig config) throws IOException {
     config.create(
-        "tools/cpp/BUILD",
+        "tools/cpp/UCBUILD",
         "cc_library(name = 'stl')",
         "filegroup(name='toolchain', srcs=['//third_party/crosstool'])");
   }

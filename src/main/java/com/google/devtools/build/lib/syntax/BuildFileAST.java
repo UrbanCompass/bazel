@@ -25,7 +25,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 /**
- * Abstract syntax node for an entire BUILD file.
+ * Abstract syntax node for an entire UCBUILD file.
  */
 public class BuildFileAST extends ASTNode {
 
@@ -99,28 +99,28 @@ public class BuildFileAST extends ASTNode {
   /**
    * Returns true if any errors were encountered during scanning or parsing. If
    * set, clients should not rely on the correctness of the AST for builds or
-   * BUILD-file editing.
+   * UCBUILD-file editing.
    */
   public boolean containsErrors() {
     return containsErrors;
   }
 
   /**
-   * Returns an (immutable, ordered) list of statements in this BUILD file.
+   * Returns an (immutable, ordered) list of statements in this UCBUILD file.
    */
   public ImmutableList<Statement> getStatements() {
     return stmts;
   }
 
   /**
-   * Returns an (immutable, ordered) list of comments in this BUILD file.
+   * Returns an (immutable, ordered) list of comments in this UCBUILD file.
    */
   public ImmutableList<Comment> getComments() {
     return comments;
   }
 
   /**
-   * Returns a list of loads in this BUILD file.
+   * Returns a list of loads in this UCBUILD file.
    */
   public synchronized ImmutableList<SkylarkImport> getImports() {
     if (imports == null) {
@@ -159,7 +159,7 @@ public class BuildFileAST extends ASTNode {
           continue;
         }
         // When the exception is raised from another file, report first the location in the
-        // BUILD file (as it is the most probable cause for the error).
+        // UCBUILD file (as it is the most probable cause for the error).
         Location exnLoc = e.getLocation();
         Location nodeLoc = stmt.getLocation();
         eventHandler.handle(Event.error(

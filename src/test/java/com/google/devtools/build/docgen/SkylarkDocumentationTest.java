@@ -50,7 +50,7 @@ public class SkylarkDocumentationTest extends SkylarkTestCase {
 
   @Before
   public final void createBuildFile() throws Exception {
-    scratch.file("foo/BUILD",
+    scratch.file("foo/UCBUILD",
         "genrule(name = 'foo',",
         "  cmd = 'dummy_cmd',",
         "  srcs = ['a.txt', 'b.img'],",

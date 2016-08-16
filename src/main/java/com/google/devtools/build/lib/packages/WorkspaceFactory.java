@@ -178,7 +178,7 @@ public class WorkspaceFactory {
       StoredEventHandler localReporter)
       throws InterruptedException {
     Environment.Builder environmentBuilder = Environment.builder(mutability)
-        .setGlobals(Environment.BUILD)
+        .setGlobals(Environment.UCBUILD)
         .setEventHandler(localReporter);
     if (importedExtensions != null) {
       importMap =

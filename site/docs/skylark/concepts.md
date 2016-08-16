@@ -42,7 +42,7 @@ a `.bzl` file visible.
 ## Macros and rules
 
 A [macro](macros.md) is a function that instantiates rules. The
-function is evaluated as soon as the BUILD file is read. Bazel has little
+function is evaluated as soon as the UCBUILD file is read. Bazel has little
 information about macros: if your macro generates a `genrule`, Bazel will behave
 as if you wrote the `genrule`. As a result, `bazel query` will only list the
 generated genrule.
@@ -57,8 +57,8 @@ If a macro becomes complex, it is often a good idea to make it a rule.
 
 A build consists of three phases.
 
-* **Loading phase**. First, we load and evaluate all extensions and all BUILD
-  files that are needed for the build. The execution of the BUILD files simply
+* **Loading phase**. First, we load and evaluate all extensions and all UCBUILD
+  files that are needed for the build. The execution of the UCBUILD files simply
   instantiates rules. This is where macros are evaluated.
 
 * **Analysis phase**. The code of the rules is executed (their `implementation`
@@ -71,7 +71,7 @@ A build consists of three phases.
   required. If a file is missing or if a command fails to generate one output,
   the build fails. Tests are run during this phase, as they are actions.
 
-Bazel uses parallelism to read, parse and evaluate the `.bzl` files and `BUILD`
+Bazel uses parallelism to read, parse and evaluate the `.bzl` files and `UCBUILD`
 files. A file is read at most once per build and the result of the evaluation is
 cached and reused. A file is evaluated only once all its dependencies (`load()`
 statements) have been resolved. By design, loading a `.bzl` file has no visible
@@ -83,7 +83,7 @@ The extension language (sometimes referred as "Skylark") is a superset of the
 [Core Build Language](/docs/build-ref.html#core_build_language)
 and its syntax is a subset of Python.
 It is designed to be simple, thread-safe and integrated with the
-BUILD language. It is not a general-purpose language and most Python
+UCBUILD language. It is not a general-purpose language and most Python
 features are not included.
 
 The following constructs have been added to the Core Build Language: `if`
@@ -106,13 +106,13 @@ fizz_buzz(20)
 
 ## Mutability
 
-Because evaluation of BUILD and .bzl files is performed in parallel, there are
+Because evaluation of UCBUILD and .bzl files is performed in parallel, there are
 some restrictions in order to guarantee thread-safety and determinism. Two
 mutable data structures are available: [lists](lib/list.html) and
 [dicts](lib/dict.html). Unlike in Python, [sets](lib/set.html) are not mutable.
 
 In a build, there are many "evaluation contexts": each `.bzl` file and each
-`BUILD` file is loaded in a different context. Each rule is also analyzed in a
+`UCBUILD` file is loaded in a different context. Each rule is also analyzed in a
 separate context. We allow side-effects (e.g. appending a value to a list or
 deleting an entry in a dictionary) only on objects created during the current
 evaluation context.

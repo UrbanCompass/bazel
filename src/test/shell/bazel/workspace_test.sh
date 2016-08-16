@@ -24,7 +24,7 @@ function setup_repo() {
   mkdir -p $1
   touch $1/WORKSPACE
   echo $2 > $1/thing
-  cat > $1/BUILD <<EOF
+  cat > $1/UCBUILD <<EOF
 genrule(
     name = "x",
     srcs = ["thing"],
@@ -82,9 +82,9 @@ function test_middleman_conflict() {
   echo "1" >$test_repo1/test.in
   echo "2" >$test_repo2/test.in
   echo 'filegroup(name="test", srcs=["test.in"], visibility=["//visibility:public"])' \
-    >$test_repo1/BUILD
+    >$test_repo1/UCBUILD
   echo 'filegroup(name="test", srcs=["test.in"], visibility=["//visibility:public"])' \
-    >$test_repo2/BUILD
+    >$test_repo2/UCBUILD
   touch $test_repo1/WORKSPACE
   touch $test_repo2/WORKSPACE
 
@@ -93,7 +93,7 @@ local_repository(name = 'repo1', path='$test_repo1')
 local_repository(name = 'repo2', path='$test_repo2')
 EOF
 
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(
   name = "test",
   srcs = ["@repo1//:test", "@repo2//:test"],

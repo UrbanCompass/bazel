@@ -43,7 +43,7 @@ import java.util.Set;
  * programmers) to refer to files using their workspace-relative paths, regardless of whether the
  * files were source files or generated files, and regardless of which part of the package path they
  * came from. The second purpose is to ensure that all run-time dependencies are explicitly declared
- * in the BUILD files; programs may only use files which the build system knows that they depend on.
+ * in the UCBUILD files; programs may only use files which the build system knows that they depend on.
  *
  * <p>The symlink farm contains a MANIFEST file which describes its contents. The MANIFEST file
  * lists the names and contents of all of the symlinks in the symlink farm. For efficiency, Blaze's

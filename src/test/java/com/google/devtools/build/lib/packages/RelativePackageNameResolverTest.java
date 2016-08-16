@@ -68,14 +68,14 @@ public class RelativePackageNameResolverTest {
   public void testBuildNotRemoved() throws Exception {
     createResolver("foo", false);
 
-    assertResolvesTo("bar/BUILD", "foo/bar/BUILD");
+    assertResolvesTo("bar/UCBUILD", "foo/bar/UCBUILD");
   }
 
   @Test
   public void testBuildRemoved() throws Exception {
     createResolver("foo", true);
 
-    assertResolvesTo("bar/BUILD", "foo/bar");
+    assertResolvesTo("bar/UCBUILD", "foo/bar");
   }
 
   @Test

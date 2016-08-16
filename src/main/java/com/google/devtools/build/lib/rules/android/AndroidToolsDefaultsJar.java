@@ -49,7 +49,7 @@ public class AndroidToolsDefaultsJar implements RuleConfiguredTargetFactory {
       throws InterruptedException, RuleErrorException {
     if (!ruleContext.getLabel().getPackageName().equals("tools/defaults")) {
       // Guard against extraordinarily inquisitive individuals.
-      ruleContext.ruleError("The android_tools_defaults_jar rule should not be used in BUILD files."
+      ruleContext.ruleError("The android_tools_defaults_jar rule should not be used in UCBUILD files."
           + " It is a rule internal to the build tool.");
       return null;
     }

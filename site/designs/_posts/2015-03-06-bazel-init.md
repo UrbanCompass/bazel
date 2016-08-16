@@ -134,7 +134,7 @@ obtained by `bazel init list` and the list of option with their value
 for a specific language by `bazel init list group`. `bazel init list
 all` could give the full configuration of all activated groups.
 
-_Prospective idea:_ Bazel init should explore the BUILD file to find the
+_Prospective idea:_ Bazel init should explore the UCBUILD file to find the
 Skylark `load` statements, determine if there is an associated init
 script and use it.
 
@@ -153,7 +153,7 @@ seems unreasonable to use a compiled language (Java or C++) for this
 script. We could use the Skylark support to make it a subset of python
 or we could use a bash script. Python support would be portable since
 provided by Bazel itself and consistent with skylark. It also gives
-immediate support for manipulating BUILD files. So keeping a
+immediate support for manipulating UCBUILD files. So keeping a
 "skylark-like" syntax, the interface would look like:
 
 ```python
@@ -209,7 +209,7 @@ See Appendix B for examples of such methods.
 
 ## Appendix A. Various comments
 
-  1. We should get rid of the requirement for a `tools/defaults/BUILD` file.
+  1. We should get rid of the requirement for a `tools/defaults/UCBUILD` file.
   2. To works correctly, we need some local caching of the bazel
      repository so tools are available. We could have bazelrc specify a
      global path to the local cache (with `/etc/bazel.bazelrc` being loaded
@@ -260,13 +260,13 @@ def autodetect_method(env, attrs):
 # That all labels are replaced by relative ones as it should not be able
 # to write out of the package.
 def generate_method(attrs):
-  scratch_file("BUILD.jdk", """
-Content of the jdk BUILD file.
+  scratch_file("UCBUILD.jdk", """
+Content of the jdk UCBUILD file.
 """)
   # Create binding using local_repository. This should not lie in
   # the WORKSPACE file but in a separate WORKSPACE file in the hidden
   # directory.
-  local_repository(name = "jdk", path = attrs.jdk_path, build_file = "BUILD.jdk")
+  local_repository(name = "jdk", path = attrs.jdk_path, build_file = "UCBUILD.jdk")
   bind("@jdk//jdk", "jdk")  # also add a filegroup("jdk", "//external:jdk")
   java_toolchain(name = "toolchain", source = attrs.java_version, target = attrs.java_version)
   # The magic __BAZEL_*__ variable could be set so we don’t

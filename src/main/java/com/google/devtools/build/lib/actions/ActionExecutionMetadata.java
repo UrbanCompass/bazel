@@ -48,7 +48,7 @@ public interface ActionExecutionMetadata extends ActionAnalysisMetadata {
    *
    * <p>Examples of changes that should affect the key are:
    * <ul>
-   *  <li>Changes to the BUILD file that materially affect the rule which gave
+   *  <li>Changes to the UCBUILD file that materially affect the rule which gave
    *  rise to this Action.</li>
    *
    *  <li>Changes to the command-line options, environment, or other global

@@ -43,8 +43,8 @@
 
 # If true, Bazel query is used for autocompletion.  This is more
 # accurate than the heuristic grep, especially for strangely-formatted
-# BUILD files.  But it can be slower, especially if the Bazel server
-# is busy, and more brittle, if the BUILD file contains serious
+# UCBUILD files.  But it can be slower, especially if the Bazel server
+# is busy, and more brittle, if the UCBUILD file contains serious
 # errors.   This is an experimental feature.
 : ${BAZEL_COMPLETION_USE_QUERY:=false}
 
@@ -170,15 +170,15 @@ _bazel__expansion_for() {
 
 # Usage: _bazel__matching_targets <kind> <prefix>
 #
-# Prints target names of kind <kind> and starting with <prefix> in the BUILD
+# Prints target names of kind <kind> and starting with <prefix> in the UCBUILD
 # file given as standard input.  <kind> is a basic regex (BRE) used to match the
 # bazel rule kind and <prefix> is the prefix of the target name.
 _bazel__matching_targets() {
   local kind_pattern="$1"
   local target_prefix="$2"
   # The following commands do respectively:
-  #   Remove BUILD file comments
-  #   Replace \n by spaces to have the BUILD file in a single line
+  #   Remove UCBUILD file comments
+  #   Replace \n by spaces to have the UCBUILD file in a single line
   #   Extract all rule types and target names
   #   Grep the kind pattern and the target prefix
   #   Returns the target name
@@ -229,7 +229,7 @@ _bazel__expand_rules_in_package() {
       cut -f2 -d: | grep "^$rule_prefix")
   else
     for root in $(_bazel__package_path "$workspace" "$displacement"); do
-      buildfile="$root/$package_name/BUILD"
+      buildfile="$root/$package_name/UCBUILD"
       if [ -f "$buildfile" ]; then
         result=$(_bazel__matching_targets \
                    "$pattern" "$rule_prefix" <"$buildfile")
@@ -268,7 +268,7 @@ _bazel__expand_package_name() {
       [[ "$dir" =~ ^(.*/)?\.[^/]*$ ]] && continue  # skip dotted dir (e.g. .git)
       found=1
       echo "${dir#$root}/"
-      if [ -f $dir/BUILD ]; then
+      if [ -f $dir/UCBUILD ]; then
         if [ "${type}" = "label-package" ]; then
           echo "${dir#$root} "
         else
@@ -291,14 +291,14 @@ _bazel__expand_target_pattern() {
   case "$current" in
     //*:*) # Expand rule names within package, no displacement.
       if [ "${label_syntax}" = "label-package" ]; then
-        compgen -S " " -W "BUILD" "$(echo current | cut -f ':' -d2)"
+        compgen -S " " -W "UCBUILD" "$(echo current | cut -f ':' -d2)"
       else
         _bazel__expand_rules_in_package "$workspace" "" "$current" "$label_syntax"
       fi
       ;;
     *:*) # Expand rule names within package, displaced.
       if [ "${label_syntax}" = "label-package" ]; then
-        compgen -S " " -W "BUILD" "$(echo current | cut -f ':' -d2)"
+        compgen -S " " -W "UCBUILD" "$(echo current | cut -f ':' -d2)"
       else
         _bazel__expand_rules_in_package \
           "$workspace" "$displacement" "$current" "$label_syntax"

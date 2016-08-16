@@ -63,7 +63,7 @@ public final class CompileOneDependencyTransformer {
   }
 
   /**
-   * Returns a list of rules in the given package sorted by BUILD file order. When
+   * Returns a list of rules in the given package sorted by UCBUILD file order. When
    * multiple rules depend on a target, we choose the first match in this list (after
    * filtering for preferred dependencies - see below).
    */

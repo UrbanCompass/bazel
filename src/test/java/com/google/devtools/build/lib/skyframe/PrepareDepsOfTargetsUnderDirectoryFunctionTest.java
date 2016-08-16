@@ -142,19 +142,19 @@ public class PrepareDepsOfTargetsUnderDirectoryFunctionTest extends BuildViewTes
    * and a test rule "aTest".
    */
   private void createPackages() throws IOException {
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "genrule(name='a', cmd='', srcs=['//b:b.txt'], outs=['a.out'])",
         "sh_test(name='aTest', size='small', srcs=['aTest.sh'])");
-    scratch.file("b/BUILD",
+    scratch.file("b/UCBUILD",
         "exports_files(['b.txt'])");
   }
 
   @Test
   public void testSubdirectoryExclusion() throws Exception {
     // Given a package "a" with two packages below it, "a/b" and "a/c",
-    scratch.file("a/BUILD");
-    scratch.file("a/b/BUILD");
-    scratch.file("a/c/BUILD");
+    scratch.file("a/UCBUILD");
+    scratch.file("a/b/UCBUILD");
+    scratch.file("a/c/UCBUILD");
 
     // When the top package is evaluated via PrepareDepsOfTargetsUnderDirectoryValue with "a/b"
     // excluded,
@@ -199,10 +199,10 @@ public class PrepareDepsOfTargetsUnderDirectoryFunctionTest extends BuildViewTes
 
   @Test
   public void testExcludedSubdirectoryGettingPassedDown() throws Exception {
-    // Given a package "a", and a package below it in "a/b/c", and a non-BUILD file below it in
+    // Given a package "a", and a package below it in "a/b/c", and a non-UCBUILD file below it in
     // "a/b/d",
-    scratch.file("a/BUILD");
-    scratch.file("a/b/c/BUILD");
+    scratch.file("a/UCBUILD");
+    scratch.file("a/b/c/UCBUILD");
     scratch.file("a/b/d/helloworld");
 
     // When the top package is evaluated for recursive package values, and "a/b/c" is excluded,

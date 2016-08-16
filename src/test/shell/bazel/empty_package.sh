@@ -22,7 +22,7 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test-setup.sh \
   || { echo "test-setup.sh not found!" >&2; exit 1; }
 
 function test_empty_package() {
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 java_binary(
     name = "noise",
     main_class = "Noise",

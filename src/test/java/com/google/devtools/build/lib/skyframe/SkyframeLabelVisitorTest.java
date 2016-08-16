@@ -49,7 +49,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     reporter.removeHandler(failFastHandler); // expect errors
 
     scratch.file(
-        "pkg/BUILD", "sh_library(name = 'x', deps = ['//nopkg:y', 'z'])", "sh_library(name = 'z')");
+        "pkg/UCBUILD", "sh_library(name = 'x', deps = ['//nopkg:y', 'z'])", "sh_library(name = 'z')");
 
     assertLabelsVisitedWithErrors(
         ImmutableSet.of("//pkg:x", "//pkg:z"), ImmutableSet.of("//pkg:x"));
@@ -62,14 +62,14 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
    */
   @Test
   public void testChangingSymlink() throws Exception {
-    Path path = scratch.file("foo/BUILD", "sh_library(name = 'foo')");
-    Path sym1 = scratch.resolve(rootDirectory + "/sym1/BUILD");
-    Path sym2 = scratch.resolve(rootDirectory + "/sym2/BUILD");
-    Path symlink = scratch.resolve(rootDirectory + "/bar/BUILD");
+    Path path = scratch.file("foo/UCBUILD", "sh_library(name = 'foo')");
+    Path sym1 = scratch.resolve(rootDirectory + "/sym1/UCBUILD");
+    Path sym2 = scratch.resolve(rootDirectory + "/sym2/UCBUILD");
+    Path symlink = scratch.resolve(rootDirectory + "/bar/UCBUILD");
     FileSystemUtils.ensureSymbolicLink(symlink, sym1);
     FileSystemUtils.ensureSymbolicLink(sym1, path);
     FileSystemUtils.ensureSymbolicLink(sym2, path);
-    scratch.file("unrelated/BUILD", "sh_library(name = 'unrelated')");
+    scratch.file("unrelated/UCBUILD", "sh_library(name = 'unrelated')");
     assertLabelsVisited(
         ImmutableSet.of("//bar:foo"), ImmutableSet.of("//bar:foo"), !EXPECT_ERROR, !KEEP_GOING);
     assertTrue(sym1.delete());
@@ -83,7 +83,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     assertTrue(sym1.delete());
     FileSystemUtils.ensureSymbolicLink(sym1, path);
     assertTrue(symlink.delete());
-    symlink = scratch.file("bar/BUILD", "sh_library(name = 'bar')");
+    symlink = scratch.file("bar/UCBUILD", "sh_library(name = 'bar')");
     syncPackages();
     assertLabelsVisited(
         ImmutableSet.of("//bar:bar"), ImmutableSet.of("//bar:bar"), !EXPECT_ERROR, !KEEP_GOING);
@@ -95,7 +95,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
 
     Path buildFile =
         scratch.file(
-            "pkg/BUILD", "sh_library(name = 'x', deps = ['z', 'z'])", "sh_library(name = 'z')");
+            "pkg/UCBUILD", "sh_library(name = 'x', deps = ['z', 'z'])", "sh_library(name = 'z')");
 
     // In the first case below, we will hit see an error on "//pkg:x", and therefore
     // not traverse into "//pkg:z" due to fail-fast.
@@ -108,7 +108,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     // Also make sure reloading works if the package has changed, but the names
     // of the targets have not.
     scratch.overwriteFile(
-        "pkg/BUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
+        "pkg/UCBUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
     buildFile.setLastModifiedTime(buildFile.getLastModifiedTime() + 1);
     syncPackages();
     assertLabelsVisited(
@@ -129,7 +129,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     reporter.removeHandler(failFastHandler); // expect errors
 
     Path buildFile =
-        scratch.file("pkg/BUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
+        scratch.file("pkg/UCBUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
     assertLabelsVisited(
         ImmutableSet.of("//pkg:x", "//pkg:z"),
         ImmutableSet.of("//pkg:x"),
@@ -137,7 +137,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
         !KEEP_GOING);
 
     scratch.overwriteFile(
-        "pkg/BUILD", "sh_library(name = 'x', deps = ['z', 'z'])", "sh_library(name = 'z')");
+        "pkg/UCBUILD", "sh_library(name = 'x', deps = ['z', 'z'])", "sh_library(name = 'z')");
     buildFile.setLastModifiedTime(buildFile.getLastModifiedTime() + 1);
     syncPackages();
     assertLabelsVisited(
@@ -152,8 +152,8 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     reporter.removeHandler(failFastHandler); // expect errors
 
     Path buildFile =
-        scratch.file("pkg/BUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
-    scratch.file("pkg2/BUILD", "sh_library(name = 'q', deps=['F','F'])", "sh_library(name = 'F')");
+        scratch.file("pkg/UCBUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
+    scratch.file("pkg2/UCBUILD", "sh_library(name = 'q', deps=['F','F'])", "sh_library(name = 'F')");
     assertLabelsVisited(
         ImmutableSet.of("//pkg:x", "//pkg:z"),
         ImmutableSet.of("//pkg:x"),
@@ -161,7 +161,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
         !KEEP_GOING);
 
     scratch.overwriteFile(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "sh_library(name = 'x', deps = ['z'])",
         "sh_library(name = 'z', deps = [ '//pkg2:q'])");
     buildFile.setLastModifiedTime(buildFile.getLastModifiedTime() + 1);
@@ -183,8 +183,8 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   @Test
   public void testAddDepInNewPkg() throws Exception {
     Path buildFile =
-        scratch.file("pkg/BUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
-    scratch.file("pkg2/BUILD", "sh_library(name = 'q')");
+        scratch.file("pkg/UCBUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
+    scratch.file("pkg2/UCBUILD", "sh_library(name = 'q')");
 
     assertLabelsVisited(
         ImmutableSet.of("//pkg:x", "//pkg:z"),
@@ -193,7 +193,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
         !KEEP_GOING);
 
     scratch.overwriteFile(
-        "pkg/BUILD", "sh_library(name = 'x', deps = ['z', '//pkg2:q'])", "sh_library(name = 'z')");
+        "pkg/UCBUILD", "sh_library(name = 'x', deps = ['z', '//pkg2:q'])", "sh_library(name = 'z')");
     buildFile.setLastModifiedTime(buildFile.getLastModifiedTime() + 1);
     syncPackages();
 
@@ -214,7 +214,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   // occurred in a label name segment.
   @Test
   public void testDotLabelName() throws Exception {
-    scratch.file("pkg/BUILD", "exports_files(srcs = ['.', 'x/.'])");
+    scratch.file("pkg/UCBUILD", "exports_files(srcs = ['.', 'x/.'])");
 
     assertLabelsVisited(
         ImmutableSet.of("//pkg:.", "//pkg:x/."),
@@ -236,7 +236,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     reporter.removeHandler(failFastHandler); // expect errors
 
     scratch.file(
-        "pkg/BUILD",
+        "pkg/UCBUILD",
         "sh_library(name = 'x', deps = ['//nopkg:y', 'z'])",
         "sh_library(name = 'z')",
         "sh_library(name = 'o', deps = ['//nopkg2:o'])");
@@ -251,16 +251,16 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   @Test
   public void testSubpackageBoundaryAdd() throws Exception {
     scratch.file(
-        "x/BUILD", "sh_library(name = 'x', deps = ['//x:y/z'])", "sh_library(name = 'y/z')");
+        "x/UCBUILD", "sh_library(name = 'x', deps = ['//x:y/z'])", "sh_library(name = 'y/z')");
 
     assertLabelsVisited(
         ImmutableSet.of("//x:x", "//x:y/z"), ImmutableSet.of("//x:x"), !EXPECT_ERROR, !KEEP_GOING);
 
-    scratch.file("x/y/BUILD", "sh_library(name = 'z')");
+    scratch.file("x/y/UCBUILD", "sh_library(name = 'z')");
     syncPackages(
         ModifiedFileSet.builder()
             .modify(new PathFragment("x/y"))
-            .modify(new PathFragment("x/y/BUILD"))
+            .modify(new PathFragment("x/y/UCBUILD"))
             .build());
 
     reporter.removeHandler(failFastHandler); // expect errors
@@ -273,13 +273,13 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   public void testSubpackageBoundaryDelete() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
     scratch.file(
-        "x/BUILD", "sh_library(name = 'x', deps = ['//x:y/z'])", "sh_library(name = 'y/z')");
-    scratch.file("x/y/BUILD", "sh_library(name = 'z')");
+        "x/UCBUILD", "sh_library(name = 'x', deps = ['//x:y/z'])", "sh_library(name = 'y/z')");
+    scratch.file("x/y/UCBUILD", "sh_library(name = 'z')");
     assertLabelsVisitedWithErrors(ImmutableSet.of("//x:x"), ImmutableSet.of("//x:x"));
     assertContainsEvent("Label '//x:y/z' crosses boundary of subpackage 'x/y'");
 
-    scratch.deleteFile("x/y/BUILD");
-    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("x/y/BUILD")).build());
+    scratch.deleteFile("x/y/UCBUILD");
+    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("x/y/UCBUILD")).build());
 
     reporter.addHandler(failFastHandler); // don't expect errors
     assertLabelsVisited(
@@ -288,11 +288,11 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
 
   @Test
   public void testInterruptPending() throws Exception {
-    scratch.file("x/BUILD");
+    scratch.file("x/UCBUILD");
     Thread.currentThread().interrupt();
 
     try {
-      assertLabelsVisitedWithErrors(ImmutableSet.of("//x:x"), ImmutableSet.of("//x:BUILD"));
+      assertLabelsVisitedWithErrors(ImmutableSet.of("//x:x"), ImmutableSet.of("//x:UCBUILD"));
       fail();
     } catch (InterruptedException e) {
       // Expected
@@ -303,7 +303,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   @Test
   public void testDoubleSlashInPackageName() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
-    scratch.file("x/BUILD", "sh_library(name='x', deps=['//x//y'])");
+    scratch.file("x/UCBUILD", "sh_library(name='x', deps=['//x//y'])");
     assertLabelsVisitedWithErrors(ImmutableSet.of("//x:x"), ImmutableSet.of("//x"));
     assertContainsEvent(
         "//x:x: invalid label '//x//y' in element 0 of attribute "
@@ -332,9 +332,9 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     // on a subsequent visitation, the visitor would get livelocked due the
     // stale PendingEntry stuck in the PackageCache.  With the fix, the NPE is
     // thrown.
-    scratch.file("bad/BUILD", "this is a bad build file");
+    scratch.file("bad/UCBUILD", "this is a bad build file");
     scratch.file(
-        "x/BUILD",
+        "x/UCBUILD",
         "sh_library(name='x', ",
         "           deps=['//bad:a', '//bad:b', '//bad:c',",
         "                 '//bad:d', '//bad:e', '//bad:f'])");
@@ -358,7 +358,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
     reporter.removeHandler(failFastHandler); // expect errors
 
     scratch.file(
-        "a/BUILD",
+        "a/UCBUILD",
         "package_group(name = 'pkgs', includes = ['//not/a/package:pkgs'])",
         "sh_library(name = 'foo', visibility = [':pkgs'])");
 
@@ -373,10 +373,10 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   public void testKeepGoing() throws Exception {
     reporter.removeHandler(failFastHandler);
     scratch.file(
-        "parent/BUILD",
+        "parent/UCBUILD",
         "sh_library(name = 'parent', deps = ['//child:child'])",
         "invalidbuildsyntax");
-    scratch.file("child/BUILD", "sh_library(name = 'child')", "invalidbuildsyntax");
+    scratch.file("child/UCBUILD", "sh_library(name = 'child')", "invalidbuildsyntax");
     assertLabelsVisited(
         ImmutableSet.of("//parent:parent", "//child:child"),
         ImmutableSet.of("//parent:parent"),
@@ -412,7 +412,7 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
             UUID.randomUUID(),
             new TimestampGranularityMonitor(BlazeClock.instance()));
     this.visitor = getSkyframeExecutor().pkgLoader();
-    scratch.file("pkg/BUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
+    scratch.file("pkg/UCBUILD", "sh_library(name = 'x', deps = ['z'])", "sh_library(name = 'z')");
     assertLabelsVisited(
         ImmutableSet.of("//pkg:x", "//pkg:z"),
         ImmutableSet.of("//pkg:x"),
@@ -424,8 +424,8 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
         !EXPECT_ERROR,
         !KEEP_GOING);
 
-    scratch.file("hassub/BUILD", "subinclude('//sub:sub')");
-    scratch.file("sub/BUILD", "exports_files(['sub'])");
+    scratch.file("hassub/UCBUILD", "subinclude('//sub:sub')");
+    scratch.file("sub/UCBUILD", "exports_files(['sub'])");
     scratch.file("sub/sub", "sh_library(name='zzz')");
 
     assertLabelsVisited(
@@ -456,22 +456,22 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
             UUID.randomUUID(),
             new TimestampGranularityMonitor(BlazeClock.instance()));
     this.visitor = getSkyframeExecutor().pkgLoader();
-    scratch.file("a/BUILD", "subinclude('//b:c/d/foo')");
-    scratch.file("b/BUILD", "exports_files(['c/d/foo'])");
+    scratch.file("a/UCBUILD", "subinclude('//b:c/d/foo')");
+    scratch.file("b/UCBUILD", "exports_files(['c/d/foo'])");
     scratch.file("b/c/d/foo", "sh_library(name = 'a')");
 
     assertLabelsVisited(
         ImmutableSet.of("//a:a"), ImmutableSet.of("//a:a"), !EXPECT_ERROR, !KEEP_GOING);
 
-    Path subpackageBuildFile = scratch.file("b/c/BUILD", "exports_files(['foo'])");
-    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("b/c/BUILD")).build());
+    Path subpackageBuildFile = scratch.file("b/c/UCBUILD", "exports_files(['foo'])");
+    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("b/c/UCBUILD")).build());
 
     reporter.removeHandler(failFastHandler); // expect errors
     assertLabelsVisitedWithErrors(ImmutableSet.of("//a:a"), ImmutableSet.of("//a:a"));
     assertContainsEvent("Label '//b:c/d/foo' crosses boundary of subpackage 'b/c'");
 
     subpackageBuildFile.delete();
-    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("b/c/BUILD")).build());
+    syncPackages(ModifiedFileSet.builder().modify(new PathFragment("b/c/UCBUILD")).build());
 
     assertLabelsVisited(
         ImmutableSet.of("//a:a"), ImmutableSet.of("//a:a"), !EXPECT_ERROR, !KEEP_GOING);
@@ -481,10 +481,10 @@ public class SkyframeLabelVisitorTest extends SkyframeLabelVisitorTestCase {
   @Test
   public void testRootCauseOnInconsistentFilesystem() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("foo/BUILD", "sh_library(name = 'foo', deps = ['//bar:baz/fizz'])");
-    Path barBuildFile = scratch.file("bar/BUILD", "sh_library(name = 'bar/baz')");
+    scratch.file("foo/UCBUILD", "sh_library(name = 'foo', deps = ['//bar:baz/fizz'])");
+    Path barBuildFile = scratch.file("bar/UCBUILD", "sh_library(name = 'bar/baz')");
     Path bazDir = barBuildFile.getParentDirectory().getRelative("baz");
-    scratch.file("bar/baz/BUILD");
+    scratch.file("bar/baz/UCBUILD");
     FileStatus inconsistentParentFileStatus =
         new FileStatus() {
           @Override

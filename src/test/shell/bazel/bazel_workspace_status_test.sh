@@ -34,7 +34,7 @@ EOF
   chmod +x $ok $bad
 
   mkdir -p a
-  cat > a/BUILD <<'EOF'
+  cat > a/UCBUILD <<'EOF'
 genrule(name="a", srcs=[], outs=["a.out"], stamp=1, cmd="touch $@")
 EOF
 
@@ -56,7 +56,7 @@ EOF
   chmod +x $cmd
 
   mkdir -p a
-  cat > a/BUILD <<'EOF'
+  cat > a/UCBUILD <<'EOF'
 genrule(
     name="a",
     srcs=[],
@@ -100,7 +100,7 @@ int main() {
 }
 EOF
 
-  cat > a/BUILD <<'EOF'
+  cat > a/UCBUILD <<'EOF'
 cc_library(
     name="linkstamped_library",
     linkstamp="linkstamped_library.cc")

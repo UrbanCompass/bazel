@@ -49,7 +49,7 @@ THIRD_PARTY_JAR_PATHS="$(find third_party -name "*.jar" | sort -u)"
 ANDROID_IMPORTING_FILES="$(grep "^import android\." -R -l --include "*.java" src | sort)"
 
 # All other generated libraries.
-readonly package_list=$(find src -name "BUILD" | sed "s|/BUILD||" | sed "s|^|//|")
+readonly package_list=$(find src -name "UCBUILD" | sed "s|/UCBUILD||" | sed "s|^|//|")
 # Returns the package of file $1
 function get_package_of() {
   # look for the longest matching package

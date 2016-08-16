@@ -64,7 +64,7 @@ public class GenerateWorkspaceOptions extends OptionsBase {
   @Option(
       name = "output_dir",
       abbrev = 'o',
-      help = "Output directory to store the WORKSPACE and BUILD files. If unspecified, a temporary"
+      help = "Output directory to store the WORKSPACE and UCBUILD files. If unspecified, a temporary"
           + " directory is used.",
       category = "output",
       defaultValue = ""

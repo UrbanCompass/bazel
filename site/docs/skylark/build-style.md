@@ -1,15 +1,15 @@
 
-# BUILD file style guide
+# UCBUILD file style guide
 
-In `BUILD` files, we take the same approach as in Go: We let the machine take care
+In `UCBUILD` files, we take the same approach as in Go: We let the machine take care
 of most formatting issues.
 [Buildifier](https://github.com/bazelbuild/buildifier) is a tool that parses and
-emits the source code in a standard style. Every `BUILD` file is therefore
+emits the source code in a standard style. Every `UCBUILD` file is therefore
 formatted in the same automated way, which makes formatting a non-issue during
 code reviews. It also makes it easier for tools to understand, edit, and
-generate `BUILD` files.
+generate `UCBUILD` files.
 
-`BUILD` file formatting must match the output of `buildifier`.
+`UCBUILD` file formatting must match the output of `buildifier`.
 
 ## Formatting example
 
@@ -86,11 +86,11 @@ are a few differences:
  * No strict line length limit. Long comments and long strings are often split
    to 79 columns, but it is not required. It should not be enforced in code
    reviews or presubmit scripts. *Rationale*: Labels can be long and exceed this
-   limit. It is common for `BUILD` files to be generated or edited by tools, which
+   limit. It is common for `UCBUILD` files to be generated or edited by tools, which
    does not go well with a line length limit.
 
  * Implicit string concatenation is not supported. Use the `+` operator.
-   *Rationale*: `BUILD` files contain many string lists. It is easy to forget a
+   *Rationale*: `UCBUILD` files contain many string lists. It is easy to forget a
    comma, which leads to a complete different result. This has created many bugs
    in the past. See also this discussion.
 
@@ -98,7 +98,7 @@ are a few differences:
    Named arguments are much more frequent than in Python and are always on a
    separate line. Spaces improve readability. This convention has been around
    for a long time, and we don't think it is worth modifying all existing
-   `BUILD` files.
+   `UCBUILD` files.
 
  * By default, use double quotation marks for strings. *Rationale*: This is not
    specified in the Python style guide, but it recommends consistency. So we
@@ -106,5 +106,5 @@ are a few differences:
    for string literals.
 
  * Use a single blank line between two top-level definitions. *Rationale*: The
-   structure of a `BUILD` file is not like a typical Python file. It has only
-   top-level statements. Using a single-blank line makes `BUILD` files shorter.
+   structure of a `UCBUILD` file is not like a typical Python file. It has only
+   top-level statements. Using a single-blank line makes `UCBUILD` files shorter.

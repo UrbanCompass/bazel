@@ -63,7 +63,7 @@ title: User Manual
 <p>
   The Bazel system is implemented as a long-lived server process.
   This allows it to perform many optimizations not possible with a
-  batch-oriented implementation, such as caching of BUILD files,
+  batch-oriented implementation, such as caching of UCBUILD files,
   dependency graphs, and other metadata from one build to the
   next.  This improves the speed of incremental builds, and allows
   different commands, such as <code>build</code>
@@ -380,7 +380,7 @@ Package path elements may be specified in three formats:
 Target pattern syntax
 =====================
 
-The BUILD file label syntax is used to specify a single target. Target
+The UCBUILD file label syntax is used to specify a single target. Target
 patterns generalize this syntax to sets of targets, and also support
 working-directory-relative forms, recursion, subtraction and filtering.
 Examples:
@@ -455,7 +455,7 @@ Subtractive patterns:
 <p>
   Whereas <a href="build-ref.html#labels">labels</a> are used
   to specify individual targets, e.g. for declaring dependencies in
-  BUILD files, Bazel's target patterns are a syntax for specifying
+  UCBUILD files, Bazel's target patterns are a syntax for specifying
   multiple targets: they are a generalization of the label syntax
   for <i>sets</i> of targets, using wildcards.  In the simplest case,
   any valid label is also a valid target pattern, identifying a set of
@@ -593,7 +593,7 @@ $ bazel fetch //...
 <p>
   All the inputs that specify the behavior and result of a given
   build can be divided into two distinct categories.
-  The first kind is the intrinsic information stored in the BUILD
+  The first kind is the intrinsic information stored in the UCBUILD
   files of your project: the build rule, the values of its attributes,
   and the complete set of its transitive dependencies.
   The second kind is the external or environmental data, supplied by
@@ -935,19 +935,19 @@ $ bazel fetch //...
 
 <h4 id='loading-phase'>Loading phase</h4>
 <p>
-  The first is <b>loading</b> during which all the necessary BUILD
+  The first is <b>loading</b> during which all the necessary UCBUILD
   files for the initial targets, and their transitive closure of
   dependencies, are loaded, parsed, evaluated and cached.
 </p>
 <p>
   For the first build after a Bazel server is started, the loading
-  phase typically takes many seconds as many BUILD files are loaded
-  from the file system.  In subsequent builds, especially if no BUILD
+  phase typically takes many seconds as many UCBUILD files are loaded
+  from the file system.  In subsequent builds, especially if no UCBUILD
   files have changed, loading occurs very quickly.
 </p>
 <p>
   Errors reported during this phase include: package not found, target
-  not found, lexical and grammatical errors in a BUILD file,
+  not found, lexical and grammatical errors in a UCBUILD file,
   and evaluation errors.
 </p>
 
@@ -971,7 +971,7 @@ $ bazel fetch //...
 </p>
 <p>
   The loading and analysis phases are fast because
-  Bazel avoids unnecessary file I/O at this stage, reading only BUILD
+  Bazel avoids unnecessary file I/O at this stage, reading only UCBUILD
   files in order to determine the work to be done.  This is by design,
   and makes Bazel a good foundation for analysis tools, such as
   Bazel's <a href='#query'>query</a> command, which is implemented
@@ -1016,7 +1016,7 @@ $ bazel fetch //...
 <h4 id='flag--package_path'><code class='flag'>--package_path</code></h4>
 <p>
   This option specifies the set of directories that are searched to
-  find the BUILD file for a given package.
+  find the UCBUILD file for a given package.
 
 </p>
 
@@ -1629,7 +1629,7 @@ the compilation of binaries during the build.
 <h4 id='flag--force_ignore_dash_static'><code class='flag'>--force_ignore_dash_static</code></h4>
 <p>
   If this flag is set, any <code>-static</code> options in linkopts of
-  <code>cc_*</code> rules BUILD files are ignored. This is only intended as a
+  <code>cc_*</code> rules UCBUILD files are ignored. This is only intended as a
   workaround for C++ hardening builds.
 </p>
 
@@ -1952,7 +1952,7 @@ cores directly from system configuration and will assume 1.0 I/O resource.
   skipped, and only the first two phases, loading and analysis, occur.
 </p>
 <p>
-  This option can be useful for validating BUILD files and detecting
+  This option can be useful for validating UCBUILD files and detecting
   errors in the inputs, without actually building anything.
 </p>
 
@@ -1998,7 +1998,7 @@ cores directly from system configuration and will assume 1.0 I/O resource.
   C++ and Java
   sources, rules in the same language space are preferentially chosen. For
   multiple rules with the same preference, the one that appears first in the
-  BUILD file is chosen. An explicitly named target pattern which does not
+  UCBUILD file is chosen. An explicitly named target pattern which does not
   reference a source file results in an error.
 </p>
 
@@ -2299,7 +2299,7 @@ either to the terminal, or to additional log files.
 </p>
 
 <p>
-  Stamping can be enabled or disabled explicitly in BUILD using
+  Stamping can be enabled or disabled explicitly in UCBUILD using
   the <code>stamp</code> attribute of certain rule types, please refer to
   the <a href="be/overview.html">build encyclopedia</a> for details. For
   rules that are neither explicitly or implicitly configured as <code>stamp =
@@ -2828,11 +2828,11 @@ in an environment closer to the current shell environment. Note that none of the
 <p>
   The <code class='flag'>--[no]implicit_deps</code> option, enabled by default, causes
   implicit dependencies to be included in the dependency graph over which the query operates. An
-  implicit dependency is one that is not explicitly specified in the BUILD file
+  implicit dependency is one that is not explicitly specified in the UCBUILD file
   but added by bazel.
 </p>
 <p>
-  Example: "Show the locations of the definitions (in BUILD files) of
+  Example: "Show the locations of the definitions (in UCBUILD files) of
   all genrules required to build all the tests in the PEBL tree."
 </p>
 <pre>
@@ -3000,7 +3000,7 @@ in an environment closer to the current shell environment. Note that none of the
     specified, all variables in the current configuration's "Make" environment
     are also displayed (e.g. <code>CC</code>, <code>GLIBC_VERSION</code>, etc).
     These are the variables accessed using the <code>$(CC)</code>
-    or <code>varref("CC")</code> syntax inside BUILD files.
+    or <code>varref("CC")</code> syntax inside UCBUILD files.
   </li>
 </ul>
 
@@ -3494,7 +3494,7 @@ Bazel execution can result in following exit codes:
   <code>bazel query</code>:</b>
 <ul>
   <li><code>3</code> - Partial success, but the query encountered 1 or more
-                       errors in the input BUILD file set and therefore the
+                       errors in the input UCBUILD file set and therefore the
                        results of the operation are not 100% reliable.
                        This is likely due to a <code class='flag'>--keep_going</code> option
                        on the command line.</li>

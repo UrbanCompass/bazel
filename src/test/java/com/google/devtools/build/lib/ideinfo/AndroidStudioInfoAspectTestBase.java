@@ -179,7 +179,7 @@ abstract class AndroidStudioInfoAspectTestBase extends BuildViewTestCase {
       contents.add(line);
     }
 
-    scratch.file("intellij_tools/BUILD", "# empty");
+    scratch.file("intellij_tools/UCBUILD", "# empty");
     scratch.file("intellij_tools/intellij_info.bzl", contents.toArray(new String[0]));
   }
 

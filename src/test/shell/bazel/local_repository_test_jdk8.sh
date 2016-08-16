@@ -37,7 +37,7 @@ public class A {
   }
 }
 EOF
-  cat > a/BUILD <<EOF
+  cat > a/UCBUILD <<EOF
 java_binary(
     name = "a",
     main_class = "a.A",
@@ -56,7 +56,7 @@ public class B {
   }
 }
 EOF
-  cat > b/BUILD <<EOF
+  cat > b/UCBUILD <<EOF
 java_library(
     name = "b",
     srcs = ["B.java"],
@@ -77,7 +77,7 @@ public class X {
   }
 }
 EOF
-  cat > $external_dir/x/BUILD <<EOF
+  cat > $external_dir/x/UCBUILD <<EOF
 java_library(
     name = "x",
     srcs = ["X.java"],

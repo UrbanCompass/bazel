@@ -24,7 +24,7 @@ timestamps of the tar file and use a SHA sum that is function of the layer
 data as layer identifier. This ensure reproducibility and correct
 incrementality.
 
-To use it, simply creates your images using the BUILD language:
+To use it, simply creates your images using the UCBUILD language:
 
 ```python
 load("/tools/build_defs/docker/docker", "docker_build")

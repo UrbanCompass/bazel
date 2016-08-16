@@ -85,7 +85,7 @@ public final class License {
 
   /**
    * An instance of LicenseType.None with no exceptions, used for packages
-   * outside of third_party which have no license clause in their BUILD files.
+   * outside of third_party which have no license clause in their UCBUILD files.
    */
   public static final License NO_LICENSE =
       new License(ImmutableSet.of(LicenseType.NONE), Collections.<Label>emptySet());
@@ -111,7 +111,7 @@ public final class License {
   /**
    * Parses a set of strings declaring distribution types.
    *
-   * @param distStrings strings containing distribution declarations from BUILD
+   * @param distStrings strings containing distribution declarations from UCBUILD
    *        files
    * @return a new, unmodifiable set of DistributionTypes
    * @throws LicenseParsingException

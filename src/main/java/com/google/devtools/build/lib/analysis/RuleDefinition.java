@@ -56,7 +56,7 @@ public interface RuleDefinition {
   @AutoValue
   public abstract static class Metadata {
     /**
-     * The name of the rule, as it appears in the BUILD file. If it starts with
+     * The name of the rule, as it appears in the UCBUILD file. If it starts with
      * '$', the rule will be hidden from users and will only be usable from
      * inside Blaze.
      */

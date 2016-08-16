@@ -67,7 +67,7 @@ public abstract class JavaHelper {
         && !ruleContext.attributes().get("create_executable", Type.BOOLEAN)) {
       return null;
     }
-    // BUILD rule "launcher" attribute
+    // UCBUILD rule "launcher" attribute
     if (ruleContext.getRule().isAttrDefined("launcher", BuildType.LABEL)) {
       Label launcher = ruleContext.attributes().get("launcher", BuildType.LABEL);
       if (launcher != null) {

@@ -72,8 +72,8 @@ public class PreciseAspectResolver implements AspectResolver {
                   toTarget,
                   dependencyFilter));
         } catch (NoSuchThingException e) {
-          // Do nothing. One of target direct deps has an error. The dependency on the BUILD file
-          // (or one of the files included in it) will be reported in the query result of :BUILD.
+          // Do nothing. One of target direct deps has an error. The dependency on the UCBUILD file
+          // (or one of the files included in it) will be reported in the query result of :UCBUILD.
         }
       }
     }
@@ -121,11 +121,11 @@ public class PreciseAspectResolver implements AspectResolver {
     // Then add all the subinclude labels of the packages thus found to the result.
     for (PackageIdentifier packageIdentifier : dependentPackages) {
       try {
-        result.add(Label.create(packageIdentifier, "BUILD"));
+        result.add(Label.create(packageIdentifier, "UCBUILD"));
         Package dependentPackage = packageProvider.getPackage(eventHandler, packageIdentifier);
         result.addAll(mode.getDependencies(dependentPackage));
       } catch (NoSuchPackageException e) {
-        // If the package is not found, just add its BUILD file, which is already done above.
+        // If the package is not found, just add its UCBUILD file, which is already done above.
         // Hopefully this error is not raised when there is a syntax error in a subincluded file
         // or something.
       } catch (LabelSyntaxException e) {

@@ -1411,13 +1411,13 @@ public class CppConfiguration extends BuildConfiguration.Fragment {
   }
 
   /**
-   * Returns the default list of options which cannot be filtered by BUILD
+   * Returns the default list of options which cannot be filtered by UCBUILD
    * rules. These should be appended to the command line after filtering.
    */
   @SkylarkCallable(
     name = "unfiltered_compiler_options",
     doc =
-        "Returns the default list of options which cannot be filtered by BUILD "
+        "Returns the default list of options which cannot be filtered by UCBUILD "
             + "rules. These should be appended to the command line after filtering."
   )
   public ImmutableList<String> getUnfilteredCompilerOptions(Iterable<String> features) {

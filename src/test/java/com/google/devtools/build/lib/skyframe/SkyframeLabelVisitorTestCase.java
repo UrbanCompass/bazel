@@ -79,8 +79,8 @@ abstract public class SkyframeLabelVisitorTestCase extends PackageLoadingTestCas
 
   protected Collection<Event> assertNewBuildFileConflict() throws Exception {
     reporter.removeHandler(failFastHandler); // expect errors
-    scratch.file("pkg/BUILD", "sh_library(name = 'x', deps = ['//pkg2:q/sub'])");
-    scratch.file("pkg2/BUILD", "sh_library(name = 'q/sub')");
+    scratch.file("pkg/UCBUILD", "sh_library(name = 'x', deps = ['//pkg2:q/sub'])");
+    scratch.file("pkg2/UCBUILD", "sh_library(name = 'q/sub')");
 
     assertLabelsVisited(
         ImmutableSet.of("//pkg:x", "//pkg2:q/sub"),
@@ -88,7 +88,7 @@ abstract public class SkyframeLabelVisitorTestCase extends PackageLoadingTestCas
         !EXPECT_ERROR,
         !KEEP_GOING);
 
-    scratch.file("pkg2/q/BUILD");
+    scratch.file("pkg2/q/UCBUILD");
     syncPackages();
 
     EventCollector warningCollector = new EventCollector(EventKind.WARNING);

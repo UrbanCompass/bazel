@@ -55,7 +55,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
   @Before
   public final void generateBuildFile() throws Exception {
     scratch.file(
-        "foo/BUILD",
+        "foo/UCBUILD",
         "package(features = ['-f1', 'f2', 'f3'])",
         "genrule(name = 'foo',",
         "  cmd = 'dummy_cmd',",
@@ -91,7 +91,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
   }
 
   private void setUpAttributeErrorTest() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('/test/macros', 'macro_native_rule', 'macro_skylark_rule', 'skylark_rule')",
         "macro_native_rule(name = 'm_native',",
         "  deps = [':jlib'])",
@@ -129,7 +129,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
       // Macro creates native rule -> location points to the rule and the message contains details
       // about the macro.
       assertContainsEvent(
-          "ERROR /workspace/test/BUILD:2:1: in deps attribute of cc_library rule //test:m_native: "
+          "ERROR /workspace/test/UCBUILD:2:1: in deps attribute of cc_library rule //test:m_native: "
               + "java_library rule '//test:jlib' is misplaced here (expected ");
       // Skip the part of the error message that has details about the allowed deps since the mocks
       // for the mac tests might have different values for them.
@@ -149,7 +149,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
       // Macro creates Skylark rule -> location points to the rule and the message contains details
       // about the macro.
       assertContainsEvent(
-          "ERROR /workspace/test/BUILD:4:1: in deps attribute of skylark_rule rule "
+          "ERROR /workspace/test/UCBUILD:4:1: in deps attribute of skylark_rule rule "
               + "//test:m_skylark: '//test:jlib' does not have mandatory provider 'some_provider'. "
               + "Since this rule was created by the macro 'macro_skylark_rule', the error might "
               + "have been caused by the macro implementation in /workspace/test/macros.bzl:12:36");
@@ -165,7 +165,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
     } catch (Exception ex) {
       // Native rule WITHOUT macro -> location points to the attribute and there is no mention of
       // 'macro' at all.
-      assertContainsEvent("ERROR /workspace/test/BUILD:9:10: in deps attribute of "
+      assertContainsEvent("ERROR /workspace/test/UCBUILD:9:10: in deps attribute of "
           + "cc_library rule //test:cclib: java_library rule '//test:jlib' is misplaced here "
           + "(expected ");
       // Skip the part of the error message that has details about the allowed deps since the mocks
@@ -183,7 +183,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
     } catch (Exception ex) {
       // Skylark rule WITHOUT macro -> location points to the attribute and there is no mention of
       // 'macro' at all.
-      assertContainsEvent("ERROR /workspace/test/BUILD:11:10: in deps attribute of "
+      assertContainsEvent("ERROR /workspace/test/UCBUILD:11:10: in deps attribute of "
           + "skylark_rule rule //test:skyrule: '//test:jlib' does not have mandatory provider "
           + "'some_provider'");
     }
@@ -191,7 +191,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
 
   @Test
   public void testMandatoryProvidersListWithSkylark() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
             "load('/test/rules', 'skylark_rule', 'my_rule', 'my_other_rule')",
             "my_rule(name = 'mylib',",
             "  srcs = ['a.py'])",
@@ -226,7 +226,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
       createRuleContext("//test:skyrule2");
       fail("Should have failed because of wrong mandatory providers");
     } catch (Exception ex) {
-      assertContainsEvent("ERROR /workspace/test/BUILD:9:10: in deps attribute of "
+      assertContainsEvent("ERROR /workspace/test/UCBUILD:9:10: in deps attribute of "
               + "skylark_rule rule //test:skyrule2: '//test:my_other_lib' does not have "
               + "mandatory provider 'a' or 'c'");
     }
@@ -234,7 +234,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
 
   @Test
   public void testMandatoryProvidersListWithNative() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
             "load('/test/rules', 'my_rule', 'my_other_rule')",
             "my_rule(name = 'mylib',",
             "  srcs = ['a.py'])",
@@ -260,7 +260,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
       createRuleContext("//test:skyrule2");
       fail("Should have failed because of wrong mandatory providers");
     } catch (Exception ex) {
-      assertContainsEvent("ERROR /workspace/test/BUILD:9:10: in deps attribute of "
+      assertContainsEvent("ERROR /workspace/test/UCBUILD:9:10: in deps attribute of "
               + "testing_rule_for_mandatory_providers rule //test:skyrule2: '//test:my_other_lib' "
               + "does not have mandatory provider 'a' or 'c'");
     }
@@ -271,23 +271,23 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
    * statement. */
   @Test
   public void testPackageBoundaryError_NativeRule() throws Exception {
-    scratch.file("test/BUILD", "cc_library(name = 'cclib',", "  srcs = ['sub/my_sub_lib.h'])");
-    scratch.file("test/sub/BUILD", "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
+    scratch.file("test/UCBUILD", "cc_library(name = 'cclib',", "  srcs = ['sub/my_sub_lib.h'])");
+    scratch.file("test/sub/UCBUILD", "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:cclib");
     assertContainsEvent(
-        "ERROR /workspace/test/BUILD:2:10: Label '//test:sub/my_sub_lib.h' crosses boundary of "
+        "ERROR /workspace/test/UCBUILD:2:10: Label '//test:sub/my_sub_lib.h' crosses boundary of "
             + "subpackage 'test/sub' (perhaps you meant to put the colon here: "
             + "'//test/sub:my_sub_lib.h'?)");
   }
 
   @Test
   public void testPackageBoundaryError_SkylarkRule() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('/test/macros', 'skylark_rule')",
         "skylark_rule(name = 'skyrule',",
         "  srcs = ['sub/my_sub_lib.h'])");
-    scratch.file("test/sub/BUILD",
+    scratch.file("test/sub/UCBUILD",
         "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     scratch.file("test/macros.bzl",
         "def _impl(ctx):",
@@ -301,18 +301,18 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:skyrule");
     assertContainsEvent(
-        "ERROR /workspace/test/BUILD:3:10: Label '//test:sub/my_sub_lib.h' crosses boundary of "
+        "ERROR /workspace/test/UCBUILD:3:10: Label '//test:sub/my_sub_lib.h' crosses boundary of "
             + "subpackage 'test/sub' (perhaps you meant to put the colon here: "
             + "'//test/sub:my_sub_lib.h'?)");
   }
 
   @Test
   public void testPackageBoundaryError_SkylarkMacro() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('/test/macros', 'macro_skylark_rule')",
         "macro_skylark_rule(name = 'm_skylark',",
         "  srcs = ['sub/my_sub_lib.h'])");
-    scratch.file("test/sub/BUILD",
+    scratch.file("test/sub/UCBUILD",
         "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     scratch.file("test/macros.bzl",
         "def _impl(ctx):",
@@ -327,7 +327,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  skylark_rule(name = name, srcs = srcs)");
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:m_skylark");
-    assertContainsEvent("ERROR /workspace/test/BUILD:2:1: Label '//test:sub/my_sub_lib.h' "
+    assertContainsEvent("ERROR /workspace/test/UCBUILD:2:1: Label '//test:sub/my_sub_lib.h' "
         + "crosses boundary of subpackage 'test/sub' (perhaps you meant to put the colon here: "
         + "'//test/sub:my_sub_lib.h'?)");
   }
@@ -335,33 +335,33 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
   /* The error message for this case used to be wrong. */
   @Test
   public void testPackageBoundaryError_ExternalRepository() throws Exception {
-    scratch.file("/r/BUILD", "cc_library(name = 'cclib',", "  srcs = ['sub/my_sub_lib.h'])");
-    scratch.file("/r/sub/BUILD", "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
+    scratch.file("/r/UCBUILD", "cc_library(name = 'cclib',", "  srcs = ['sub/my_sub_lib.h'])");
+    scratch.file("/r/sub/UCBUILD", "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     scratch.overwriteFile("WORKSPACE", "local_repository(name='r', path='/r')");
     invalidatePackages(/*alsoConfigs=*/false); // Repository shuffling messes with toolchain labels.
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("@r//:cclib");
     assertContainsEvent(
-        "/external/r/BUILD:2:10: Label '@r//:sub/my_sub_lib.h' crosses boundary of "
+        "/external/r/UCBUILD:2:10: Label '@r//:sub/my_sub_lib.h' crosses boundary of "
             + "subpackage '@r//sub' (perhaps you meant to put the colon here: "
             + "'@r//sub:my_sub_lib.h'?)");
   }
 
   /*
-   * Making the location in BUILD file the default for "crosses boundary of subpackage" errors does
+   * Making the location in UCBUILD file the default for "crosses boundary of subpackage" errors does
    * not work in this case since the error actually happens in the bzl file. However, because of
    * the current design, we can neither show the location in the bzl file nor display both
-   * locations (BUILD + bzl).
+   * locations (UCBUILD + bzl).
    *
-   * Since this case is less common than having such an error in a BUILD file, we can live
+   * Since this case is less common than having such an error in a UCBUILD file, we can live
    * with it.
    */
   @Test
   public void testPackageBoundaryError_SkylarkMacroWithErrorInBzlFile() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('/test/macros', 'macro_skylark_rule')",
         "macro_skylark_rule(name = 'm_skylark')");
-    scratch.file("test/sub/BUILD",
+    scratch.file("test/sub/UCBUILD",
         "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     scratch.file("test/macros.bzl",
         "def _impl(ctx):",
@@ -376,25 +376,25 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  skylark_rule(name = name, srcs = srcs + ['sub/my_sub_lib.h'])");
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:m_skylark");
-    assertContainsEvent("ERROR /workspace/test/BUILD:2:1: Label '//test:sub/my_sub_lib.h' "
+    assertContainsEvent("ERROR /workspace/test/UCBUILD:2:1: Label '//test:sub/my_sub_lib.h' "
         + "crosses boundary of subpackage 'test/sub' (perhaps you meant to put the colon here: "
         + "'//test/sub:my_sub_lib.h'?)");
   }
 
   @Test
   public void testPackageBoundaryError_NativeMacro() throws Exception {
-    scratch.file("test/BUILD",
+    scratch.file("test/UCBUILD",
         "load('/test/macros', 'macro_native_rule')",
         "macro_native_rule(name = 'm_native',",
         "  srcs = ['sub/my_sub_lib.h'])");
-    scratch.file("test/sub/BUILD",
+    scratch.file("test/sub/UCBUILD",
         "cc_library(name = 'my_sub_lib', srcs = ['my_sub_lib.h'])");
     scratch.file("test/macros.bzl",
         "def macro_native_rule(name, deps=[], srcs=[]): ",
         "  native.cc_library(name = name, deps = deps, srcs = srcs)");
     reporter.removeHandler(failFastHandler);
     getConfiguredTarget("//test:m_native");
-    assertContainsEvent("ERROR /workspace/test/BUILD:2:1: Label '//test:sub/my_sub_lib.h' "
+    assertContainsEvent("ERROR /workspace/test/UCBUILD:2:1: Label '//test:sub/my_sub_lib.h' "
         + "crosses boundary of subpackage 'test/sub' (perhaps you meant to put the colon here: "
         + "'//test/sub:my_sub_lib.h'?)");
   }
@@ -457,19 +457,19 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
 
   @Test
   public void testGetRuleSelect() throws Exception {
-    scratch.file("test/skylark/BUILD");
+    scratch.file("test/skylark/UCBUILD");
     scratch.file(
         "test/skylark/rulestr.bzl", "def rule_dict(name):", "  return native.existing_rule(name)");
 
     scratch.file(
-        "test/getrule/BUILD",
+        "test/getrule/UCBUILD",
         "load('/test/skylark/rulestr', 'rule_dict')",
         "cc_library(name ='x', ",
         "  srcs = select({'//conditions:default': []})",
         ")",
         "rule_dict('x')");
 
-    // Parse the BUILD file, to make sure select() makes it out of native.rule().
+    // Parse the UCBUILD file, to make sure select() makes it out of native.rule().
     createRuleContext("//test/getrule:x");
   }
 
@@ -482,10 +482,10 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  if native.existing_rule(x) == None:",
         "    native.cc_library(name = name)");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('//test:rulestr.bzl', 'test_rule')",
         "test_rule('a', 'does not exist')",
-        "test_rule('b', 'BUILD')");
+        "test_rule('b', 'UCBUILD')");
 
     assertNotNull(getConfiguredTarget("//test:a"));
     assertNotNull(getConfiguredTarget("//test:b"));
@@ -493,7 +493,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
 
   @Test
   public void testGetRule() throws Exception {
-    scratch.file("test/skylark/BUILD");
+    scratch.file("test/skylark/UCBUILD");
     scratch.file(
         "test/skylark/rulestr.bzl",
         "def rule_dict(name):",
@@ -506,7 +506,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "consume_rule = rule(attrs = {'s': attr.string_list()}, implementation = nop)");
 
     scratch.file(
-        "test/getrule/BUILD",
+        "test/getrule/UCBUILD",
         "load('/test/skylark/rulestr', 'rules_dict', 'rule_dict', 'nop_rule', 'consume_rule')",
         "genrule(name = 'a', outs = ['a.txt'], ",
         "        licenses = ['notice'],",
@@ -791,7 +791,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         ")");
 
     scratch.file(
-        "BUILD", "filegroup(name='dep')", "load('/my_rule', 'my_rule')", "my_rule(name='r')");
+        "UCBUILD", "filegroup(name='dep')", "load('/my_rule', 'my_rule')", "my_rule(name='r')");
 
     invalidatePackages();
     SkylarkRuleContext context = createRuleContext("//:r");
@@ -821,10 +821,10 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  }",
         ")");
 
-    scratch.file("BUILD",
+    scratch.file("UCBUILD",
         "filegroup(name='dep')");
 
-    scratch.file("/r/a/BUILD",
+    scratch.file("/r/a/UCBUILD",
         "load('/external_rule', 'external_rule')",
         "external_rule(name='r')");
 
@@ -839,7 +839,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
 
   @Test
   public void testCallerRelativeLabelInExternalRepository() throws Exception {
-    scratch.file("BUILD");
+    scratch.file("UCBUILD");
     scratch.file("external_rule.bzl",
         "def _impl(ctx):",
         "  return",
@@ -852,10 +852,10 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  }",
         ")");
 
-    scratch.file("/r/BUILD",
+    scratch.file("/r/UCBUILD",
         "filegroup(name='dep')");
 
-    scratch.file("/r/a/BUILD",
+    scratch.file("/r/a/UCBUILD",
         "load('/external_rule', 'external_rule')",
         "external_rule(name='r')");
 
@@ -871,13 +871,13 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
   @Test
   public void testExternalWorkspaceLoad() throws Exception {
     scratch.file(
-        "/r1/BUILD",
+        "/r1/UCBUILD",
         "filegroup(name = 'test',",
         " srcs = ['test.txt'],",
         " visibility = ['//visibility:public'],",
         ")");
     scratch.file("/r1/WORKSPACE");
-    scratch.file("/r2/BUILD", "exports_files(['test.bzl'])");
+    scratch.file("/r2/UCBUILD", "exports_files(['test.bzl'])");
     scratch.file(
         "/r2/test.bzl",
         "def macro(name, path):",
@@ -888,7 +888,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "def other_macro(name, path):",
         "  print(name + ': ' + path)"
     );
-    scratch.file("BUILD");
+    scratch.file("UCBUILD");
     scratch.overwriteFile(
         "WORKSPACE",
         "local_repository(name='r2', path='/r2')",
@@ -908,10 +908,10 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
     reporter.removeHandler(failFastHandler);
     scratch.file("/bar/WORKSPACE");
     scratch.file("/bar/bar.txt");
-    scratch.file("/bar/BUILD", "filegroup(name = 'baz', srcs = ['bar.txt'])");
+    scratch.file("/bar/UCBUILD", "filegroup(name = 'baz', srcs = ['bar.txt'])");
     scratch.file("/baz/WORKSPACE");
     scratch.file("/baz/baz.txt");
-    scratch.file("/baz/BUILD", "filegroup(name = 'baz', srcs = ['baz.txt'])");
+    scratch.file("/baz/UCBUILD", "filegroup(name = 'baz', srcs = ['baz.txt'])");
     scratch.overwriteFile(
         "WORKSPACE",
         "local_repository(name = 'foo', path = '/bar')",
@@ -926,7 +926,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
                     .getAttr("srcs"))
         .contains(Label.parseAbsolute("@foo//:baz.txt"));
 
-    scratch.overwriteFile("BUILD");
+    scratch.overwriteFile("UCBUILD");
     scratch.overwriteFile("bar.bzl", "dummy = 1");
     scratch.overwriteFile(
         "WORKSPACE",
@@ -960,7 +960,7 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
         "  },",
         ")");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "load('/test/rule', 'skylark_rule')",
         "py_library(name = 'lib', srcs = ['a.py', 'b.py'])",
         "skylark_rule(name = 'foo', dep = ':lib')",
@@ -994,12 +994,12 @@ public class SkylarkRuleContextTest extends SkylarkTestCase {
   public void testExternalShortPath() throws Exception {
     scratch.file("/bar/WORKSPACE");
     scratch.file("/bar/bar.txt");
-    scratch.file("/bar/BUILD", "exports_files(['bar.txt'])");
+    scratch.file("/bar/UCBUILD", "exports_files(['bar.txt'])");
     FileSystemUtils.appendIsoLatin1(
         scratch.resolve("WORKSPACE"),
         "local_repository(name = 'foo', path = '/bar')");
     scratch.file(
-        "test/BUILD",
+        "test/UCBUILD",
         "genrule(",
         "    name = 'lib',",
         "    srcs = ['@foo//:bar.txt'],",

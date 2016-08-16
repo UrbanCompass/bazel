@@ -15,7 +15,7 @@ filegroup(
 filegroup(
     name = "embedded_tools_srcs",
     srcs = [
-        "BUILD.tools",
+        "UCBUILD.tools",
         "test_rules.bzl",
     ],
     visibility = ["//visibility:public"],

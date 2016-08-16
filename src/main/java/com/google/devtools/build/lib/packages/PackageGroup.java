@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This class represents a package group BUILD target. It has a name, a list of {@link
+ * This class represents a package group UCBUILD target. It has a name, a list of {@link
  * PackageSpecification}s, a list of {@link Label}s of other package groups this one includes, and
  * can be asked if a specific package is included in it.
  */

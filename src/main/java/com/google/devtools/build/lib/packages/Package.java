@@ -85,12 +85,12 @@ public class Package {
   private final PathFragment nameFragment;
 
   /**
-   * The filename of this package's BUILD file.
+   * The filename of this package's UCBUILD file.
    */
   protected Path filename;
 
   /**
-   * The directory in which this package's BUILD file resides.  All InputFile
+   * The directory in which this package's UCBUILD file resides.  All InputFile
    * members of the packages are located relative to this directory.
    */
   private Path packageDirectory;
@@ -146,12 +146,12 @@ public class Package {
   private ImmutableList<String> defaultCopts;
 
   /**
-   * The InputFile target corresponding to this package's BUILD file.
+   * The InputFile target corresponding to this package's UCBUILD file.
    */
   private InputFile buildFile;
 
   /**
-   * True iff this package's BUILD files contained lexical or grammatical
+   * True iff this package's UCBUILD files contained lexical or grammatical
    * errors, or experienced errors during evaluation, or semantic errors during
    * the construction of any rule.
    *
@@ -173,7 +173,7 @@ public class Package {
 
   /**
    * The package's default "licenses" and "distribs" attributes, as specified
-   * in calls to licenses() and distribs() in the BUILD file.
+   * in calls to licenses() and distribs() in the UCBUILD file.
    */
   // These sets contain the values specified by the most recent licenses() or
   // distribs() declarations encountered during package parsing:
@@ -297,7 +297,7 @@ public class Package {
         || !sourceRoot.getRelative(packageIdentifier.getSourceRoot()).equals(packageDirectory))
         && !filename.getBaseName().equals("WORKSPACE")) {
       throw new IllegalArgumentException(
-          "Invalid BUILD file name for package '" + packageIdentifier + "': " + filename);
+          "Invalid UCBUILD file name for package '" + packageIdentifier + "': " + filename);
     }
 
     this.makeEnv = builder.makeEnv.build();
@@ -334,15 +334,15 @@ public class Package {
   }
 
   /**
-   * Returns the filename of the BUILD file which defines this package. The
-   * parent directory of the BUILD file is the package directory.
+   * Returns the filename of the UCBUILD file which defines this package. The
+   * parent directory of the UCBUILD file is the package directory.
    */
   public Path getFilename() {
     return filename;
   }
 
   /**
-   * Returns the source root (a directory) beneath which this package's BUILD file was found.
+   * Returns the source root (a directory) beneath which this package's UCBUILD file was found.
    *
    * <p> Assumes invariant:
    * {@code getSourceRoot().getRelative(packageId.getSourceRoot()).equals(getPackageDirectory())}
@@ -352,7 +352,7 @@ public class Package {
   }
 
   /**
-   * Returns the directory containing the package's BUILD file.
+   * Returns the directory containing the package's UCBUILD file.
    */
   public Path getPackageDirectory() {
     return packageDirectory;
@@ -404,9 +404,9 @@ public class Package {
   }
 
   /**
-   * Returns the label of this package's BUILD file.
+   * Returns the label of this package's UCBUILD file.
    *
-   * <p> Typically <code>getBuildFileLabel().getName().equals("BUILD")</code> --
+   * <p> Typically <code>getBuildFileLabel().getName().equals("UCBUILD")</code> --
    * though not necessarily: data in a subdirectory of a test package may use a
    * different filename to avoid inadvertently creating a new package.
    */
@@ -415,7 +415,7 @@ public class Package {
   }
 
   /**
-   * Returns the InputFile target for this package's BUILD file.
+   * Returns the InputFile target for this package's UCBUILD file.
    */
   public InputFile getBuildFile() {
     return buildFile;
@@ -469,7 +469,7 @@ public class Package {
   }
 
   /**
-   * Returns the rule that corresponds to a particular BUILD target name. Useful
+   * Returns the rule that corresponds to a particular UCBUILD target name. Useful
    * for walking through the dependency graph of a target.
    * Fails if the target is not a Rule.
    */
@@ -510,7 +510,7 @@ public class Package {
 
     // No such target.
 
-    // If there's a file on the disk that's not mentioned in the BUILD file,
+    // If there's a file on the disk that's not mentioned in the UCBUILD file,
     // produce a more informative error.  NOTE! this code path is only executed
     // on failure, which is (relatively) very rare.  In the common case no
     // stat(2) is executed.
@@ -524,11 +524,11 @@ public class Package {
       suffix = "";
     } else if (filename.isDirectory()) {
       suffix = "; however, a source directory of this name exists.  (Perhaps add "
-          + "'exports_files([\"" + targetName + "\"])' to " + name + "/BUILD, or define a "
+          + "'exports_files([\"" + targetName + "\"])' to " + name + "/UCBUILD, or define a "
           + "filegroup?)";
     } else if (filename.exists()) {
       suffix = "; however, a source file of this name exists.  (Perhaps add "
-          + "'exports_files([\"" + targetName + "\"])' to " + name + "/BUILD?)";
+          + "'exports_files([\"" + targetName + "\"])' to " + name + "/UCBUILD?)";
     } else {
       String suggestion = SpellChecker.suggest(targetName, targets.keySet());
       if (suggestion != null) {
@@ -811,7 +811,7 @@ public class Package {
     }
 
     /**
-     * Sets the name of this package's BUILD file.
+     * Sets the name of this package's UCBUILD file.
      */
     Builder setFilename(Path filename) {
       this.filename = filename;
@@ -820,7 +820,7 @@ public class Package {
         addInputFile(buildFileLabel, Location.fromFile(filename));
       } catch (LabelSyntaxException e) {
         // This can't actually happen.
-        throw new AssertionError("Package BUILD file has an illegal name: " + filename);
+        throw new AssertionError("Package UCBUILD file has an illegal name: " + filename);
       }
       return this;
     }
@@ -860,7 +860,7 @@ public class Package {
     }
 
     /**
-     * Sets whether the default visibility is set in the BUILD file.
+     * Sets whether the default visibility is set in the UCBUILD file.
      */
     Builder setDefaultVisibilitySet(boolean defaultVisibilitySet) {
       this.defaultVisibilitySet = defaultVisibilitySet;
@@ -1280,7 +1280,7 @@ public class Package {
           ? Collections.<Label, Path>emptyMap()
           : Collections.unmodifiableMap(subincludes);
 
-      // We create the original BUILD InputFile when the package filename is set; however, the
+      // We create the original UCBUILD InputFile when the package filename is set; however, the
       // visibility may be overridden with an exports_files directive, so we need to obtain the
       // current instance here.
       buildFile = (InputFile) Preconditions.checkNotNull(targets.get(buildFileLabel.getName()));
@@ -1470,7 +1470,7 @@ public class Package {
       }
     }
 
-    /** An output file conflicts with another output file or the BUILD file. */
+    /** An output file conflicts with another output file or the UCBUILD file. */
     private NameConflictException duplicateOutputFile(OutputFile duplicate, Target existing) {
       return new NameConflictException(duplicate.getTargetKind() + " '" + duplicate.getName()
           + "' in rule '" + duplicate.getGeneratingRule().getName() + "' "

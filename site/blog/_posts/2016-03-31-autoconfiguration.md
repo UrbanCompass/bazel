@@ -21,11 +21,11 @@ can be different from the host architecture (e.g., gcc running on Linux and
 building for Raspberry Pi).
 </blockquote>
 
-C++ toolchains are configured in Bazel using a [crosstool target](https://github.com/bazelbuild/bazel/blob/8fa5ae6a6364100f2a7f9130e62eb0edb447339a/tools/cpp/BUILD#L32)
+C++ toolchains are configured in Bazel using a [crosstool target](https://github.com/bazelbuild/bazel/blob/8fa5ae6a6364100f2a7f9130e62eb0edb447339a/tools/cpp/UCBUILD#L32)
 and a [CROSSTOOL file](https://github.com/bazelbuild/bazel/blob/master/tools/cpp/CROSSTOOL).
 
 This crosstool target (:default_toolchain) is the first step in moving the contents
-of the CROSSTOOL file entirely into BUILD file rules. The CROSSTOOL file defines
+of the CROSSTOOL file entirely into UCBUILD file rules. The CROSSTOOL file defines
 where to find the C++ compiler, its include directories and also the various flag
 to use at each compilation step.
 
@@ -58,7 +58,7 @@ of the `cc_autoconf` rule does the following step:
    using [`repository_ctx.execute`](/docs/skylark/lib/repository_ctx.html#execute). We also
    [detect the include directories](https://github.com/bazelbuild/bazel/blob/9116b3e99af2fd31d92c9bb7c37905a1675456c1/tools/cpp/cc_configure.bzl#L101)
    with [`repository_ctx.execute`](/docs/skylark/lib/repository_ctx.html#execute).
- - With the gathered information, generate the C++ tools package: its [BUILD file](https://github.com/bazelbuild/bazel/blob/9116b3e99af2fd31d92c9bb7c37905a1675456c1/tools/cpp/cc_configure.bzl#L274),
+ - With the gathered information, generate the C++ tools package: its [UCBUILD file](https://github.com/bazelbuild/bazel/blob/9116b3e99af2fd31d92c9bb7c37905a1675456c1/tools/cpp/cc_configure.bzl#L274),
    [wrapper script for Darwin](https://github.com/bazelbuild/bazel/blob/9116b3e99af2fd31d92c9bb7c37905a1675456c1/tools/cpp/cc_configure.bzl#L278) and
    [CROSSTOOL file](https://github.com/bazelbuild/bazel/blob/9116b3e99af2fd31d92c9bb7c37905a1675456c1/tools/cpp/cc_configure.bzl#L279) using
    [`repository_ctx.template`](/docs/skylark/lib/repository_ctx.html#template).

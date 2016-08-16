@@ -110,14 +110,14 @@ assert_expansion_error_not_contains() {
 #### FIXTURES ##########################################################
 
 make_empty_packages() {
-    touch video/streamer2/testing/BUILD
-    touch ${PACKAGE_PATH_PREFIX:-}video/streamer2/stuff/BUILD
-    touch video/streamer2/names/BUILD
+    touch video/streamer2/testing/UCBUILD
+    touch ${PACKAGE_PATH_PREFIX:-}video/streamer2/stuff/UCBUILD
+    touch video/streamer2/names/UCBUILD
 }
 
 make_packages() {
     mkdir -p video/streamer2/testing || fail "mkdir failed"
-    cat >video/streamer2/BUILD <<EOF
+    cat >video/streamer2/UCBUILD <<EOF
 cc_library(name='task_lib', ...)
 cc_library(name='token_bucket', ...)
 cc_library(name='with_special+_,=-.@~chars', ...)
@@ -141,12 +141,12 @@ cc_binary(name='comment_run_target_2new', ...)
 EOF
 
     mkdir -p ${PACKAGE_PATH_PREFIX:-}video/streamer2/stuff || fail "mkdir failed"
-    cat >${PACKAGE_PATH_PREFIX:-}video/streamer2/stuff/BUILD <<EOF
+    cat >${PACKAGE_PATH_PREFIX:-}video/streamer2/stuff/UCBUILD <<EOF
 cc_library(name='stuff', ...)
 EOF
 
     mkdir -p video/streamer2/names || fail "mkdir failed"
-    cat >video/streamer2/names/BUILD <<EOF
+    cat >video/streamer2/names/UCBUILD <<EOF
 genrule(
   name = 'foo',
   cmd = ('name=foo'),
@@ -154,7 +154,7 @@ genrule(
 EOF
 
     mkdir -p dash || fail "mkdir failed"
-    cat >dash/BUILD <<EOF
+    cat >dash/UCBUILD <<EOF
 cc_library(
     name = "mia-bid-multiplier-mixer-module",
 )
@@ -475,7 +475,7 @@ test_directory_expansion() {
     assert_expansion 'build video/streamer2/s' \
                      'build video/streamer2/stuff/'
 
-    # Now add BUILD files; it should no longer expand the trailing slashes:
+    # Now add UCBUILD files; it should no longer expand the trailing slashes:
     make_empty_packages
 
     assert_expansion 'build video/streamer2/t' \

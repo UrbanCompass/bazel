@@ -40,13 +40,13 @@ public class GlobCriteria {
 
   /**
    * A list of names or patterns that are included by this glob. They should
-   * consist of characters that are valid in labels in the BUILD language.
+   * consist of characters that are valid in labels in the UCBUILD language.
    */
   private final ImmutableList<String> include;
 
   /**
    * A list of names or patterns that are excluded by this glob. They should
-   * consist of characters that are valid in labels in the BUILD language.
+   * consist of characters that are valid in labels in the UCBUILD language.
    */
   private final ImmutableList<String> exclude;
 
@@ -146,7 +146,7 @@ public class GlobCriteria {
   }
 
   /**
-   * Returns a String that represents this glob as a BUILD expression.
+   * Returns a String that represents this glob as a UCBUILD expression.
    * For example, <code>glob(['abc', 'def'], exclude=['uvw', 'xyz'])</code>
    * or <code>['foo', 'bar', 'baz']</code>.
    */

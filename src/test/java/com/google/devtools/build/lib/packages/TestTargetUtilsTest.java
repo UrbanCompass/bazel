@@ -53,7 +53,7 @@ public class TestTargetUtilsTest extends PackageLoadingTestCase {
   @Before
   public final void createTargets() throws Exception {
     scratch.file(
-        "tests/BUILD",
+        "tests/UCBUILD",
         "py_test(name = 'small_test_1',",
         "        srcs = ['small_test_1.py'],",
         "        data = [':xUnit'],",
@@ -100,7 +100,7 @@ public class TestTargetUtilsTest extends PackageLoadingTestCase {
   @Test
   public void testFilterByTimeout() throws Exception {
     scratch.file(
-        "timeouts/BUILD",
+        "timeouts/UCBUILD",
         "sh_test(name = 'long_timeout',",
         "          srcs = ['a.sh'],",
         "          size = 'small',",
@@ -182,7 +182,7 @@ public class TestTargetUtilsTest extends PackageLoadingTestCase {
   @Test
   public void testExpandTestSuitesKeepGoing() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("broken/BUILD", "test_suite(name = 'broken', tests = ['//missing:missing_test'])");
+    scratch.file("broken/UCBUILD", "test_suite(name = 'broken', tests = ['//missing:missing_test'])");
     ResolvedTargets<Target> actual =
         TestTargetUtils.expandTestSuites(
             getPackageManager(),
@@ -227,7 +227,7 @@ public class TestTargetUtilsTest extends PackageLoadingTestCase {
   @Test
   public void testExpandTestSuitesInterrupted() throws Exception {
     reporter.removeHandler(failFastHandler);
-    scratch.file("broken/BUILD", "test_suite(name = 'broken', tests = ['//missing:missing_test'])");
+    scratch.file("broken/UCBUILD", "test_suite(name = 'broken', tests = ['//missing:missing_test'])");
     try {
       TestTargetUtils.expandTestSuites(
           new TargetProvider() {

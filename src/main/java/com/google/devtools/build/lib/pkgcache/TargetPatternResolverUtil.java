@@ -63,7 +63,7 @@ public final class TargetPatternResolverUtil {
     if (!resolver.isPackage(PackageIdentifier.createInMainRepo(packageName))) {
       throw new TargetParsingException(
           TargetPatternResolverUtil.getParsingErrorMessage(
-              "no such package '" + packageName + "': BUILD file not found on package path",
+              "no such package '" + packageName + "': UCBUILD file not found on package path",
               originalPattern));
     }
   }

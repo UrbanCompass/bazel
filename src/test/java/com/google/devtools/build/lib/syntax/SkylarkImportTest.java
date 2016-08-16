@@ -41,7 +41,7 @@ public class SkylarkImportTest {
     assertThat(importForLabel.hasAbsolutePath()).named("hasAbsolutePath()").isFalse();
     assertThat(importForLabel.getImportString()).named("getIMportString()").isEqualTo(labelString);
 
-    Label irrelevantContainingFile = Label.parseAbsoluteUnchecked("//another/path:BUILD");
+    Label irrelevantContainingFile = Label.parseAbsoluteUnchecked("//another/path:UCBUILD");
     assertThat(importForLabel.getLabel(irrelevantContainingFile)).named("getLabel()")
         .isEqualTo(Label.parseAbsoluteUnchecked(expectedLabelString));
  
@@ -74,7 +74,7 @@ public class SkylarkImportTest {
     assertThat(importForPath.hasAbsolutePath()).named("hasAbsolutePath()").isTrue();
     assertThat(importForPath.getImportString()).named("getImportString()").isEqualTo(pathToTest);
 
-    Label irrelevantContainingFile = Label.parseAbsoluteUnchecked("//another/path:BUILD");
+    Label irrelevantContainingFile = Label.parseAbsoluteUnchecked("//another/path:UCBUILD");
     assertThat(importForPath.getAbsolutePath()).named("getAbsolutePath()")
         .isEqualTo(new PathFragment("//some/skylark/file.bzl"));
 
@@ -108,7 +108,7 @@ public class SkylarkImportTest {
   @Test
   public void testValidRelativeSimpleLabelInPackageDir() throws Exception {
     validRelativeLabelTest(":file.bzl",
-        /*containing*/ "//some/skylark:BUILD",
+        /*containing*/ "//some/skylark:UCBUILD",
         /*expected label*/ "//some/skylark:file.bzl",
         /*expected path*/ "file.bzl");
   }
@@ -124,7 +124,7 @@ public class SkylarkImportTest {
   @Test
   public void testValidRelativeComplexLabelInPackageDir() throws Exception {
     validRelativeLabelTest(":subdir/containing/file.bzl",
-        /*containing*/ "//some/skylark:BUILD",
+        /*containing*/ "//some/skylark:UCBUILD",
         /*expected label*/ "//some/skylark:subdir/containing/file.bzl",
         /*expected path*/ "subdir/containing/file.bzl");
   }
@@ -158,7 +158,7 @@ public class SkylarkImportTest {
   @Test
   public void testValidRelativePathInPackageDir() throws Exception {
     validRelativePathTest("file",
-        /*containing*/ "//some/skylark:BUILD",
+        /*containing*/ "//some/skylark:UCBUILD",
         /*expected label*/ "//some/skylark:file.bzl",
         /*expected path*/ "file.bzl");
   }

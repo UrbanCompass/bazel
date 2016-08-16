@@ -180,7 +180,7 @@ class XmlOutputFormatter extends AbstractUnorderedFormatter {
     } else if (target instanceof InputFile) {
       elem = doc.createElement("source-file");
       InputFile inputFile = (InputFile) target;
-      if (inputFile.getName().equals("BUILD")) {
+      if (inputFile.getName().equals("UCBUILD")) {
         addSubincludedFilesToElement(doc, elem, inputFile);
         addSkylarkFilesToElement(doc, elem, inputFile);
         addFeaturesToElement(doc, elem, inputFile);

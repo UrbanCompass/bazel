@@ -38,7 +38,7 @@ public class PackageGroupTest {
 
   @Test
   public void testDoesNotFailHorribly() throws Exception {
-    scratch.file("fruits/BUILD", "package_group(name = 'apple', packages = ['//random'])");
+    scratch.file("fruits/UCBUILD", "package_group(name = 'apple', packages = ['//random'])");
 
     getPackageGroup("fruits", "apple");
   }
@@ -46,7 +46,7 @@ public class PackageGroupTest {
   // Regression test for: "Package group with empty name causes Blaze exception"
   @Test
   public void testEmptyPackageGroupNameDoesNotThrow() throws Exception {
-    scratch.file("strawberry/BUILD", "package_group(name = '', packages=[])");
+    scratch.file("strawberry/UCBUILD", "package_group(name = '', packages=[])");
 
     events.setFailFast(false);
     getPackage("strawberry");
@@ -56,12 +56,12 @@ public class PackageGroupTest {
   @Test
   public void testAbsolutePackagesWork() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'apple',",
         "              packages = ['//vegetables'])");
 
-    scratch.file("vegetables/BUILD");
-    scratch.file("fruits/vegetables/BUILD");
+    scratch.file("vegetables/UCBUILD");
+    scratch.file("fruits/vegetables/UCBUILD");
 
     PackageGroup grp = getPackageGroup("fruits", "apple");
     assertTrue(grp.contains(getPackage("vegetables")));
@@ -71,12 +71,12 @@ public class PackageGroupTest {
   @Test
   public void testPackagesWithoutDoubleSlashDoNotWork() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'apple',",
         "              packages = ['vegetables'])");
 
-    scratch.file("vegetables/BUILD");
-    scratch.file("fruits/vegetables/BUILD");
+    scratch.file("vegetables/UCBUILD");
+    scratch.file("fruits/vegetables/UCBUILD");
 
     events.setFailFast(false);
     getPackageGroup("fruits", "apple");
@@ -86,7 +86,7 @@ public class PackageGroupTest {
   @Test
   public void testPackagesWithRepositoryDoNotWork() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'banana',",
         "              packages = ['@veggies//:cucumber'])");
 
@@ -98,7 +98,7 @@ public class PackageGroupTest {
   @Test
   public void testAllPackagesInMainRepositoryDoesNotWork() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'apple',",
         "              packages = ['@//...'])");
 
@@ -110,12 +110,12 @@ public class PackageGroupTest {
   @Test
   public void testTargetNameAsPackageDoesNotWork1() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'apple',",
         "              packages = ['//vegetables:carrot'])");
 
-    scratch.file("vegetables/BUILD");
-    scratch.file("fruits/vegetables/BUILD");
+    scratch.file("vegetables/UCBUILD");
+    scratch.file("fruits/vegetables/UCBUILD");
 
     events.setFailFast(false);
     getPackageGroup("fruits", "apple");
@@ -125,10 +125,10 @@ public class PackageGroupTest {
   @Test
   public void testTargetNameAsPackageDoesNotWork2() throws Exception {
     scratch.file(
-        "fruits/BUILD", "package_group(name = 'apple',", "              packages = [':carrot'])");
+        "fruits/UCBUILD", "package_group(name = 'apple',", "              packages = [':carrot'])");
 
-    scratch.file("vegetables/BUILD");
-    scratch.file("fruits/vegetables/BUILD");
+    scratch.file("vegetables/UCBUILD");
+    scratch.file("fruits/vegetables/UCBUILD");
 
     events.setFailFast(false);
     getPackageGroup("fruits", "apple");
@@ -138,7 +138,7 @@ public class PackageGroupTest {
   @Test
   public void testAllBeneathSpecificationWorks() throws Exception {
     scratch.file(
-        "fruits/BUILD",
+        "fruits/UCBUILD",
         "package_group(name = 'maracuja',",
         "              packages = ['//tropics/...'])");
 
@@ -147,14 +147,14 @@ public class PackageGroupTest {
 
   @Test
   public void testEverythingSpecificationWorks() throws Exception {
-    scratch.file("fruits/BUILD", "package_group(name = 'mango', packages = ['//...'])");
+    scratch.file("fruits/UCBUILD", "package_group(name = 'mango', packages = ['//...'])");
     PackageGroup packageGroup = getPackageGroup("fruits", "mango");
     assertThat(packageGroup.getPackageSpecifications())
         .containsExactlyElementsIn(ImmutableList.of(PackageSpecification.everything()));
   }
 
   private Package getPackage(String packageName) throws Exception {
-    PathFragment buildFileFragment = new PathFragment(packageName).getRelative("BUILD");
+    PathFragment buildFileFragment = new PathFragment(packageName).getRelative("UCBUILD");
 
     Path buildFile = scratch.resolve(buildFileFragment.getPathString());
     return packages.createPackage(packageName, buildFile);

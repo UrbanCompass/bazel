@@ -59,7 +59,7 @@ public abstract class FragmentOptions extends OptionsBase implements Cloneable, 
   /**
    * Returns the extra rules contributed to the default package by this fragment.
    *
-   * <p>The return value should be a list of strings, which are merged into the BUILD files of the
+   * <p>The return value should be a list of strings, which are merged into the UCBUILD files of the
    * defaults package.
    *
    * <p><strong>WARNING;</strong> this method should only be used when absolutely necessary. Always

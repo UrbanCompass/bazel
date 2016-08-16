@@ -73,7 +73,7 @@ public class GenerateWorkspace {
 
   private static void printUsage(OptionsParser parser) {
     System.out.println("Usage: generate_workspace (-b PATH|-m PATH|-a coord)+ [-o PATH]\n\n"
-        + "Generates a WORKSPACE file from the given projects and a BUILD file with a rule that "
+        + "Generates a WORKSPACE file from the given projects and a UCBUILD file with a rule that "
         + "contains all of the transitive dependencies. At least one bazel_project, "
         + "maven_project, or artifact coordinate must be specified. If output_dir is not "
         + "specified, the generated files will be written to a temporary directory.\n");
@@ -129,7 +129,7 @@ public class GenerateWorkspace {
   }
 
   /**
-   * Returns if there were any errors generating the WORKSPACE and BUILD files.
+   * Returns if there were any errors generating the WORKSPACE and UCBUILD files.
    */
   private boolean hasErrors() {
     return handler.hasErrors();
@@ -138,14 +138,14 @@ public class GenerateWorkspace {
   private void writeResults() {
     String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
     File workspaceFile = outputDir.getRelative("WORKSPACE").getPathFile();
-    File buildFile = outputDir.getRelative("BUILD").getPathFile();
+    File buildFile = outputDir.getRelative("UCBUILD").getPathFile();
 
     // Don't overwrite existing files with generated ones.
     if (workspaceFile.exists()) {
       workspaceFile = outputDir.getRelative(date + ".WORKSPACE").getPathFile();
     }
     if (buildFile.exists()) {
-      buildFile = outputDir.getRelative(date + ".BUILD").getPathFile();
+      buildFile = outputDir.getRelative(date + ".UCBUILD").getPathFile();
     }
 
     try (PrintStream workspaceStream = new PrintStream(workspaceFile);
@@ -155,7 +155,7 @@ public class GenerateWorkspace {
       writer.writeBuild(buildStream);
     } catch (IOException e) {
       handler.handle(Event.error(
-          "Could not write WORKSPACE and BUILD files to " + outputDir + ": " + e.getMessage()));
+          "Could not write WORKSPACE and UCBUILD files to " + outputDir + ": " + e.getMessage()));
       return;
     }
     System.err.println("Wrote:\n" + workspaceFile + "\n" + buildFile);

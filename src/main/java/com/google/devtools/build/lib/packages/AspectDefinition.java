@@ -274,8 +274,8 @@ public final class AspectDefinition {
     /**
      * Adds an attribute to the aspect.
      *
-     * <p>Since aspects do not appear in BUILD files, the attribute must be either implicit
-     * (not available in the BUILD file, starting with '$') or late-bound (determined after the
+     * <p>Since aspects do not appear in UCBUILD files, the attribute must be either implicit
+     * (not available in the UCBUILD file, starting with '$') or late-bound (determined after the
      * configuration is available, starting with ':')
      */
     public <TYPE> Builder add(Attribute.Builder<TYPE> attr) {
@@ -286,8 +286,8 @@ public final class AspectDefinition {
     /**
      * Adds an attribute to the aspect.
      *
-     * <p>Since aspects do not appear in BUILD files, the attribute must be either implicit
-     * (not available in the BUILD file, starting with '$') or late-bound (determined after the
+     * <p>Since aspects do not appear in UCBUILD files, the attribute must be either implicit
+     * (not available in the UCBUILD file, starting with '$') or late-bound (determined after the
      * configuration is available, starting with ':')
      */
     public Builder add(Attribute attribute) {

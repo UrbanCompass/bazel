@@ -48,7 +48,7 @@ function set_up() {
 #
 # pluto/
 #   WORKSPACE
-#   BUILD
+#   UCBUILD
 #   info
 #
 # Then, set up workspace with the following files:
@@ -56,7 +56,7 @@ function set_up() {
 # $WORKSPACE_DIR/
 #   WORKSPACE
 #   planets/
-#     BUILD
+#     UCBUILD
 #     planet_info.sh
 #
 # //planets has a dependency on a target in the pluto Git repository.
@@ -75,7 +75,7 @@ git_repository(
 )
 EOF
   mkdir -p planets
-  cat > planets/BUILD <<EOF
+  cat > planets/UCBUILD <<EOF
 sh_binary(
     name = "planet-info",
     srcs = ["planet_info.sh"],
@@ -114,9 +114,9 @@ function test_new_git_repository_with_build_file_content() {
 #
 # $WORKSPACE_DIR/
 #   WORKSPACE
-#   pluto.BUILD
+#   pluto.UCBUILD
 #   planets/
-#     BUILD
+#     UCBUILD
 #     planet_info.sh
 #
 # //planets has a dependency on a target in the $TEST_TMPDIR/pluto Git
@@ -133,11 +133,11 @@ new_git_repository(
     name = "pluto",
     remote = "$pluto_repo_dir",
     tag = "0-initial",
-    build_file = "pluto.BUILD",
+    build_file = "pluto.UCBUILD",
 )
 EOF
 
-    cat > pluto.BUILD <<EOF
+    cat > pluto.UCBUILD <<EOF
 filegroup(
     name = "pluto",
     srcs = ["info"],
@@ -161,7 +161,7 @@ EOF
   fi
 
   mkdir -p planets
-  cat > planets/BUILD <<EOF
+  cat > planets/UCBUILD <<EOF
 sh_binary(
     name = "planet-info",
     srcs = ["planet_info.sh"],
@@ -196,9 +196,9 @@ EOF
 #
 # $WORKSPACE_DIR/
 #   WORKSPACE
-#   outer_planets.BUILD
+#   outer_planets.UCBUILD
 #   planets/
-#     BUILD
+#     UCBUILD
 #     planet_info.sh
 #
 # planets has a dependency on targets in the $TEST_TMPDIR/outer_planets Git
@@ -214,11 +214,11 @@ new_git_repository(
     remote = "$outer_planets_repo_dir",
     tag = "1-submodule",
     init_submodules = 1,
-    build_file = "outer_planets.BUILD",
+    build_file = "outer_planets.UCBUILD",
 )
 EOF
 
-  cat > outer_planets.BUILD <<EOF
+  cat > outer_planets.UCBUILD <<EOF
 filegroup(
     name = "neptune",
     srcs = ["neptune/info"],
@@ -233,7 +233,7 @@ filegroup(
 EOF
 
   mkdir -p planets
-  cat > planets/BUILD <<EOF
+  cat > planets/UCBUILD <<EOF
 sh_binary(
     name = "planet-info",
     srcs = ["planet_info.sh"],
@@ -345,7 +345,7 @@ EOF
 #   WORKSPACE
 #   planets/
 #     planet_info.sh
-#     BUILD
+#     UCBUILD
 function setup_error_test() {
   cd $WORKSPACE_DIR
   mkdir -p planets
@@ -354,7 +354,7 @@ function setup_error_test() {
 cat external/pluto/info
 EOF
 
-  cat > planets/BUILD <<EOF
+  cat > planets/UCBUILD <<EOF
 sh_binary(
     name = "planet-info",
     srcs = ["planet_info.sh"],
@@ -370,7 +370,7 @@ EOF
 #
 # pluto/
 #   WORKSPACE
-#   BUILD
+#   UCBUILD
 #   info
 function test_git_repository_both_commit_tag_error() {
   setup_error_test
@@ -400,7 +400,7 @@ EOF
 #
 # pluto/
 #   WORKSPACE
-#   BUILD
+#   UCBUILD
 #   info
 function test_git_repository_no_commit_tag_error() {
   setup_error_test

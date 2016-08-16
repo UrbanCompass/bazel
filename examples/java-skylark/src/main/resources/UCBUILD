@@ -8,7 +8,7 @@ filegroup(
 filegroup(
     name = "srcs",
     srcs = [
-        "BUILD",
+        "UCBUILD",
         "greeting.txt",
     ],
 )

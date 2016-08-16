@@ -48,6 +48,6 @@ java_test(
 
 filegroup(
     name = "srcs",
-    srcs = glob(["**/*.java"]) + ["BUILD"],
+    srcs = glob(["**/*.java"]) + ["UCBUILD"],
     visibility = ["//examples/java-native:__pkg__"],
 )

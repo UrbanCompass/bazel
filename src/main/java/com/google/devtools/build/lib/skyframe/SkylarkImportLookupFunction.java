@@ -277,7 +277,7 @@ public class SkylarkImportLookupFunction implements SkyFunction {
         }
       }
     } catch (BuildFileNotFoundException e) {
-      // Thrown when there are IO errors looking for BUILD files.
+      // Thrown when there are IO errors looking for UCBUILD files.
       throw new SkylarkImportFailedException(e);
     } catch (InconsistentFilesystemException e) {
       throw new SkylarkImportFailedException(e);
@@ -413,8 +413,8 @@ public class SkylarkImportLookupFunction implements SkyFunction {
     static SkylarkImportFailedException noBuildFile(PathFragment file) {
       return new SkylarkImportFailedException(
           String.format("Every .bzl file must have a corresponding package, but '%s' "
-              + "does not have one. Please create a BUILD file in the same or any parent directory."
-              + " Note that this BUILD file does not need to do anything except exist.", file));
+              + "does not have one. Please create a UCBUILD file in the same or any parent directory."
+              + " Note that this UCBUILD file does not need to do anything except exist.", file));
     }
 
     static SkylarkImportFailedException skylarkErrors(PathFragment file) {

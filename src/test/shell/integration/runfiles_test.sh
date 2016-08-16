@@ -43,7 +43,7 @@ function set_up() {
 #### TESTS #############################################################
 
 function test_hidden() {
-  cat > pkg/BUILD << EOF
+  cat > pkg/UCBUILD << EOF
 py_binary(name = "py",
           srcs = [ "py.py" ],
           data = [ "e/f",
@@ -59,12 +59,12 @@ EOF
 }
 
 function test_foo_runfiles() {
-cat > BUILD << EOF
+cat > UCBUILD << EOF
 py_library(name = "root",
            srcs = ["__init__.py"],
            visibility = ["//visibility:public"])
 EOF
-cat > pkg/BUILD << EOF
+cat > pkg/UCBUILD << EOF
 sh_binary(name = "foo",
           srcs = [ "x/y/z.sh" ],
           data = [ ":py",
@@ -153,11 +153,11 @@ function test_workspace_name_change() {
 workspace(name = "foo")
 EOF
 
-  cat > BUILD <<EOF
+  cat > UCBUILD <<EOF
 cc_binary(
     name = "thing",
     srcs = ["thing.cc"],
-    data = ["BUILD"],
+    data = ["UCBUILD"],
 )
 EOF
   cat > thing.cc <<EOF

@@ -37,7 +37,7 @@ import java.util.List;
 public class GenruleConfiguredTargetTest extends BuildViewTestCase {
   @Before
   public void createFiles() throws Exception {
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "genrule(",
         "    name = 'z',",
         "    outs = ['x/y'],",

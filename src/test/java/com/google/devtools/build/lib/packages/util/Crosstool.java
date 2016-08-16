@@ -178,7 +178,7 @@ final class Crosstool {
     config.create(crosstoolTop + "/" + version + "/x86/bin/gcc");
     config.create(crosstoolTop + "/" + version + "/x86/bin/ld");
     config.getPath(crosstoolTop + "/CROSSTOOL");
-    config.overwrite(crosstoolTop + "/BUILD", build);
+    config.overwrite(crosstoolTop + "/UCBUILD", build);
     config.overwrite(crosstoolTop + "/CROSSTOOL", crosstoolFileContents);
     config.create(crosstoolTop + "/crosstool.cppmap", "module crosstool {}");
   }

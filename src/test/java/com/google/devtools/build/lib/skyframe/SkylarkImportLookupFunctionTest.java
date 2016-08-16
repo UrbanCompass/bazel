@@ -60,30 +60,30 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testSkylarkImportLabels() throws Exception {
-    scratch.file("pkg1/BUILD");
+    scratch.file("pkg1/UCBUILD");
     scratch.file("pkg1/ext.bzl");
     checkSuccessfulLookup("//pkg1:ext.bzl");
 
-    scratch.file("pkg2/BUILD");
+    scratch.file("pkg2/UCBUILD");
     scratch.file("pkg2/dir/ext.bzl");
     checkSuccessfulLookup("//pkg2:dir/ext.bzl");
 
-    scratch.file("dir/pkg3/BUILD");
+    scratch.file("dir/pkg3/UCBUILD");
     scratch.file("dir/pkg3/dir/ext.bzl");
     checkSuccessfulLookup("//dir/pkg3:dir/ext.bzl");
   }
 
   @Test
   public void testSkylarkImportLabelsAlternativeRoot() throws Exception {
-    scratch.file("/root_2/pkg4/BUILD");
+    scratch.file("/root_2/pkg4/UCBUILD");
     scratch.file("/root_2/pkg4/ext.bzl");
     checkSuccessfulLookup("//pkg4:ext.bzl");
   }
 
   @Test
   public void testSkylarkImportLabelsMultipleBuildFiles() throws Exception {
-    scratch.file("dir1/BUILD");
-    scratch.file("dir1/dir2/BUILD");
+    scratch.file("dir1/UCBUILD");
+    scratch.file("dir1/dir2/UCBUILD");
     scratch.file("dir1/dir2/ext.bzl");
     checkSuccessfulLookup("//dir1/dir2:ext.bzl");
   }
@@ -96,7 +96,7 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
         "    name = 'a_remote_repo',",
         "    path = '/a_remote_repo'",
         ")");
-    scratch.file("/a_remote_repo/remote_pkg/BUILD");
+    scratch.file("/a_remote_repo/remote_pkg/UCBUILD");
     scratch.file("/a_remote_repo/remote_pkg/ext1.bzl",
         "load(':ext2.bzl', 'CONST')");
     scratch.file("/a_remote_repo/remote_pkg/ext2.bzl",
@@ -106,7 +106,7 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testLoadRelativePath() throws Exception {
-    scratch.file("pkg/BUILD");
+    scratch.file("pkg/UCBUILD");
     scratch.file("pkg/ext1.bzl", "a = 1");
     scratch.file("pkg/ext2.bzl", "load('ext1', 'a')");
     get(key("//pkg:ext2.bzl"));
@@ -114,8 +114,8 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testLoadAbsolutePath() throws Exception {
-    scratch.file("pkg2/BUILD");
-    scratch.file("pkg3/BUILD");
+    scratch.file("pkg2/UCBUILD");
+    scratch.file("pkg3/UCBUILD");
     scratch.file("pkg2/ext.bzl", "b = 1");
     scratch.file("pkg3/ext.bzl", "load('/pkg2/ext', 'b')");
     get(key("//pkg3:ext.bzl"));
@@ -123,8 +123,8 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testLoadFromSameAbsolutePathTwice() throws Exception {
-    scratch.file("pkg1/BUILD");
-    scratch.file("pkg2/BUILD");
+    scratch.file("pkg1/UCBUILD");
+    scratch.file("pkg2/UCBUILD");
     scratch.file("pkg1/ext.bzl", "a = 1", "b = 2");
     scratch.file("pkg2/ext.bzl", "load('/pkg1/ext', 'a')", "load('/pkg1/ext', 'b')");
     get(key("//pkg2:ext.bzl"));
@@ -132,7 +132,7 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testLoadFromSameRelativePathTwice() throws Exception {
-    scratch.file("pkg/BUILD");
+    scratch.file("pkg/UCBUILD");
     scratch.file("pkg/ext1.bzl", "a = 1", "b = 2");
     scratch.file("pkg/ext2.bzl", "load('ext1', 'a')", "load('ext1', 'b')");
     get(key("//pkg:ext2.bzl"));
@@ -140,7 +140,7 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
 
   @Test
   public void testLoadFromRelativePathInSubdir() throws Exception {
-    scratch.file("pkg/BUILD");
+    scratch.file("pkg/UCBUILD");
     scratch.file("pkg/subdir/ext1.bzl", "a = 1");
     scratch.file("pkg/subdir/ext2.bzl", "load('ext1', 'a')");
     get(key("//pkg:subdir/ext2.bzl"));
@@ -182,12 +182,12 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
     ErrorInfo errorInfo = result.getError(skylarkImportLookupKey);
     String errorMessage = errorInfo.getException().getMessage();
     assertEquals("Extension file not found. Unable to load package for '//pkg:ext.bzl': "
-        + "BUILD file not found on package path", errorMessage);
+        + "UCBUILD file not found on package path", errorMessage);
   }
 
   @Test
   public void testSkylarkImportLookupNoBuildFileForLoad() throws Exception {
-    scratch.file("pkg2/BUILD");
+    scratch.file("pkg2/UCBUILD");
     scratch.file("pkg1/ext.bzl", "a = 1");
     scratch.file("pkg2/ext.bzl", "load('/pkg1/ext', 'a')");
     SkyKey skylarkImportLookupKey =
@@ -199,12 +199,12 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
     ErrorInfo errorInfo = result.getError(skylarkImportLookupKey);
     String errorMessage = errorInfo.getException().getMessage();
     assertEquals("Extension file not found. Unable to load package for '//pkg:ext.bzl': "
-        + "BUILD file not found on package path", errorMessage);
+        + "UCBUILD file not found on package path", errorMessage);
   }
 
   @Test
   public void testSkylarkAbsoluteImportFilenameWithControlChars() throws Exception {
-    scratch.file("pkg/BUILD", "");
+    scratch.file("pkg/UCBUILD", "");
     scratch.file("pkg/ext.bzl", "load('/pkg/oops\u0000', 'a')");
     SkyKey skylarkImportLookupKey =
         SkylarkImportLookupValue.key(Label.parseAbsoluteUnchecked("//pkg:ext.bzl"), false);
@@ -226,7 +226,7 @@ public class SkylarkImportLookupFunctionTest extends BuildViewTestCase {
         "    name = 'a_remote_repo',",
         "    path = '/a_remote_repo'",
         ")");
-    scratch.file("/a_remote_repo/remote_pkg/BUILD");
+    scratch.file("/a_remote_repo/remote_pkg/UCBUILD");
     scratch.file("/a_remote_repo/remote_pkg/ext.bzl",
         "CONST = 17");
 

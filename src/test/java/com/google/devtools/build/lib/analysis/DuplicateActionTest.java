@@ -33,7 +33,7 @@ public class DuplicateActionTest extends AnalysisTestCase {
     scratch.file("a/stamp.cc",
         "// Empty."
     );
-    scratch.file("a/BUILD",
+    scratch.file("a/UCBUILD",
         "cc_binary(name = 'a', srcs = ['a.cc'], deps = [':c'], stamp = 1)",
         "cc_binary(name = 'b', srcs = ['b.cc'], deps = [':c'], stamp = 1)",
         "cc_library(name = 'c', linkstamp = 'stamp.cc')");

@@ -26,7 +26,7 @@ bind(
 )
 EOF
   mkdir bar
-  cat > bar/BUILD <<EOF
+  cat > bar/UCBUILD <<EOF
 genrule(
     name = "baz-rule",
     outs = ["baz"],
@@ -54,7 +54,7 @@ bind(
 )
 EOF
   mkdir bar
-  cat > bar/BUILD <<EOF
+  cat > bar/UCBUILD <<EOF
 genrule(
     name = "baz-rule",
     outs = ["baz"],

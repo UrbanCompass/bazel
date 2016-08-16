@@ -3,7 +3,7 @@ exports_files(["genrule-setup.sh"])
 filegroup(
     name = "srcs",
     srcs = [
-        "BUILD",
+        "UCBUILD",
         "genrule-setup.sh",
     ],
     visibility = ["//tools:__pkg__"],

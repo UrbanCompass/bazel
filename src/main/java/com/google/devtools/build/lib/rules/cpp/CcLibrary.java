@@ -213,7 +213,7 @@ public abstract class CcLibrary implements RuleConfiguredTargetFactory {
      * preserved (since some libraries might have SONAME tag) - symlink will
      * be created to the parent directory instead.
      *
-     * For compatibility with existing BUILD files, any ".a" or ".lo" files listed in
+     * For compatibility with existing UCBUILD files, any ".a" or ".lo" files listed in
      * srcs are assumed to be position-independent code, or at least suitable for
      * inclusion in shared libraries, unless they end with ".nopic.a" or ".nopic.lo".
      *

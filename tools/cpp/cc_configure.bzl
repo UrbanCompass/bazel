@@ -427,9 +427,9 @@ def _impl(repository_ctx):
     # Theorically, FreeBSD should be straightforward to add but we cannot run it in a docker
     # container so escaping until we have proper tests for FreeBSD.
     repository_ctx.symlink(Label("@bazel_tools//tools/cpp:CROSSTOOL"), "CROSSTOOL")
-    repository_ctx.symlink(Label("@bazel_tools//tools/cpp:BUILD.static"), "BUILD")
+    repository_ctx.symlink(Label("@bazel_tools//tools/cpp:UCBUILD.static"), "UCBUILD")
   elif cpu_value == "x64_windows":
-    repository_ctx.symlink(Label("@bazel_tools//tools/cpp:BUILD.static"), "BUILD")
+    repository_ctx.symlink(Label("@bazel_tools//tools/cpp:UCBUILD.static"), "UCBUILD")
 
     msvc_wrapper = repository_ctx.path(Label("@bazel_tools//tools/cpp:CROSSTOOL")).dirname.get_child("wrapper").get_child("bin")
     for f in ["msvc_cl.bat", "msvc_link.bat", "msvc_nop.bat"]:
@@ -473,7 +473,7 @@ def _impl(repository_ctx):
     crosstool_content = _crosstool_content(repository_ctx, cc, cpu_value, darwin)
     opt_content = _opt_content(darwin)
     dbg_content = _dbg_content()
-    _tpl(repository_ctx, "BUILD", {
+    _tpl(repository_ctx, "UCBUILD", {
         "%{name}": cpu_value,
         "%{supports_param_files}": "0" if darwin else "1",
         "%{cc_compiler_deps}": ":cc_wrapper" if darwin else ":empty",

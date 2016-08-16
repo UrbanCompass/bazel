@@ -59,9 +59,9 @@ def _new_git_repository_implementation(ctx):
   _clone_or_update(ctx)
   ctx.file('WORKSPACE', "workspace(name = \"{name}\")\n".format(name=ctx.name))
   if ctx.attr.build_file:
-    ctx.symlink(ctx.attr.build_file, 'BUILD')
+    ctx.symlink(ctx.attr.build_file, 'UCBUILD')
   else:
-    ctx.file('BUILD', ctx.attr.build_file_content)
+    ctx.file('UCBUILD', ctx.attr.build_file_content)
 
 def _git_repository_implementation(ctx):
   _clone_or_update(ctx)
@@ -90,15 +90,15 @@ makes its targets available for binding.
 Args:
   name: A unique name for this rule.
 
-  build_file: The file to use as the BUILD file for this repository.
+  build_file: The file to use as the UCBUILD file for this repository.
     Either build_file or build_file_content must be specified.
 
     This attribute is a label relative to the main workspace. The file
-    does not need to be named BUILD, but can be (something like
-    BUILD.new-repo-name may work well for distinguishing it from the
-    repository's actual BUILD files.
+    does not need to be named UCBUILD, but can be (something like
+    UCBUILD.new-repo-name may work well for distinguishing it from the
+    repository's actual UCBUILD files.
 
-  build_file_content: The content for the BUILD file for this repository.
+  build_file_content: The content for the UCBUILD file for this repository.
     Either build_file or build_file_content must be specified.
 
   init_submodules: Whether to clone submodules in the repository.

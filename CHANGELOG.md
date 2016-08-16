@@ -575,7 +575,7 @@ Baseline: a0881e8
    + 87374e6: Make android_binary use a constant, hard-coded,
               checked-in debug key.
    + 2984f1c: Adds some safety checks in the Bazel installer
-   + 4e21d90: Remove BUILD.glob and incorporate the necessary
+   + 4e21d90: Remove UCBUILD.glob and incorporate the necessary
               filegroups into the android_{ndk,sdk}_repository rules
               themselves.
    + 1ee813e: Fix Groovy rules to work with sandboxing

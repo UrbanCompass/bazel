@@ -59,7 +59,7 @@ public class GlobCache {
   private final Map<Pair<String, Boolean>, Future<List<Path>>> globCache = new HashMap<>();
 
   /**
-   * The directory in which our package's BUILD file resides.
+   * The directory in which our package's UCBUILD file resides.
    */
   private final Path packageDirectory;
 
@@ -218,7 +218,7 @@ public class GlobCache {
 
   /**
    * Returns true iff all this package's globs are up-to-date.  That is,
-   * re-evaluating the package's BUILD file at this moment would yield an
+   * re-evaluating the package's UCBUILD file at this moment would yield an
    * equivalent Package instance.  (This call requires filesystem I/O to
    * re-evaluate the globs.)
    */

@@ -38,7 +38,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A mapping from the name of a package to the location of its BUILD file.
+ * A mapping from the name of a package to the location of its UCBUILD file.
  * The implementation composes an ordered sequence of directories according to
  * the package-path rules.
  *
@@ -87,7 +87,7 @@ public class PathPackageLocator implements Serializable {
   public Path getPackageBuildFile(PackageIdentifier packageName) throws NoSuchPackageException {
     Path buildFile  = getPackageBuildFileNullable(packageName, UnixGlob.DEFAULT_SYSCALLS_REF);
     if (buildFile == null) {
-      throw new BuildFileNotFoundException(packageName, "BUILD file not found on package path");
+      throw new BuildFileNotFoundException(packageName, "UCBUILD file not found on package path");
     }
     return buildFile;
   }
@@ -101,7 +101,7 @@ public class PathPackageLocator implements Serializable {
       AtomicReference<? extends UnixGlob.FilesystemCalls> cache)  {
     Preconditions.checkArgument(!packageIdentifier.getRepository().isDefault());
     if (packageIdentifier.getRepository().isMain()) {
-      return getFilePath(packageIdentifier.getPackageFragment().getRelative("BUILD"), cache);
+      return getFilePath(packageIdentifier.getPackageFragment().getRelative("UCBUILD"), cache);
     } else {
       Verify.verify(outputBase != null, String.format(
           "External package '%s' needs to be loaded but this PathPackageLocator instance does not "
@@ -111,7 +111,7 @@ public class PathPackageLocator implements Serializable {
       // is true for the invocation in GlobCache, but not for the locator.getBuildFileForPackage()
       // invocation in Parser#include().
       Path buildFile = outputBase.getRelative(
-          packageIdentifier.getSourceRoot()).getRelative("BUILD");
+          packageIdentifier.getSourceRoot()).getRelative("UCBUILD");
       FileStatus stat = cache.get().statNullable(buildFile, Symlinks.FOLLOW);
       if (stat != null && stat.isFile()) {
         return buildFile;

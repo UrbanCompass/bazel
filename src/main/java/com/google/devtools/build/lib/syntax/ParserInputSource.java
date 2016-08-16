@@ -41,7 +41,7 @@ public abstract class ParserInputSource {
   /**
    * Create an input source instance by (eagerly) reading from the file at
    * path. The file is assumed to be ISO-8859-1 encoded and smaller than
-   * 2 Gigs - these assumptions are reasonable for BUILD files, which is
+   * 2 Gigs - these assumptions are reasonable for UCBUILD files, which is
    * all we care about here.
    */
   public static ParserInputSource create(Path path) throws IOException {

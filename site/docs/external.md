@@ -13,7 +13,7 @@ dependencies from outside of the workspace.
 
 External dependencies can be specified in a `WORKSPACE` file in the
 [workspace directory](/docs/build-ref.html#workspaces). This `WORKSPACE` file
-uses the same Python-like syntax of BUILD files, but allows a different set of
+uses the same Python-like syntax of UCBUILD files, but allows a different set of
 rules. See the full list of rules that are allowed in the
 [Workspace](/docs/be/workspace.html) list of rules in the Build
 Encyclopedia.
@@ -77,14 +77,14 @@ $ bazel run //src/tools/generate_workspace -- \
 >    --artifact=groupId:artifactId:version
 Wrote:
 /tmp/1437415510621-0/2015-07-20-14-05-10.WORKSPACE
-/tmp/1437415510621-0/2015-07-20-14-05-10.BUILD
+/tmp/1437415510621-0/2015-07-20-14-05-10.UCBUILD
 ```
 
 The `WORKSPACE` file will contain the transitive dependencies of the given
-projects and artifacts. The `BUILD` file will contain a single target,
+projects and artifacts. The `UCBUILD` file will contain a single target,
 `transitive-deps`, that contains all of the dependencies. You can copy these
 files to your project and add `transitive-deps` as a dependency of your `java_`
-targets in `BUILD` files.
+targets in `UCBUILD` files.
 
 If you specify multiple Bazel projects, Maven projects, or artifacts, they will
 all be combined into one `WORKSPACE` file (e.g., if the Bazel project depends on
@@ -135,7 +135,7 @@ For example, suppose you are working on a project, `my-project/`, and you want
 to depend on targets from your coworker's project, `coworkers-project/`. Both
 projects use Bazel, so you can add your coworker's project as an external
 dependency and then use any targets your coworker has defined from your own
-BUILD files. You would add the following to `my_project/WORKSPACE`:
+UCBUILD files. You would add the following to `my_project/WORKSPACE`:
 
 ```python
 local_repository(
@@ -163,11 +163,11 @@ it generates. To do so, add the following to `my_project/WORKSPACE`:
 new_local_repository(
     name = "coworkers-project",
     path = "/path/to/coworkers-project",
-    build_file = "coworker.BUILD",
+    build_file = "coworker.UCBUILD",
 )
 ```
 
-`build_file` specifies a BUILD file to overlay on the existing project, for
+`build_file` specifies a UCBUILD file to overlay on the existing project, for
 example:
 
 ```python
@@ -178,7 +178,7 @@ java_library(
 )
 ```
 
-You can then depend on `@coworkers-project//:some-lib` from your project's BUILD
+You can then depend on `@coworkers-project//:some-lib` from your project's UCBUILD
 files.
 
 # Caching of external dependencies

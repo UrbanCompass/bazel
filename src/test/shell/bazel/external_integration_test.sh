@@ -27,7 +27,7 @@ source $src/remote_helpers.sh \
 function set_up() {
   bazel clean --expunge >& $TEST_log
   mkdir -p zoo
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -68,14 +68,14 @@ function tar_xz_up() {
 # repo/
 #   WORKSPACE
 #   zoo/
-#     BUILD
+#     UCBUILD
 #     female.sh
 #
 # And a .zip file, which contains:
 #
 # WORKSPACE
 # fox/
-#   BUILD
+#   UCBUILD
 #   male
 #   male_relative -> male
 #   male_absolute -> /fox/male
@@ -91,7 +91,7 @@ function http_archive_helper() {
     mkdir -p $repo2/fox
     cd $repo2
     touch WORKSPACE
-    cat > fox/BUILD <<EOF
+    cat > fox/UCBUILD <<EOF
 filegroup(
     name = "fox",
     srcs = ["male"],
@@ -125,7 +125,7 @@ http_archive(
 )
 EOF
 
-    cat > zoo/BUILD <<EOF
+    cat > zoo/UCBUILD <<EOF
 sh_binary(
     name = "breeding-program",
     srcs = ["female.sh"],
@@ -197,7 +197,7 @@ http_archive(name = 'endangered', url = 'http://localhost:$nc_port/repo.zip',
     sha256 = 'dummy')
 EOF
 
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 sh_binary(
     name = "breeding-program",
     srcs = ["female.sh"],
@@ -233,7 +233,7 @@ http_archive(name = 'endangered', url = 'http://localhost:$nc_port/repo.zip',
     sha256 = '$wrong_sha256')
 EOF
 
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 sh_binary(
     name = "breeding-program",
     srcs = ["female.sh"],
@@ -253,7 +253,7 @@ EOF
 }
 
 # Bazel should not re-download the .zip unless the user requests it or the
-# WORKSPACE file changes, so doing a BUILD where the "wrong" .zip is available
+# WORKSPACE file changes, so doing a UCBUILD where the "wrong" .zip is available
 # on the server should work if the correct .zip is already available.
 function test_sha256_caching() {
   # Download with correct sha256.
@@ -299,7 +299,7 @@ http_jar(name = 'endangered', url = 'http://localhost:$nc_port/lib.jar')
 EOF
 
   mkdir -p zoo
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 java_binary(
     name = "ball-pit",
     srcs = ["BallPit.java"],
@@ -389,7 +389,7 @@ http_file(name = 'toto', url = 'http://localhost:$nc_port/toto',
 EOF
 
   mkdir -p test
-  cat > test/BUILD <<EOF
+  cat > test/UCBUILD <<EOF
 sh_binary(
     name = "test",
     srcs = ["test.sh"],
@@ -427,7 +427,7 @@ http_file(name = 'toto', url = 'http://localhost:$redirect_port/toto',
 EOF
 
   mkdir -p test
-  cat > test/BUILD <<EOF
+  cat > test/UCBUILD <<EOF
 sh_binary(
     name = "test",
     srcs = ["test.sh"],
@@ -458,13 +458,13 @@ new_http_archive(
     name = "x",
     url = "http://localhost:$nc_port/x.tar.gz",
     sha256 = "$sha256",
-    build_file = "x.BUILD",
+    build_file = "x.UCBUILD",
 )
 EOF
-  cat > x.BUILD <<EOF
+  cat > x.UCBUILD <<EOF
 exports_files(["empty"])
 EOF
-  cat > BUILD <<'EOF'
+  cat > UCBUILD <<'EOF'
 genrule(
   name = "rule",
   srcs = ["@x//:empty"],
@@ -516,7 +516,7 @@ function do_new_remote_repo_test() {
   cd ${WORKSPACE_DIR}
 
   if [ "$1" = "build_file" ] ; then
-    cat > fox.BUILD <<EOF
+    cat > fox.UCBUILD <<EOF
 filegroup(
     name = "fox",
     srcs = ["fox/male"],
@@ -529,7 +529,7 @@ new_http_archive(
     name = 'endangered',
     url = 'http://localhost:$nc_port/repo.zip',
     sha256 = '$sha256',
-    build_file = 'fox.BUILD'
+    build_file = 'fox.UCBUILD'
 )
 EOF
   else
@@ -549,7 +549,7 @@ EOF
   fi
 
   mkdir -p zoo
-  cat > zoo/BUILD <<EOF
+  cat > zoo/UCBUILD <<EOF
 sh_binary(
     name = "breeding-program",
     srcs = ["female.sh"],
@@ -617,10 +617,10 @@ new_http_archive(
     url = "http://localhost:$nc_port/x.tar.gz",
     sha256 = "$sha256",
     strip_prefix = "x/y/z",
-    build_file = "x.BUILD",
+    build_file = "x.UCBUILD",
 )
 EOF
-  cat > x.BUILD <<EOF
+  cat > x.UCBUILD <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -646,10 +646,10 @@ new_http_archive(
     url = "http://localhost:$nc_port/x.zip",
     sha256 = "$sha256",
     strip_prefix = "x/y/z",
-    build_file = "x.BUILD",
+    build_file = "x.UCBUILD",
 )
 EOF
-  cat > x.BUILD <<EOF
+  cat > x.UCBUILD <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -666,7 +666,7 @@ function test_prefix_stripping_existing_repo() {
   mkdir -p x/y/z
   touch x/y/z/WORKSPACE
   echo "abc" > x/y/z/w
-  cat > x/y/z/BUILD <<EOF
+  cat > x/y/z/UCBUILD <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -702,10 +702,10 @@ new_http_archive(
     name = "x",
     url = "http://localhost:$nc_port/x.tar.gz",
     sha256 = "$sha256",
-    build_file = "x.BUILD",
+    build_file = "x.UCBUILD",
 )
 EOF
-  cat > x.BUILD <<EOF
+  cat > x.UCBUILD <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -716,8 +716,8 @@ EOF
 
   bazel build @x//:catter &> $TEST_log || fail "Build 1 failed"
   assert_contains "abc" bazel-genfiles/external/x/catter.out
-  mv x.BUILD x.BUILD.new || fail "Moving x.BUILD failed"
-  sed 's/x.BUILD/x.BUILD.new/g' WORKSPACE > WORKSPACE.tmp || \
+  mv x.UCBUILD x.UCBUILD.new || fail "Moving x.UCBUILD failed"
+  sed 's/x.UCBUILD/x.UCBUILD.new/g' WORKSPACE > WORKSPACE.tmp || \
     fail "Editing WORKSPACE failed"
   mv WORKSPACE.tmp WORKSPACE
   serve_file x.tar.gz
@@ -737,10 +737,10 @@ new_http_archive(
     name = "x",
     url = "http://localhost:$nc_port/x.tar.gz",
     sha256 = "$sha256",
-    build_file = "x.BUILD",
+    build_file = "x.UCBUILD",
 )
 EOF
-  cat > x.BUILD <<EOF
+  cat > x.UCBUILD <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -749,7 +749,7 @@ genrule(
 )
 EOF
 
-  cat > x.BUILD.new <<EOF
+  cat > x.UCBUILD.new <<EOF
 genrule(
     name = "catter",
     cmd = "cat \$< > \$@",
@@ -760,7 +760,7 @@ EOF
 
   bazel build @x//:catter || fail "Build 1 failed"
   assert_contains "abc" bazel-genfiles/external/x/catter.out
-  sed 's/x.BUILD/x.BUILD.new/g' WORKSPACE > WORKSPACE.tmp || \
+  sed 's/x.UCBUILD/x.UCBUILD.new/g' WORKSPACE > WORKSPACE.tmp || \
     fail "Editing WORKSPACE failed"
   mv WORKSPACE.tmp WORKSPACE
   serve_file x.tar.gz
@@ -813,7 +813,7 @@ function test_flip_flopping() {
   REPO_PATH=$TEST_TMPDIR/repo
   mkdir -p "$REPO_PATH"
   cd "$REPO_PATH"
-  touch WORKSPACE BUILD foo
+  touch WORKSPACE UCBUILD foo
   zip -r repo.zip *
   startup_server $PWD
   # Make the remote repo and local repo slightly different.

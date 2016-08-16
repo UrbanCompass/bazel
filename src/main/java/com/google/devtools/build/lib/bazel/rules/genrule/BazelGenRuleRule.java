@@ -41,7 +41,7 @@ public final class BazelGenRuleRule implements RuleDefinition {
   public RuleClass build(Builder builder, RuleDefinitionEnvironment env) {
     /* <!-- #BLAZE_RULE(genrule).NAME -->
     <br/>You may refer to this rule by name in the <code>srcs</code> or <code>deps</code> section of
-    other <code>BUILD</code> rules. If the rule generates source files, you should use the
+    other <code>UCBUILD</code> rules. If the rule generates source files, you should use the
     <code>srcs</code> attribute.
     <!-- #END_BLAZE_RULE.NAME --> */
     return builder

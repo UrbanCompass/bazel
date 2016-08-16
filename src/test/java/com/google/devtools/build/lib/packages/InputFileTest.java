@@ -46,7 +46,7 @@ public class InputFileTest {
   public final void writeFiles() throws Exception  {
     Path buildfile =
         scratch.file(
-            "pkg/BUILD",
+            "pkg/UCBUILD",
             "genrule(name = 'dummy', ",
             "        cmd = '', ",
             "        outs = [], ",

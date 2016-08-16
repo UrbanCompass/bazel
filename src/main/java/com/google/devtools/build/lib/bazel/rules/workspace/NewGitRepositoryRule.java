@@ -52,17 +52,17 @@ public class NewGitRepositoryRule implements RuleDefinition {
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("tag", STRING))
         /* <!-- #BLAZE_RULE(new_git_repository).ATTRIBUTE(build_file) -->
-        The file to use as the BUILD file for this repository.
+        The file to use as the UCBUILD file for this repository.
 
         <p>Either build_file or build_file_content must be specified.</p>
 
         <p>This attribute is a label relative to the main workspace. The file does not need to be
-        named BUILD, but can be (something like BUILD.new-repo-name may work well for
-        distinguishing it from the repository's actual BUILD files.</p>
+        named UCBUILD, but can be (something like UCBUILD.new-repo-name may work well for
+        distinguishing it from the repository's actual UCBUILD files.</p>
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(attr("build_file", STRING))
         /* <!-- #BLAZE_RULE(new_git_repository).ATTRIBUTE(build_file_content) -->
-        The content for the BUILD file for this repository.
+        The content for the UCBUILD file for this repository.
 
         <p>Either build_file or build_file_content must be specified.</p>
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */

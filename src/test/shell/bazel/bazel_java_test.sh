@@ -23,7 +23,7 @@ source $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/test-setup.sh \
 
 function write_hello_library_files() {
   mkdir -p java/main
-  cat >java/main/BUILD <<EOF
+  cat >java/main/UCBUILD <<EOF
 java_binary(name = 'main',
     deps = ['//java/hello_library'],
     srcs = ['Main.java'],
@@ -42,7 +42,7 @@ public class Main {
 EOF
 
   mkdir -p java/hello_library
-  cat >java/hello_library/BUILD <<EOF
+  cat >java/hello_library/UCBUILD <<EOF
 package(default_visibility=['//visibility:public'])
 java_library(name = 'hello_library',
              srcs = ['HelloLibrary.java']);
@@ -96,7 +96,7 @@ public class HelloLibrary {
 }
 EOF
   # Disable error-prone for this target, though.
-  cat >java/hello_library/BUILD <<EOF
+  cat >java/hello_library/UCBUILD <<EOF
 package(default_visibility=['//visibility:public'])
 java_library(name = 'hello_library',
              srcs = ['HelloLibrary.java'],

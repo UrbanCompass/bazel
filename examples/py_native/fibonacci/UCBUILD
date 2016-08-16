@@ -1,7 +1,7 @@
 filegroup(
     name = "srcs",
     srcs = glob(["*.py"]) + [
-        "BUILD",
+        "UCBUILD",
     ],
     visibility = ["//examples/py_native:__pkg__"],
 )

@@ -224,7 +224,7 @@ public class SkylarkRuleClassFunctions {
   // TODO(bazel-team): implement attribute copy and other rule properties
   @SkylarkSignature(name = "rule", doc =
       "Creates a new rule. Store it in a global value, so that it can be loaded and called "
-      + "from BUILD files.",
+      + "from UCBUILD files.",
       returnType = BaseFunction.class,
       parameters = {
         @Param(name = "implementation", type = BaseFunction.class,
@@ -545,7 +545,7 @@ public class SkylarkRuleClassFunctions {
         if (pkgContext == null) {
           throw new EvalException(ast.getLocation(),
               "Cannot instantiate a rule when loading a .bzl file. Rules can only called from "
-              + "a BUILD file (possibly via a macro).");
+              + "a UCBUILD file (possibly via a macro).");
         }
         return RuleFactory.createAndAddRule(
             pkgContext,
@@ -626,7 +626,7 @@ public class SkylarkRuleClassFunctions {
     }
   }
 
-  @SkylarkSignature(name = "Label", doc = "Creates a Label referring to a BUILD target. Use "
+  @SkylarkSignature(name = "Label", doc = "Creates a Label referring to a UCBUILD target. Use "
       + "this function only when you want to give a default value for the label attributes. "
       + "The argument must refer to an absolute label. "
       + "Example: <br><pre class=language-python>Label(\"//tools:default\")</pre>",

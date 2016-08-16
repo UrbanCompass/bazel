@@ -242,7 +242,7 @@ public class ProtoOutputFormatter extends AbstractUnorderedFormatter {
         input.setLocation(location);
       }
 
-      if (inputFile.getName().equals("BUILD")) {
+      if (inputFile.getName().equals("UCBUILD")) {
         Set<Label> subincludeLabels = new LinkedHashSet<>();
         subincludeLabels.addAll(aspectResolver == null
             ? inputFile.getPackage().getSubincludeLabels()

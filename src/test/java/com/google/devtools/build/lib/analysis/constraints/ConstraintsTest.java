@@ -49,11 +49,11 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Before
   public final void createBuildFile() throws Exception {
     // Support files for RuleClassWithImplicitAndLateBoundDefaults:
-    scratch.file("helpers/BUILD",
+    scratch.file("helpers/UCBUILD",
         "sh_library(name = 'implicit', srcs = ['implicit.sh'])",
         "sh_library(name = 'latebound', srcs = ['latebound.sh'])",
         "sh_library(name = 'default', srcs = ['default.sh'])");
-    scratch.file("config/BUILD",
+    scratch.file("config/UCBUILD",
         "config_setting(name = 'a', values = {'define': 'mode=a'})",
         "config_setting(name = 'b', values = {'define': 'mode=b'})");
   }
@@ -359,7 +359,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void allDefaults() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule());
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -372,7 +372,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void sameConstraintsDeclaredExplicitly() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:b")),
         getDependingRule(constrainedTo("//buildenv/foo:b")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -386,7 +386,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void validConstraintsDeclaredExplicitly() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:a", "//buildenv/foo:b")),
         getDependingRule(constrainedTo("//buildenv/foo:b")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -400,7 +400,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void invalidConstraintsDeclaredExplicitly() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:b")),
         getDependingRule(constrainedTo("//buildenv/foo:a", "//buildenv/foo:b")));
     reporter.removeHandler(failFastHandler);
@@ -417,7 +417,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void sameCompatibilityConstraints() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")),
         getDependingRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -432,7 +432,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void validCompatibilityConstraints() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")),
         getDependingRule(compatibleWith("//buildenv/foo:c")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -447,7 +447,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void invalidCompatibilityConstraints() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(compatibleWith("//buildenv/foo:c")),
         getDependingRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")));
     reporter.removeHandler(failFastHandler);
@@ -463,7 +463,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void multipleMissingEnvironments() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")));
     reporter.removeHandler(failFastHandler);
@@ -481,7 +481,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .make();
     new EnvironmentGroupMaker("buildenv/bar").setEnvironments("d", "e", "f").setDefaults("d")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:b", "//buildenv/foo:c"),
             compatibleWith("//buildenv/bar:e")),
         getDependingRule(constrainedTo("//buildenv/foo:c"), compatibleWith("//buildenv/bar:e")));
@@ -498,7 +498,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .make();
     new EnvironmentGroupMaker("buildenv/bar").setEnvironments("d", "e", "f").setDefaults("d")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:c"), compatibleWith("//buildenv/bar:e")),
         getDependingRule(constrainedTo("//buildenv/foo:b", "//buildenv/foo:c"),
             compatibleWith("//buildenv/bar:e")));
@@ -516,7 +516,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void validConstraintsUnknownEnvironmentToDependency() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a", "b")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(constrainedTo("//buildenv/foo:b")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -531,7 +531,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void invalidConstraintsUnknownEnvironmentToDependency() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a", "b")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(constrainedTo("//buildenv/foo:c")));
     reporter.removeHandler(failFastHandler);
@@ -549,7 +549,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void validConstraintsUnknownEnvironmentToDependender() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:a", "//buildenv/foo:b")),
         getDependingRule());
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -565,7 +565,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void invalidConstraintsUnknownEnvironmentToDependender() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:b")),
         getDependingRule());
     reporter.removeHandler(failFastHandler);
@@ -580,7 +580,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void oneDependencyIsInvalid() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getRuleDef("sh_library", "bad_dep", constrainedTo("//buildenv/foo:b")),
         getRuleDef("sh_library", "good_dep", compatibleWith("//buildenv/foo:b")),
         getRuleDef("sh_library", "depender",
@@ -597,7 +597,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     useConfiguration("--enforce_constraints=0");
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(compatibleWith("//buildenv/foo:b", "//buildenv/foo:c")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -608,7 +608,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void constraintEnforcementDisabledHostConfig() throws Exception {
     useConfiguration("--enforce_constraints=0");
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults().make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "genrule(",
         "    name = 'gen',",
         "    srcs = [],",
@@ -628,7 +628,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void compatibilityPackageDefaults() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "package(default_compatible_with = ['//buildenv/foo:b'])",
         getDependencyRule(),
         getDependingRule(compatibleWith("//buildenv/foo:b")));
@@ -645,7 +645,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     // We intentionally create an invalid dependency structure vs. a valid one. If we tested on
     // a valid one, this test wouldn't be able to distinguish between rule declarations overriding
     // package defaults and package defaults overriding rule declarations.
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "package(default_compatible_with = ['//buildenv/foo:b'])",
         getDependencyRule(compatibleWith("//buildenv/foo:a")),
         getDependingRule(compatibleWith("//buildenv/foo:a", "//buildenv/foo:b")));
@@ -663,7 +663,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void restrictionPackageDefaults() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a", "b")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "package(default_restricted_to = ['//buildenv/foo:b'])",
         getDependencyRule(constrainedTo("//buildenv/foo:b")),
         getDependingRule());
@@ -680,7 +680,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     // We intentionally create an invalid dependency structure vs. a valid one. If we tested on
     // a valid one, this test wouldn't be able to distinguish between rule declarations overriding
     // package defaults and package defaults overriding rule declarations.
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "package(default_restricted_to = ['//buildenv/foo:b'])",
         getDependencyRule(constrainedTo("//buildenv/foo:a")),
         getDependingRule(constrainedTo("//buildenv/foo:a", "//buildenv/foo:b")));
@@ -699,7 +699,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void packageDefaultsDirectlyFillRuleAttributes() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "package(default_restricted_to = ['//buildenv/foo:b'])",
         getDependencyRule(compatibleWith("//buildenv/foo:a")));
     reporter.removeHandler(failFastHandler);
@@ -711,7 +711,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void hostDependenciesAreNotChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "sh_binary(name = 'host_tool',",
         "    srcs = ['host_tool.sh'],",
         "    restricted_to = ['//buildenv/foo:b'])",
@@ -730,7 +730,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void hostDependenciesNotCheckedNoDistinctHostConfiguration() throws Exception {
     useConfiguration("--nodistinct_host_configuration");
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "sh_binary(name = 'host_tool',",
         "    srcs = ['host_tool.sh'],",
         "    restricted_to = ['//buildenv/foo:b'])",
@@ -748,7 +748,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void implicitAndLateBoundDependenciesAreNotChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "rule_with_implicit_and_latebound_deps(",
         "    name = 'hi',",
         "    compatible_with = ['//buildenv/foo:b'])");
@@ -763,7 +763,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void implicitDepsWithWhiteListedAttributeAreChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("a").make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "rule_with_enforced_implicit_deps(",
         "    name = 'hi',",
         "    compatible_with = ['//buildenv/foo:b'])");
@@ -776,7 +776,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void outputFilesAreChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "genrule(name = 'gen', srcs = [], outs = ['shlib.sh'], cmd = '')",
         "sh_library(",
         "    name = 'shlib',",
@@ -792,7 +792,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   @Test
   public void configSettingRulesAreNotChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "sh_library(",
         "    name = 'shlib',",
         "    srcs = select({",
@@ -811,7 +811,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("a", "b")
         .setDefaults()
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:a")),
         getDependingRule(constrainedTo("//buildenv/foo:b")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -825,7 +825,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("a", "b")
         .setDefaults()
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:b")),
         getDependingRule(constrainedTo("//buildenv/foo:a")));
     reporter.removeHandler(failFastHandler);
@@ -842,7 +842,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("b", "c")
         .setDefaults()
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:a")),
         getDependingRule(constrainedTo("//buildenv/foo:c")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -856,7 +856,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("a", "b")
         .setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(constrainedTo("//buildenv/foo:b")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -871,7 +871,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("b", "c")
         .setDefaults("a")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(),
         getDependingRule(constrainedTo("//buildenv/foo:c")));
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -885,7 +885,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setFulfills("a", "b")
         .setDefaults("b")
         .make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         getDependencyRule(constrainedTo("//buildenv/foo:a")),
         getDependingRule());
     assertNotNull(getConfiguredTarget("//hello:main"));
@@ -898,7 +898,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         .setEnvironments("a", "b")
         .setDefaults("a")
         .make();
-    scratch.file("ihave/BUILD",
+    scratch.file("ihave/UCBUILD",
         "totally_free_rule(",
         "    name = 'nolimits',",
         "    restricted_to = ['//buildenv/foo:b']",
@@ -919,7 +919,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   }
 
   private void writeDepsForSelectTests() throws Exception {
-    scratch.file("deps/BUILD",
+    scratch.file("deps/UCBUILD",
         "cc_library(",
         "    name = 'dep_a',",
         "    srcs = [],",
@@ -934,7 +934,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void selectableDepsCanMissEnvironments() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -955,7 +955,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     // fulfilled by any of the deps.
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b", "c").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -972,7 +972,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void depInBothSelectAndUnconditionalListIsAlwaysChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -993,7 +993,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void unconditionalSelectsAlwaysChecked() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1011,7 +1011,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void refinedEnvironmentCheckingValidCaseDirect() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1029,7 +1029,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void refinedEnvironmentCheckingBadCaseDirect() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1044,14 +1044,14 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     assertNull(getConfiguredTarget("//hello:lib"));
     assertContainsEvent("//hello:lib: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
-        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/BUILD:1:1)");
+        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/UCBUILD:1:1)");
   }
 
   @Test
   public void refinedEnvironmentCheckingValidCaseTransitive() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1074,7 +1074,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void refinedEnvironmentCheckingBadCaseTransitive() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1094,14 +1094,14 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     assertNull(getConfiguredTarget("//hello:depender"));
     assertContainsEvent("//hello:depender: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
-        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/BUILD:1:1)");
+        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/UCBUILD:1:1)");
   }
 
   @Test
   public void refinedEnvironmentCheckingBadCaseChooseLowestLevelCulprit() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib2',",  // Even though both lib1 and lib2 refine away b, lib2 is the culprit.
         "    srcs = [],",
@@ -1129,14 +1129,14 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     assertNull(getConfiguredTarget("//hello:depender"));
     assertContainsEvent("//hello:depender: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
-        + " environment: //buildenv/foo:b removed by: //hello:lib2 (/workspace/hello/BUILD:1:1)");
+        + " environment: //buildenv/foo:b removed by: //hello:lib2 (/workspace/hello/UCBUILD:1:1)");
   }
 
   @Test
   public void environmentRefiningAccountsForImplicitDefaults() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults("b").make();
     writeDepsForSelectTests();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1151,14 +1151,14 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     assertNull(getConfiguredTarget("//hello:lib"));
     assertContainsEvent("//hello:lib: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
-        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/BUILD:1:1)");
+        + " environment: //buildenv/foo:b removed by: //hello:lib (/workspace/hello/UCBUILD:1:1)");
   }
 
   @Test
   public void environmentRefiningChecksAllEnvironmentGroups() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     new EnvironmentGroupMaker("buildenv/bar").setEnvironments("c", "d").setDefaults().make();
-    scratch.file("deps/BUILD",
+    scratch.file("deps/UCBUILD",
         "cc_library(",
         "    name = 'dep_a',",
         "    srcs = [],",
@@ -1167,7 +1167,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         "    name = 'dep_b',",
         "    srcs = [],",
         "    restricted_to = ['//buildenv/foo:b', '//buildenv/bar:c'])");
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'lib',",
         "    srcs = [],",
@@ -1183,7 +1183,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
         assertNull(getConfiguredTarget("//hello:lib"));
     assertContainsEvent("//hello:lib: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
-        + " environment: //buildenv/bar:c removed by: //hello:lib (/workspace/hello/BUILD:1:1)");
+        + " environment: //buildenv/bar:c removed by: //hello:lib (/workspace/hello/UCBUILD:1:1)");
   }
 
   /**
@@ -1194,7 +1194,7 @@ public class ConstraintsTest extends AbstractConstraintsTest {
   public void refinedEnvironmentCheckingPartitionsErrorsbyEnvironmentGroup() throws Exception {
     new EnvironmentGroupMaker("buildenv/foo").setEnvironments("a", "b").setDefaults().make();
     new EnvironmentGroupMaker("buildenv/bar").setEnvironments("c", "d").setDefaults().make();
-    scratch.file("hello/BUILD",
+    scratch.file("hello/UCBUILD",
         "cc_library(",
         "    name = 'all_groups_gone',",
         "    srcs = [],",
@@ -1217,9 +1217,9 @@ public class ConstraintsTest extends AbstractConstraintsTest {
     assertContainsEvent("//hello:lib: the current command-line flags disqualify all supported "
         + "environments because of incompatible select() paths:\n"
         + "\nenvironment group: //buildenv/foo:foo:\n"
-        + " environment: //buildenv/foo:a removed by: //hello:lib (/workspace/hello/BUILD:9:1)\n"
+        + " environment: //buildenv/foo:a removed by: //hello:lib (/workspace/hello/UCBUILD:9:1)\n"
         + "\nenvironment group: //buildenv/bar:bar:\n"
-        + " environment: //buildenv/bar:c removed by: //hello:lib (/workspace/hello/BUILD:9:1)");
+        + " environment: //buildenv/bar:c removed by: //hello:lib (/workspace/hello/UCBUILD:9:1)");
   }
 }
 

@@ -112,7 +112,7 @@ An open source software library for machine intelligence.
 
 ## [Trunk](https://github.com/mzhaom/trunk)
 
-A collection of C++/Java opensource projects with BUILD files so they
+A collection of C++/Java opensource projects with UCBUILD files so they
 can be built with Bazel with out of box support for protobuf and
 grpc (maybe thrift).
 

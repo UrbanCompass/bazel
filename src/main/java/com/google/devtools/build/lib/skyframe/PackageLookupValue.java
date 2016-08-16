@@ -27,7 +27,7 @@ import com.google.devtools.build.skyframe.SkyValue;
  * A value that represents a package lookup result.
  *
  * <p>Package lookups will always produce a value. On success, the {@code #getRoot} returns the
- * package path root under which the package resides and the package's BUILD file is guaranteed to
+ * package path root under which the package resides and the package's UCBUILD file is guaranteed to
  * exist (unless this is looking up a WORKSPACE file, in which case the underlying file may or may
  * not exist. On failure, {@code #getErrorReason} and {@code #getErrorMsg} describe why the package
  * doesn't exist.
@@ -37,7 +37,7 @@ import com.google.devtools.build.skyframe.SkyValue;
 public abstract class PackageLookupValue implements SkyValue {
 
   /**
-   * The file (BUILD, WORKSPACE, etc.) that defines this package, referred to as the "build file".
+   * The file (UCBUILD, WORKSPACE, etc.) that defines this package, referred to as the "build file".
    */
   public enum BuildFileName {
     WORKSPACE("WORKSPACE") {
@@ -46,7 +46,7 @@ public abstract class PackageLookupValue implements SkyValue {
         return new PathFragment(BuildFileName.WORKSPACE.getFilename());
       }
     },
-    BUILD("BUILD") {
+    UCBUILD("UCBUILD") {
       @Override
       public PathFragment getBuildFileFragment(PackageIdentifier packageIdentifier) {
         return packageIdentifier.getPackageFragment().getChild(getFilename());
@@ -84,7 +84,7 @@ public abstract class PackageLookupValue implements SkyValue {
       new DeletedPackageLookupValue();
 
   enum ErrorReason {
-    // There is no BUILD file.
+    // There is no UCBUILD file.
     NO_BUILD_FILE,
 
     // The package name is invalid.
@@ -230,7 +230,7 @@ public abstract class PackageLookupValue implements SkyValue {
 
     @Override
     public String getErrorMsg() {
-      return "BUILD file not found on package path";
+      return "UCBUILD file not found on package path";
     }
   }
 

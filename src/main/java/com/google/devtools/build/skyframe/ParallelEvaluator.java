@@ -918,9 +918,9 @@ public final class ParallelEvaluator implements Evaluator {
 
           // Check the children group by group -- we don't want to evaluate a value that is no
           // longer needed because an earlier dependency changed. For example, //foo:foo depends
-          // on target //bar:bar and is built. Then foo/BUILD is modified to remove the dependence
-          // on bar, and bar/BUILD is deleted. Reloading //bar:bar would incorrectly throw an
-          // exception. To avoid this, we must reload foo/BUILD first, at which point we will
+          // on target //bar:bar and is built. Then foo/UCBUILD is modified to remove the dependence
+          // on bar, and bar/UCBUILD is deleted. Reloading //bar:bar would incorrectly throw an
+          // exception. To avoid this, we must reload foo/UCBUILD first, at which point we will
           // discover that it has changed, and re-evaluate target //foo:foo from scratch.
           // On the other hand, when an action requests all of its inputs, we can safely check all
           // of them in parallel on a subsequent build. So we allow checking an entire group in

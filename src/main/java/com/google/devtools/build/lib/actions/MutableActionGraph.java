@@ -147,7 +147,7 @@ public interface MutableActionGraph extends ActionGraph {
     // See also Actions.canBeShared()
     private String suffix(ActionAnalysisMetadata a, ActionAnalysisMetadata b) {
       // Note: the error message reveals to users the names of intermediate files that are not
-      // documented in the BUILD language.  This error-reporting logic is rather elaborate but it
+      // documented in the UCBUILD language.  This error-reporting logic is rather elaborate but it
       // does help to diagnose some tricky situations.
       StringBuilder sb = new StringBuilder();
       ActionOwner aOwner = a.getOwner();
