@@ -17,7 +17,6 @@ package com.google.testing.junit.runner.model;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.joda.time.Interval;
 
 /**
  * Result of executing a test suite or test case.
@@ -83,7 +82,7 @@ final class TestResult {
   private final Map<String, String> properties;
   private final List<Throwable> failures;
   @Nullable
-  private final Interval runTime;
+  private final TestInterval runtime;
   private final Status status;
   private final int numTests, numFailures;
   private final List<TestResult> childResults;
@@ -93,7 +92,7 @@ final class TestResult {
     className = checkNotNull(builder.className, "className not set");
     properties = checkNotNull(builder.properties, "properties not set");
     failures = checkNotNull(builder.failures, "failures not set");
-    runTime = builder.runTime;
+    runtime = builder.runTime;
     status = checkNotNull(builder.status, "status not set");
     numTests = checkNotNull(builder.numTests, "numTests not set");
     numFailures = checkNotNull(builder.numFailures, "numFailures not set");
@@ -117,8 +116,8 @@ final class TestResult {
   }
 
   @Nullable
-  Interval getRunTimeInterval() {
-    return runTime;
+  TestInterval getRunTimeInterval() {
+    return runtime;
   }
 
   Status getStatus() {
@@ -154,7 +153,7 @@ final class TestResult {
     private Map<String, String> properties = null;
     private List<Throwable> failures = null;
     @Nullable
-    private Interval runTime = null;
+    private TestInterval runTime = null;
     private Status status = null;
     private Integer numTests = null;
     private Integer numFailures = null;
@@ -182,7 +181,7 @@ final class TestResult {
       return this;
     }
 
-    Builder runTimeInterval(@Nullable Interval runTime) {
+    Builder runTimeInterval(@Nullable TestInterval runTime) {
       if (this.runTime != null) {
         throw new IllegalStateException("runTime already set");
       }
