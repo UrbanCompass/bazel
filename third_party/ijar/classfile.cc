@@ -1363,7 +1363,8 @@ void HasAttrs::ReadAttrs(const u1 *&p) {
         attr_name == "Code" ||
         attr_name == "Synthetic" ||
         attr_name == "BootstrapMethods" ||
-        attr_name == "SourceDebugExtension") {
+        attr_name == "SourceDebugExtension" ||
+        attr_name.compare(0, 18, "org.aspectj.weaver") == 0) {
       p += attribute_length; // drop these attributes
     } else if (attr_name == "Exceptions") {
       attributes.push_back(ExceptionsAttribute::Read(p, attribute_name));
